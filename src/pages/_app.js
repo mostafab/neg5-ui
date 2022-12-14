@@ -4,17 +4,21 @@ import { Provider } from "react-redux";
 import styledNormalize from "styled-normalize";
 
 import { wrapper } from "store";
-import Layout from "components/Layout";
 import theme from "theme";
+
+import "bootswatch/dist/minty/bootstrap.min.css";
 
 const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
+  body {
+    background-color: #e7ebf3;
+  }
 `;
 
 export default function MyApp(props) {
   const { Component, pageProps, ...rest } = props;
   const { store } = wrapper.useWrappedStore({ pageProps, ...rest });
-  const title = "Hello next.js Real World!";
+  const title = pageProps.title || "Hello next.js Real World!";
   return (
     <>
       <Helmet>
@@ -25,9 +29,7 @@ export default function MyApp(props) {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Provider store={store}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <Component {...pageProps} />
         </Provider>
       </ThemeProvider>
     </>

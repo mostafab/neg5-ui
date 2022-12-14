@@ -21,7 +21,7 @@ if [ ! -f ".env" ]; then
     touch .env
     chmod a+r .env
     echo 'NEG5_API_HOST=http://localhost:1337' > .env
-    echo 'PORT=3000' >> .env
+    echo 'PORT=3100' >> .env
 fi
 
 
