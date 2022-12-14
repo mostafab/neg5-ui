@@ -1,0 +1,79 @@
+{
+  "dependencies": {
+    "@reduxjs/toolkit": "1.9.1",
+    "axios": "1.1.3",
+    "compression": "1.7.1",
+    "express": "4.18.1",
+    "helmet": "6.0.1",
+    "humps": "2.0.1",
+    "next": "13.0.1",
+    "next-redux-wrapper": "8.0.0",
+    "prop-types": "15.7.2",
+    "react": "18.2.0",
+    "react-bootstrap": "2.7.0",
+    "react-dom": "18.2.0",
+    "react-helmet": "6.1.0",
+    "react-redux": "8.0.5",
+    "redux-logger": "3.0.6",
+    "styled-components": "5.3.1",
+    "styled-normalize": "8.0.6"
+  },
+  "name": "neg5-ui",
+  "version": "1.0.0",
+  "main": "server/index.js",
+  "devDependencies": {
+    "@babel/core": "7.1.0",
+    "@testing-library/jest-dom": "5.1.1",
+    "@testing-library/react": "9.4.1",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "10.0.1",
+    "babel-jest": "25.1.0",
+    "babel-plugin-inline-dotenv": "1.1.2",
+    "babel-plugin-module-resolver": "4.0.0",
+    "jest": "25.1.0",
+    "pre-commit": "1.2.2",
+    "react-test-renderer": "16.2.0",
+    "rimraf": "3.0.0",
+    "snazzy": "8.0.0",
+    "standard": "13.0.1"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production next build",
+    "test:ci": "jest --maxWorkers=2 --ci",
+    "test": "jest --watch",
+    "start": "node server/index.js",
+    "clean": "rimraf node_modules/.cache .next",
+    "lint": "standard --verbose | snazzy",
+    "now-start": "yarn serve",
+    "lint:fix": "standard --fix --verbose | snazzy"
+  },
+  "pre-commit": "lint-staged",
+  "lint-staged": {
+    "*.js": [
+      "yarn lint:fix",
+      "git add"
+    ]
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "env": [
+      "jest"
+    ]
+  },
+  "engines": {
+    "node": "16.18.1"
+  },
+  "jest": {
+    "modulePaths": [
+      "./src",
+      "./src/test"
+    ],
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ]
+  },
+  "repository": "CodementorIO/nextjs-redux-starter",
+  "bugs": "https://github.com/CodementorIO/nextjs-redux-starter/issues",
+  "author": "Mostafa Bhuiyan <mostafa0104@gmail.com> (https://github.com/mostafab)",
+  "license": "ISC"
+}
