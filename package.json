@@ -40,38 +40,11 @@
   },
   "scripts": {
     "build": "next build",
-    "test:ci": "jest --maxWorkers=2 --ci",
-    "test": "jest --watch",
     "start": "node server/index.js",
-    "clean": "rimraf node_modules/.cache .next",
-    "lint": "standard --verbose | snazzy",
-    "now-start": "yarn serve",
-    "lint:fix": "standard --fix --verbose | snazzy"
-  },
-  "pre-commit": "lint-staged",
-  "lint-staged": {
-    "*.js": [
-      "yarn lint:fix",
-      "git add"
-    ]
-  },
-  "standard": {
-    "parser": "babel-eslint",
-    "env": [
-      "jest"
-    ]
+    "clean": "rimraf node_modules/.cache .next"
   },
   "engines": {
     "node": "16.18.1"
-  },
-  "jest": {
-    "modulePaths": [
-      "./src",
-      "./src/test"
-    ],
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ]
   },
   "repository": "CodementorIO/nextjs-redux-starter",
   "bugs": "https://github.com/CodementorIO/nextjs-redux-starter/issues",
