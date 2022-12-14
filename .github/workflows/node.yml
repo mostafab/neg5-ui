@@ -1,0 +1,35 @@
+# This workflow will build a NodeJS application
+
+name: Node CI with Yarn
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      PORT: 3000
+      NEG5_API_HOST: http://localhost:$PORT
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read Node Version
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+        id: nvm
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install Dependencies
+        run: yarn install
+      - name: Prettier Check
+        run: yarn prettier --check .
+      - name: Next Build
+        run: ./node_modules/next/dist/bin/next build
+      - name: Start Server
+        run: npm start & sleep 20
+      - name: Ensure Service is Running
+        run: curl http://localhost:$PORT
