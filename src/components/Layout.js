@@ -1,20 +1,16 @@
-import React, { PureComponent } from 'react'
-import Link from 'next/link'
+import React, { PureComponent } from "react";
+import Link from "next/link";
 
 class Layout extends PureComponent {
-  render () {
+  render() {
     return (
-      <div className='layout'>
+      <div className="layout">
         <header>
-          <img src='/static/next-logo.png' />
+          <img src="/static/next-logo.png" />
           <h3>nextjs redux starter</h3>
           <menu>
-            <Link href='/about'>
-              About
-            </Link>
-            <Link href='/'>
-              Demo
-            </Link>
+            <Link href="/about">About</Link>
+            <Link href="/">Demo</Link>
           </menu>
           <style jsx>{`
             header {
@@ -24,7 +20,7 @@ class Layout extends PureComponent {
               margin: 10px 20px;
             }
             h3 {
-              margin-left: 10px
+              margin-left: 10px;
             }
             img {
               width: 30px;
@@ -34,10 +30,10 @@ class Layout extends PureComponent {
             }
           `}</style>
         </header>
-        { this.props.children }
+        {this.props.children}
       </div>
-    )
+    );
   }
 }
 
-export default Layout
+export default Layout;

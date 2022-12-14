@@ -1,11 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { useDispatch, useSelector } from 'react-redux'
+import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
 import { combineReducers } from "redux";
-import { createLogger } from 'redux-logger'
+import { createLogger } from "redux-logger";
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 
-import config from 'config'
-import { repoSearchReducer } from 'features/repoSearch/repoSearchSlice'
+import config from "config";
+import { repoSearchReducer } from "features/repoSearch/repoSearchSlice";
 
 const rootReducer = combineReducers({
   repoSearchReducer,
@@ -22,29 +22,30 @@ const reducer = (state, action) => {
 };
 
 export const createStore = (preloadedState) => {
-  const middlewares = []
+  const middlewares = [];
 
-  if (config.env === 'development' && typeof window !== 'undefined') {
+  if (config.env === "development" && typeof window !== "undefined") {
     const logger = createLogger({
-      level: 'info',
-      collapsed: true
-    })
+      level: "info",
+      collapsed: true,
+    });
 
-    middlewares.push(logger)
+    middlewares.push(logger);
   }
 
   return configureStore({
     reducer,
     preloadedState,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(...middlewares),
-    devTools: config.env === 'development'
-  })
-}
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(...middlewares),
+    devTools: config.env === "development",
+  });
+};
 
 export const wrapper = createWrapper(createStore, {
   debug: process.env.NODE_ENV !== "production",
 });
 
-export const useAppDispatch = () => useDispatch()
+export const useAppDispatch = () => useDispatch();
 
-export const useAppSelector = useSelector
+export const useAppSelector = useSelector;

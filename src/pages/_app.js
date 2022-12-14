@@ -1,26 +1,26 @@
-import { ThemeProvider, createGlobalStyle } from 'styled-components'
-import { Helmet } from 'react-helmet'
-import { Provider } from 'react-redux'
-import styledNormalize from 'styled-normalize'
+import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { Helmet } from "react-helmet";
+import { Provider } from "react-redux";
+import styledNormalize from "styled-normalize";
 
-import { wrapper } from 'store'
-import Layout from 'components/Layout'
-import theme from 'theme'
+import { wrapper } from "store";
+import Layout from "components/Layout";
+import theme from "theme";
 
 const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
-`
+`;
 
-export default function MyApp (props) {
-  const { Component, pageProps, ...rest } = props
+export default function MyApp(props) {
+  const { Component, pageProps, ...rest } = props;
   const { store } = wrapper.useWrappedStore({ pageProps, ...rest });
-  const title = 'Hello next.js Real World!'
+  const title = "Hello next.js Real World!";
   return (
     <>
       <Helmet>
         <title>{title}</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <meta property='og:title' content={title} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content={title} />
       </Helmet>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
@@ -31,5 +31,5 @@ export default function MyApp (props) {
         </Provider>
       </ThemeProvider>
     </>
-  )
+  );
 }
