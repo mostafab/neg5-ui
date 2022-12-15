@@ -1,14 +1,5 @@
-import { useRouter } from "next/router";
+import LoginPage from "features/login/container";
 
-const IndexPage = () => {
-  const router = useRouter();
-  return (
-    <>
-      <div onClick={() => router.push("/about")}>
-        GO TO ABOUT (with <code>router</code>)
-      </div>
-    </>
-  );
-};
+const IndexPage = () => <LoginPage />;
 
 export default IndexPage;
