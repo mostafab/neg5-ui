@@ -6,7 +6,7 @@ import { getServerSideUser } from "api/user";
 const IndexPage = () => <LoginPage />;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  ({ dispatch, getState }) => {
+  () => {
     return async (ctx) => {
       const user = await getServerSideUser(ctx.req);
       if (user) {
@@ -15,6 +15,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             destination: "/tournaments",
           },
         };
+      }
+      return {
+        props: {
+          title: 'Welcome to Neg 5'
+        }
       }
     };
   }
