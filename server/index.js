@@ -1,12 +1,12 @@
 const path = require("path");
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const next = require("next");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const proxy = require("express-http-proxy");
 
-const port = parseInt(process.env.PORT, 10) || 3100;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handler = app.getRequestHandler();
@@ -14,10 +14,12 @@ const handler = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
+    const port = process.env.PORT || 3100;
     const server = express();
 
     server.use(helmet());
     server.use(compression());
+    server.use(cookieParser());
     if (process.env.NODE_ENV !== "production") {
       server.use(morgan());
     }
@@ -35,10 +37,18 @@ app
       "/neg5-api",
       proxy(process.env.NEG5_API_HOST, {
         proxyReqPathResolver: (req) => `/neg5-api${req.url}`,
+        proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+          if (srcReq.cookies["NEG5_TOKEN"]) {
+            proxyReqOpts.headers = {
+              ["NEG5_TOKEN"]: srcReq.cookies["NEG5_TOKEN"],
+            };
+          }
+          return proxyReqOpts;
+        },
       })
     );
 
-    server.get("*", (req, res) => {
+    server.get("*", async (req, res) => {
       return handler(req, res);
     });
 

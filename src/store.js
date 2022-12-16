@@ -5,10 +5,10 @@ import { createLogger } from "redux-logger";
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 
 import config from "config";
-import { repoSearchReducer } from "features/repoSearch/repoSearchSlice";
+import { loginReducer } from "features/login/loginSlice";
 
 const rootReducer = combineReducers({
-  repoSearchReducer,
+  loginReducer,
 });
 
 const reducer = (state, action) => {

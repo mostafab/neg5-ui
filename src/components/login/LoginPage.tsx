@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { Col, Row, Container, Image } from "react-bootstrap";
+import { Col, Row, Container } from "react-bootstrap";
+import { useRouter } from "next/router";
 
 import Card from "components/common/cards";
-
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
-const LoginPage = () => {
+const LoginPage = ({ loggingIn, requestingAccount, registerError }) => {
   const [registering, setRegistering] = useState(false);
+  const router = useRouter();
   const formComponent = registering ? (
     <>
-      <RegistrationForm />
+      <RegistrationForm submitting={requestingAccount} />
       <div className="mt-3">
-        <p className="mb-0  text-center">
+        <p className="mb-0 text-center">
           <a
             role="button"
             className="text-secondary"
@@ -21,11 +22,17 @@ const LoginPage = () => {
             Go Back
           </a>
         </p>
+        {registerError && (
+          <p className="mb-0 text-center text-danger">{registerError}</p>
+        )}
       </div>
     </>
   ) : (
     <>
-      <LoginForm />
+      <LoginForm
+        submitting={loggingIn}
+        onLoginSuccess={() => router.push("/tournaments")}
+      />
       <div className="mt-3">
         <p className="mb-0  text-center">
           Don't have an account?{" "}

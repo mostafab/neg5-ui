@@ -1,15 +1,81 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+import { attemptLogin, attemptRegister } from "api/login";
+import { setLoginCookie } from "libs/cookies";
+
 const initialState = {
   loggingIn: false,
-  registering: false,
+  requestingAccount: false,
+  loginError: null,
+  registerError: null,
 };
 
 const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginAsync.pending, (state, _action) => {
+        state.loggingIn = true;
+        state.loginError = null;
+      })
+      .addCase(loginAsync.rejected, (state, _action) => {
+        state.loggingIn = false;
+      })
+      .addCase(loginAsync.fulfilled, (state, _action) => {
+        state.loggingIn = false;
+      })
+      .addCase(registerAsync.pending, (state, _action) => {
+        state.requestingAccount = true;
+        state.registerError = null;
+      })
+      .addCase(registerAsync.rejected, (state, action) => {
+        state.requestingAccount = false;
+        state.registerError =
+          action.payload?.errorMessage ||
+          "There was an issue creating your account.";
+      })
+      .addCase(registerAsync.fulfilled, (state, action) => {
+        state.requestingAccount = false;
+      });
+  },
 });
+
+export const loginAsync = createAsyncThunk(
+  "loginSlice/login",
+  async ({ emailOrUsername, password, onLoginSuccess }) => {
+    const token = await attemptLogin({
+      username: emailOrUsername,
+      password,
+    });
+    // Add a cookie so we can use it to authenticate future page visits
+    setLoginCookie(token);
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
+  }
+);
+
+export const registerAsync = createAsyncThunk(
+  "loginSlice/register",
+  async ({ onRegisterSuccess, ...values }, thunkApi) => {
+    try {
+      const { token } = await attemptRegister(values);
+      // Add a cookie so we can use it to authenticate future page visits
+      setLoginCookie(token);
+    } catch (e) {
+      if (e.response?.data) {
+        return thunkApi.rejectWithValue({ errorMessage: e.response?.data });
+      }
+      console.error(e);
+      throw e;
+    }
+    if (onRegisterSuccess) {
+      onRegisterSuccess();
+    }
+  }
+);
 
 export const selectRepoSearch = (state) => state.repoSearch;
 
