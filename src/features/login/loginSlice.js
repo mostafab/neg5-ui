@@ -32,6 +32,9 @@ const loginSlice = createSlice({
       })
       .addCase(registerAsync.rejected, (state, action) => {
         state.requestingAccount = false;
+        state.registerError =
+          action.payload?.errorMessage ||
+          "There was an issue creating your account.";
       })
       .addCase(registerAsync.fulfilled, (state, action) => {
         state.requestingAccount = false;
@@ -56,10 +59,18 @@ export const loginAsync = createAsyncThunk(
 
 export const registerAsync = createAsyncThunk(
   "loginSlice/register",
-  async ({ onRegisterSuccess, ...values }) => {
-    const { token } = await attemptRegister(values);
-    // Add a cookie so we can use it to authenticate future page visits
-    setLoginCookie(token);
+  async ({ onRegisterSuccess, ...values }, thunkApi) => {
+    try {
+      const { token } = await attemptRegister(values);
+      // Add a cookie so we can use it to authenticate future page visits
+      setLoginCookie(token);
+    } catch (e) {
+      if (e.response?.data) {
+        return thunkApi.rejectWithValue({ errorMessage: e.response?.data });
+      }
+      console.error(e);
+      throw e;
+    }
     if (onRegisterSuccess) {
       onRegisterSuccess();
     }

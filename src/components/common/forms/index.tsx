@@ -78,9 +78,14 @@ const CommonFormElementWrapper = ({
         <FormComponent.Control
           type={type}
           placeholder={placeholder || name}
+          isInvalid={!!meta.error}
           {...field}
         />
-        {meta.error ? <p className="text-danger">{meta.error}</p> : null}
+        {meta.error && (
+          <FormComponent.Control.Feedback type="invalid">
+            {meta.error}
+          </FormComponent.Control.Feedback>
+        )}
       </FloatingLabel>
     </FormComponent.Group>
   );

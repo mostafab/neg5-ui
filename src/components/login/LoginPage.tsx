@@ -6,14 +6,14 @@ import Card from "components/common/cards";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
-const LoginPage = ({ loggingIn, requestingAccount }) => {
+const LoginPage = ({ loggingIn, requestingAccount, registerError }) => {
   const [registering, setRegistering] = useState(false);
   const router = useRouter();
   const formComponent = registering ? (
     <>
       <RegistrationForm submitting={requestingAccount} />
       <div className="mt-3">
-        <p className="mb-0  text-center">
+        <p className="mb-0 text-center">
           <a
             role="button"
             className="text-secondary"
@@ -22,6 +22,9 @@ const LoginPage = ({ loggingIn, requestingAccount }) => {
             Go Back
           </a>
         </p>
+        {registerError && (
+          <p className="mb-0 text-center text-danger">{registerError}</p>
+        )}
       </div>
     </>
   ) : (

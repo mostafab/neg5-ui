@@ -6,7 +6,7 @@ import styledNormalize from "styled-normalize";
 import { wrapper } from "store";
 import theme from "theme";
 
-import "bootswatch/dist/minty/bootstrap.min.css";
+import "bootswatch/dist/journal/bootstrap.min.css";
 
 const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
