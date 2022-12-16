@@ -3,7 +3,6 @@ import { Col, Row, Container } from "react-bootstrap";
 import { useRouter } from "next/router";
 
 import Card from "components/common/cards";
-
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
@@ -12,7 +11,7 @@ const LoginPage = ({ loggingIn, requestingAccount }) => {
   const router = useRouter();
   const formComponent = registering ? (
     <>
-      <RegistrationForm />
+      <RegistrationForm submitting={requestingAccount} />
       <div className="mt-3">
         <p className="mb-0  text-center">
           <a
