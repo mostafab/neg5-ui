@@ -22,13 +22,15 @@ const initialValues = {
   confirmPassword: "",
 };
 
-const RegistrationForm = ({ submitting = false }) => {
+const RegistrationForm = ({ submitting = false, onRegisterSuccess = null }) => {
   const dispatch = useAppDispatch();
   return (
     <Form
       name="RegistrationForm"
       initialValues={initialValues}
-      onSubmit={(values) => dispatch(registerAsync(values))}
+      onSubmit={(values) =>
+        dispatch(registerAsync({ ...values, onRegisterSuccess }))
+      }
       validation={validation}
       submitting={submitting}
     >

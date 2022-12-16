@@ -20,11 +20,15 @@ const loginSlice = createSlice({
         state.loggingIn = true;
         state.loginError = null;
       })
-      .addCase(loginAsync.rejected, (state, _action) => {
+      .addCase(loginAsync.rejected, (state, action) => {
         state.loggingIn = false;
+        state.loginError =
+          action.payload?.errorMessage ||
+          "There was an issue logging into your account.";
       })
       .addCase(loginAsync.fulfilled, (state, _action) => {
         state.loggingIn = false;
+        state.loginError = null;
       })
       .addCase(registerAsync.pending, (state, _action) => {
         state.requestingAccount = true;
@@ -36,21 +40,32 @@ const loginSlice = createSlice({
           action.payload?.errorMessage ||
           "There was an issue creating your account.";
       })
-      .addCase(registerAsync.fulfilled, (state, action) => {
+      .addCase(registerAsync.fulfilled, (state, _action) => {
         state.requestingAccount = false;
+        state.registerError = null;
       });
   },
 });
 
 export const loginAsync = createAsyncThunk(
   "loginSlice/login",
-  async ({ emailOrUsername, password, onLoginSuccess }) => {
-    const token = await attemptLogin({
-      username: emailOrUsername,
-      password,
-    });
-    // Add a cookie so we can use it to authenticate future page visits
-    setLoginCookie(token);
+  async ({ usernameOrEmail, password, onLoginSuccess }, thunkApi) => {
+    try {
+      const token = await attemptLogin({
+        usernameOrEmail: usernameOrEmail,
+        password,
+      });
+      // Add a cookie so we can use it to authenticate future page visits
+      setLoginCookie(token);
+    } catch (e) {
+      if (e.response?.status === 403) {
+        return thunkApi.rejectWithValue({
+          errorMessage: "Invalid credentials provided.",
+        });
+      }
+      console.error(e);
+      throw e;
+    }
     if (onLoginSuccess) {
       onLoginSuccess();
     }
@@ -65,7 +80,7 @@ export const registerAsync = createAsyncThunk(
       // Add a cookie so we can use it to authenticate future page visits
       setLoginCookie(token);
     } catch (e) {
-      if (e.response?.data) {
+      if (e.response?.status === 403) {
         return thunkApi.rejectWithValue({ errorMessage: e.response?.data });
       }
       console.error(e);
@@ -76,7 +91,5 @@ export const registerAsync = createAsyncThunk(
     }
   }
 );
-
-export const selectRepoSearch = (state) => state.repoSearch;
 
 export const loginReducer = loginSlice.reducer;

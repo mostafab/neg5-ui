@@ -8,14 +8,14 @@ import { Form, Text, Password } from "components/common/forms";
 import styles from "./LoginPage.module.css";
 
 const validation = Yup.object({
-  emailOrUsername: Yup.string().required(
+  usernameOrEmail: Yup.string().required(
     "Please enter your username or email address."
   ),
   password: Yup.string().required("Please enter your password."),
 });
 
 const initialValues = {
-  emailOrUsername: "",
+  usernameOrEmail: "",
   password: "",
 };
 
@@ -36,7 +36,7 @@ const LoginForm = ({ onLoginSuccess, submitting = false }) => {
         submitButtonText="Login"
         submitting={submitting}
       >
-        <Text name="emailOrUsername" label="Email address / Username" />
+        <Text name="usernameOrEmail" label="Email address / Username" />
         <Password name="password" label="Password" />
       </Form>
     </>
