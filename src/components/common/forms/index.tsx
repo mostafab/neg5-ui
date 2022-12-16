@@ -1,5 +1,5 @@
 import React from "react";
-import { Form as FormComponent, Button, FloatingLabel } from "react-bootstrap";
+import { Form as FormComponent, Button, FloatingLabel, Spinner } from "react-bootstrap";
 import { Formik, Form as FormikForm, useField } from "formik";
 
 export const Form = ({
@@ -11,6 +11,7 @@ export const Form = ({
   submitButtonText = "Submit",
   onCancel = null,
   cancelButtonText = "Cancel",
+  submitting = false,
 }) => {
   return (
     <Formik
@@ -28,8 +29,9 @@ export const Form = ({
               {cancelButtonText}
             </Button>
           )}
-          <Button variant="primary" type="submit">
-            {submitButtonText}
+          <Button variant="primary" type="submit" disabled={submitting}>
+            {submitting ? 'Submitting' : submitButtonText}
+            {submitting && <Spinner animation="border" size="sm"/>}
           </Button>
         </div>
       </FormikForm>

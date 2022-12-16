@@ -6,7 +6,10 @@ import Card from "components/common/cards";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
-const LoginPage = () => {
+const LoginPage = ({
+  loggingIn,
+  requestingAccount,
+}) => {
   const [registering, setRegistering] = useState(false);
   const formComponent = registering ? (
     <>
@@ -25,7 +28,7 @@ const LoginPage = () => {
     </>
   ) : (
     <>
-      <LoginForm />
+      <LoginForm submitting={loggingIn} />
       <div className="mt-3">
         <p className="mb-0  text-center">
           Don't have an account?{" "}

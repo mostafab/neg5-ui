@@ -6,7 +6,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const proxy = require("express-http-proxy");
 
-const port = parseInt(process.env.PORT, 10) || 3100;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handler = app.getRequestHandler();
@@ -14,6 +13,7 @@ const handler = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
+    const port = process.env.PORT || 3100;
     const server = express();
 
     server.use(helmet());
@@ -38,7 +38,7 @@ app
       })
     );
 
-    server.get("*", (req, res) => {
+    server.get("*", async (req, res) => {
       return handler(req, res);
     });
 
