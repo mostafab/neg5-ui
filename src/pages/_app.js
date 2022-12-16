@@ -19,6 +19,7 @@ export default function MyApp(props) {
   const { Component, pageProps, ...rest } = props;
   const { store } = wrapper.useWrappedStore({ pageProps, ...rest });
   const title = pageProps.title || "Hello next.js Real World!";
+  const getLayout = Component.getLayout || ((page) => page);
   return (
     <>
       <Helmet>
@@ -29,7 +30,7 @@ export default function MyApp(props) {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Provider store={store}>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </Provider>
       </ThemeProvider>
     </>

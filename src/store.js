@@ -5,10 +5,13 @@ import { createLogger } from "redux-logger";
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 
 import config from "config";
+
 import { loginReducer } from "features/login/loginSlice";
+import { myTournamentsReducer } from "features/myTournaments/myTournamentsSlice";
 
 const rootReducer = combineReducers({
   loginReducer,
+  myTournamentsReducer,
 });
 
 const reducer = (state, action) => {
@@ -27,7 +30,7 @@ export const createStore = (preloadedState) => {
   if (config.env === "development" && typeof window !== "undefined") {
     const logger = createLogger({
       level: "info",
-      collapsed: true,
+      collapsed: false,
     });
 
     middlewares.push(logger);
