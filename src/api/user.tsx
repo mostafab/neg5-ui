@@ -12,7 +12,7 @@ export const getServerSideUser = async (request) => {
   const response = await axios.get(`/neg5-api/accounts/me`, {
     baseURL: baseUrl(),
     headers: {
-      // ["Cookie"]: `NEG5_TOKEN=${userCookie}`,
+      ["Cookie"]: `NEG5_TOKEN=${userCookie}`,
     },
   });
   return response.data;
