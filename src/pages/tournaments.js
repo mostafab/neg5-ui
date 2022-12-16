@@ -1,4 +1,3 @@
-import { wrapper } from "store";
 import { getServerSideUser } from "api/user";
 
 import AppLayout from "components/common/layout/AppLayout";
@@ -8,23 +7,21 @@ const TournamentPage = () => <MyTournaments />;
 
 TournamentPage.getLayout = (page) => <AppLayout>{page}</AppLayout>;
 
-export const getServerSideProps = wrapper.getServerSideProps(() => {
-  return async (ctx) => {
-    const user = await getServerSideUser(ctx.req);
-    if (!user) {
-      return {
-        redirect: {
-          destination: "/",
-        },
-      };
-    }
+export const getServerSideProps = async (ctx) => {
+  const user = await getServerSideUser(ctx.req);
+  if (!user) {
     return {
-      props: {
-        title: "Home | Neg 5",
-        user,
+      redirect: {
+        destination: "/",
       },
     };
+  }
+  return {
+    props: {
+      title: "Home | Neg 5",
+      user,
+    },
   };
-});
+};
 
 export default TournamentPage;

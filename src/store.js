@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { combineReducers } from "redux";
 import { createLogger } from "redux-logger";
-import { createWrapper, HYDRATE } from "next-redux-wrapper";
 
 import config from "config";
 
@@ -15,13 +14,6 @@ const combinedReducer = combineReducers({
 });
 
 const reducer = (state, action) => {
-  // Server hydrating the client-side store
-  if (action.type === HYDRATE) {
-    return {
-      ...state,
-      ...action.payload,
-    };
-  }
   return combinedReducer(state, action);
 };
 
@@ -45,10 +37,6 @@ export const createStore = (preloadedState) => {
     devTools: config.env === "development",
   });
 };
-
-export const wrapper = createWrapper(createStore, {
-  debug: process.env.NODE_ENV !== "production",
-});
 
 export const useAppDispatch = () => useDispatch();
 

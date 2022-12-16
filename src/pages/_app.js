@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
 import styledNormalize from "styled-normalize";
 
-import { wrapper } from "store";
+import { createStore } from "store";
 import theme from "theme";
 
 import "bootswatch/dist/journal/bootstrap.min.css";
@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
 
 export default function MyApp(props) {
   const { Component, pageProps, ...rest } = props;
-  const { store } = wrapper.useWrappedStore({ pageProps, ...rest });
+  const store = createStore();
   const title = pageProps.title || "Hello next.js Real World!";
   const getLayout = Component.getLayout || ((page) => page);
   return (
