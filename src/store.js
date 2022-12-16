@@ -9,19 +9,20 @@ import config from "config";
 import { loginReducer } from "features/login/loginSlice";
 import { myTournamentsReducer } from "features/myTournaments/myTournamentsSlice";
 
-const rootReducer = combineReducers({
+const combinedReducer = combineReducers({
   loginReducer,
   myTournamentsReducer,
 });
 
 const reducer = (state, action) => {
+  // Server hydrating the client-side store
   if (action.type === HYDRATE) {
     return {
       ...state,
       ...action.payload,
     };
   }
-  return rootReducer(state, action);
+  return combinedReducer(state, action);
 };
 
 export const createStore = (preloadedState) => {
@@ -30,7 +31,7 @@ export const createStore = (preloadedState) => {
   if (config.env === "development" && typeof window !== "undefined") {
     const logger = createLogger({
       level: "info",
-      collapsed: false,
+      collapsed: true,
     });
 
     middlewares.push(logger);

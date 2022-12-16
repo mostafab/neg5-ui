@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getUserTournaments } from "api/tournaments";
+import { getUserTournaments } from 'api/tournaments';
 
 const initialState = {
   collaboratingTournaments: [],
@@ -18,8 +18,7 @@ const myTournamentsSlice = createSlice({
         state.loadingData = true;
       })
       .addCase(loadTournamentsAsync.fulfilled, (state, action) => {
-        const { collaboratingTournaments, userOwnedTournaments } =
-          action.payload;
+        const { collaboratingTournaments, userOwnedTournaments } = action.payload;
         state.loadingData = false;
         state.collaboratingTournaments = collaboratingTournaments;
         state.ownTournaments = userOwnedTournaments;
@@ -35,3 +34,4 @@ export const loadTournamentsAsync = createAsyncThunk(
 );
 
 export const myTournamentsReducer = myTournamentsSlice.reducer;
+
