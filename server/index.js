@@ -1,6 +1,6 @@
 const path = require("path");
 const express = require("express");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const next = require("next");
 const helmet = require("helmet");
@@ -38,13 +38,13 @@ app
       proxy(process.env.NEG5_API_HOST, {
         proxyReqPathResolver: (req) => `/neg5-api${req.url}`,
         proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
-          if (srcReq.cookies['NEG5_TOKEN']) {
+          if (srcReq.cookies["NEG5_TOKEN"]) {
             proxyReqOpts.headers = {
-              ['NEG5_TOKEN']: srcReq.cookies['NEG5_TOKEN'],
-            }
+              ["NEG5_TOKEN"]: srcReq.cookies["NEG5_TOKEN"],
+            };
           }
           return proxyReqOpts;
-        }
+        },
       })
     );
 

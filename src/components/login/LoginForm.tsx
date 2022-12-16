@@ -30,7 +30,7 @@ const LoginForm = ({ onLoginSuccess, submitting = false }) => {
         name="LoginForm"
         initialValues={initialValues}
         onSubmit={(values) => {
-          dispatch(loginAsync(values));
+          dispatch(loginAsync({ ...values, onLoginSuccess }));
         }}
         validation={validation}
         submitButtonText="Login"

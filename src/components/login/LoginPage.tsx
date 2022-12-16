@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { Col, Row, Container, Image } from "react-bootstrap";
+import { Col, Row, Container } from "react-bootstrap";
+import { useRouter } from "next/router";
 
 import Card from "components/common/cards";
 
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
 
-const LoginPage = ({
-  loggingIn,
-  requestingAccount,
-}) => {
+const LoginPage = ({ loggingIn, requestingAccount }) => {
   const [registering, setRegistering] = useState(false);
+  const router = useRouter();
   const formComponent = registering ? (
     <>
       <RegistrationForm />
@@ -28,7 +27,10 @@ const LoginPage = ({
     </>
   ) : (
     <>
-      <LoginForm submitting={loggingIn} />
+      <LoginForm
+        submitting={loggingIn}
+        onLoginSuccess={() => router.push("/tournaments")}
+      />
       <div className="mt-3">
         <p className="mb-0  text-center">
           Don't have an account?{" "}

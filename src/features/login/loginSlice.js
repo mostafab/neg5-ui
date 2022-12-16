@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { attemptLogin } from 'api/login';
+import { attemptLogin } from "api/login";
 
 const initialState = {
   loggingIn: false,
@@ -21,19 +21,22 @@ const loginSlice = createSlice({
       })
       .addCase(loginAsync.fulfilled, (state, action) => {
         state.loggingIn = false;
-      })
+      });
   },
 });
 
 export const loginAsync = createAsyncThunk(
   "loginSlice/login",
-  async ({ emailOrUsername, password }) => {
+  async ({ emailOrUsername, password, onLoginSuccess }) => {
     const token = await attemptLogin({
       username: emailOrUsername,
       password,
     });
     // Add a cookie so we can use it to authenticate future page visits
     document.cookie = `NEG5_TOKEN=${token};Secure;Path=/`;
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
   }
 );
 

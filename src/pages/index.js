@@ -1,14 +1,21 @@
 import LoginPage from "features/login/container";
 
-import { wrapper } from 'store';
-import client from 'api/_client';
+import { wrapper } from "store";
+import { getServerSideUser } from "api/user";
 
 const IndexPage = () => <LoginPage />;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   ({ dispatch, getState }) => {
     return async (ctx) => {
-      console.log(ctx.req.cookies);
+      const user = await getServerSideUser(ctx.req);
+      if (user) {
+        return {
+          redirect: {
+            destination: "/tournaments",
+          },
+        };
+      }
     };
   }
 );
