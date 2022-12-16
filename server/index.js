@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const compression = require("compression");
 const next = require("next");
 const helmet = require("helmet");
@@ -18,6 +19,7 @@ app
 
     server.use(helmet());
     server.use(compression());
+    server.use(cookieParser());
     if (process.env.NODE_ENV !== "production") {
       server.use(morgan());
     }
@@ -35,6 +37,14 @@ app
       "/neg5-api",
       proxy(process.env.NEG5_API_HOST, {
         proxyReqPathResolver: (req) => `/neg5-api${req.url}`,
+        proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+          if (srcReq.cookies['NEG5_TOKEN']) {
+            proxyReqOpts.headers = {
+              ['NEG5_TOKEN']: srcReq.cookies['NEG5_TOKEN'],
+            }
+          }
+          return proxyReqOpts;
+        }
       })
     );
 

@@ -33,7 +33,7 @@ export const loginAsync = createAsyncThunk(
       password,
     });
     // Add a cookie so we can use it to authenticate future page visits
-    document.cookie = `NEG_5_TOKEN=${token};Secure`;
+    document.cookie = `NEG5_TOKEN=${token};Secure;Path=/`;
   }
 );
 
