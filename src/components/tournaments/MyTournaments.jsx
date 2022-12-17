@@ -26,7 +26,11 @@ const MyTournaments = ({
           <TournamentGallery
             title="Your Tournaments"
             tournaments={ownTournaments}
-            cta={<Button type="primary">+</Button>}
+            cta={
+              <Button type="primary" onClick={() => console.log(Math.random())}>
+                New
+              </Button>
+            }
           />
         </Col>
         <Col sm={6}>
