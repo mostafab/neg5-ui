@@ -22,20 +22,24 @@ const MyTournaments = ({
   return (
     <Container>
       <Row className="d-flex">
-        <Col sm={6}>
+        <Col sm={6} lg={12}>
           <TournamentGallery
-            title="Your Tournaments"
+            title="Upcoming Tournaments"
             tournaments={ownTournaments}
             cta={
-              <Button type="primary" onClick={() => console.log(Math.random())}>
-                New
+              <Button
+                className="m-3"
+                type="primary"
+                onClick={() => console.log(Math.random())}
+              >
+                +
               </Button>
             }
           />
         </Col>
-        <Col sm={6}>
+        <Col sm={6} lg={12}>
           <TournamentGallery
-            title="Shared with you"
+            title="Past Tournaments"
             tournaments={collaboratingTournaments}
           />
         </Col>

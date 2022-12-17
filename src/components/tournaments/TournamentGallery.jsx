@@ -17,13 +17,14 @@ const TournamentGallery = ({
       {cta}
       <Row>
         {tournaments.map((t) => (
-          <Col key={t.id} xs={12} sm={12} md={12}>
+          <Col key={t.id} xs={12} sm={12} md={12} lg={4}>
             <Card
               className="mb-4"
               title={t.name}
               onClick={() => router.push(`/tournaments/${t.id}`)}
             >
               <p>{t.location}</p>
+              <p>{t.tournamentDate}</p>
               <p>{t.questionSet}</p>
             </Card>
           </Col>
