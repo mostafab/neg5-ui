@@ -5,6 +5,7 @@ import { useAppDispatch } from "store";
 import { loadTournamentsAsync } from "features/myTournaments/myTournamentsSlice";
 
 import TournamentGallery from "components/tournaments/TournamentGallery";
+import Icon from "components/common/icon";
 import Button from "components/common/button";
 
 const MyTournaments = ({
@@ -32,7 +33,7 @@ const MyTournaments = ({
                 type="primary"
                 onClick={() => console.log(Math.random())}
               >
-                +
+                <Icon name="Plus" size="25"/>
               </Button>
             }
           />
