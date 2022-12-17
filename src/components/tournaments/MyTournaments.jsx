@@ -4,6 +4,8 @@ import { Col, Row, Container } from "react-bootstrap";
 import { useAppDispatch } from "store";
 import { loadTournamentsAsync } from "features/myTournaments/myTournamentsSlice";
 
+import TournamentGallery from "components/tournaments/TournamentGallery";
+
 const MyTournaments = ({
   collaboratingTournaments,
   ownTournaments,
@@ -19,13 +21,21 @@ const MyTournaments = ({
   return (
     <Container>
       <Row className="d-flex">
-        My Tournaments
+        <TournamentGallery
+          title="Your Tournaments"
+          tournaments={ownTournaments}
+          className="mt-5"
+        />
       </Row>
       <Row className="d-flex">
-        Shared Tournaments
+        <TournamentGallery
+          title="Shared with you"
+          tournaments={collaboratingTournaments}
+          className="mt-3"
+        />
       </Row>
     </Container>
-  )
+  );
 };
 
 export default MyTournaments;
