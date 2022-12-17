@@ -21,18 +21,18 @@ const MyTournaments = ({
   return (
     <Container>
       <Row className="d-flex">
-        <TournamentGallery
-          title="Your Tournaments"
-          tournaments={ownTournaments}
-          className="mt-5"
-        />
-      </Row>
-      <Row className="d-flex">
-        <TournamentGallery
-          title="Shared with you"
-          tournaments={collaboratingTournaments}
-          className="mt-3"
-        />
+        <Col sm={6}>
+          <TournamentGallery
+            title="Your Tournaments"
+            tournaments={ownTournaments}
+          />
+        </Col>
+        <Col sm={6}>
+          <TournamentGallery
+            title="Shared with you"
+            tournaments={collaboratingTournaments}
+          />
+        </Col>
       </Row>
     </Container>
   );
