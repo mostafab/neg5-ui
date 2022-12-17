@@ -1,6 +1,6 @@
 import BootstrapButton from "react-bootstrap/Button";
 
-import Icon from 'components/common/icon';
+import Icon from "components/common/icon";
 
 const Button = ({
   children,

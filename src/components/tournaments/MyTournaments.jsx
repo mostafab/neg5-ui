@@ -33,7 +33,7 @@ const MyTournaments = ({
                 type="primary"
                 onClick={() => console.log(Math.random())}
               >
-                <Icon name="Plus" size="25"/>
+                <Icon name="Plus" size="25" />
               </Button>
             }
           />
