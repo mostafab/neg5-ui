@@ -16,6 +16,9 @@ const myTournamentsSlice = createSlice({
     clickAddTournament: (state) => {
       state.showForm = true;
     },
+    closeAddTournament: (state) => {
+      state.showForm = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -39,6 +42,7 @@ export const loadTournamentsAsync = createAsyncThunk(
   }
 );
 
-export const { clickAddTournament } = myTournamentsSlice.actions;
+export const { clickAddTournament, closeAddTournament } =
+  myTournamentsSlice.actions;
 
 export const myTournamentsReducer = myTournamentsSlice.reducer;
