@@ -44,6 +44,21 @@ export const Form = ({
   );
 };
 
+export const Date = ({
+  name,
+  label,
+  placeholder = null,
+  className = "",
+}) => (
+  <CommonFormElementWrapper
+    name={name}
+    className={className}
+    label={label}
+    placeholder={placeholder}
+    type="date"
+  />
+)
+
 export const Text = ({
   name,
   autoComplete = false,
