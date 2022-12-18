@@ -26,7 +26,7 @@ export const Form = ({
       validateOnChange={false}
       validateOnBlur={false}
     >
-      <FormikForm name={name} noValidate>
+      <FormikForm name={name} noValidate className={name}>
         {children}
         <div className="d-grid">
           {onCancel && (
