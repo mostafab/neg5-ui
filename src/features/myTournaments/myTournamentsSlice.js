@@ -5,7 +5,7 @@ import { getUserTournaments } from "api/tournaments";
 const initialState = {
   collaboratingTournaments: [],
   ownTournaments: [],
-  loadingData: false,
+  loadingData: true,
 };
 
 const myTournamentsSlice = createSlice({

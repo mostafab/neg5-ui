@@ -13,7 +13,7 @@ const TournamentGallery = ({
   const router = useRouter();
   return (
     <div className={`TournamentGallery ${className}`}>
-      <h1 className="d-inline-block align-middle mr-5">{title}</h1>
+      <h4 className="d-inline-block align-middle mr-5">{title}</h4>
       {cta}
       <Row>
         {tournaments.map((t) => (
