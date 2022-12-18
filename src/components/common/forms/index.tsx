@@ -44,12 +44,7 @@ export const Form = ({
   );
 };
 
-export const Date = ({
-  name,
-  label,
-  placeholder = null,
-  className = "",
-}) => (
+export const Date = ({ name, label, placeholder = null, className = "" }) => (
   <CommonFormElementWrapper
     name={name}
     className={className}
@@ -57,7 +52,7 @@ export const Date = ({
     placeholder={placeholder}
     type="date"
   />
-)
+);
 
 export const Text = ({
   name,

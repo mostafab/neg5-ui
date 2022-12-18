@@ -1,18 +1,11 @@
 import React from "react";
 
-import { useAppDispatch } from "store";
-import { closeAddTournament } from "features/myTournaments/myTournamentsSlice";
 import Modal from "components/common/modal";
-
 import CreateTournamentForm from "./CreateTournamentForm";
 
-const CreateTournamentDialog = () => {
-  const dispatch = useAppDispatch();
+const CreateTournamentDialog = ({ onClose }) => {
   return (
-    <Modal
-      title="Add a Tournament"
-      onHide={() => dispatch(closeAddTournament())}
-    >
+    <Modal title="Add a Tournament" onHide={onClose}>
       <CreateTournamentForm />
     </Modal>
   );

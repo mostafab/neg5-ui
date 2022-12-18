@@ -1,11 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 
 import { useAppDispatch } from "store";
-import {
-  loadTournamentsAsync,
-  clickAddTournament,
-} from "features/myTournaments/myTournamentsSlice";
+import { loadTournamentsAsync } from "features/myTournaments/myTournamentsSlice";
 
 import Icon from "components/common/icon";
 import Button from "components/common/button";
@@ -13,18 +10,17 @@ import Button from "components/common/button";
 import TournamentGallery from "./TournamentGallery";
 import CreateTournamentDialog from "./CreateTournamentDialog";
 
-const MyTournaments = ({
-  collaboratingTournaments,
-  ownTournaments,
-  showForm,
-}) => {
+const MyTournaments = ({ collaboratingTournaments, ownTournaments }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(loadTournamentsAsync());
   }, []);
+  const [showForm, setShowForm] = useState(false);
   return (
     <>
-      {showForm && <CreateTournamentDialog />}
+      {showForm && (
+        <CreateTournamentDialog onClose={() => setShowForm(false)} />
+      )}
       <Container>
         <Row className="d-flex">
           <Col sm={12} lg={12}>
@@ -35,7 +31,7 @@ const MyTournaments = ({
                 <Button
                   className="m-3 btn-sm"
                   type="primary"
-                  onClick={() => dispatch(clickAddTournament())}
+                  onClick={() => setShowForm(true)}
                 >
                   <Icon name="Plus" size="20" />
                 </Button>
