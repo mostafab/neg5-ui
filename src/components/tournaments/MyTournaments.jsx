@@ -5,26 +5,17 @@ import { useAppDispatch } from "store";
 import { loadTournamentsAsync } from "features/myTournaments/myTournamentsSlice";
 
 import TournamentGallery from "components/tournaments/TournamentGallery";
-import Card from "components/common/cards";
 import Icon from "components/common/icon";
 import Button from "components/common/button";
 
 const MyTournaments = ({
   collaboratingTournaments,
   ownTournaments,
-  loadingData,
 }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(loadTournamentsAsync());
   }, []);
-  if (loadingData) {
-    return (
-      <div className="vh-100 d-flex justify-content-center align-items-center">
-        <Card title="Loading" />
-      </div>
-    );
-  }
   return (
     <Container>
       <Row className="d-flex">
