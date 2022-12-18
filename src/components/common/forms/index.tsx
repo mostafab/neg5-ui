@@ -44,13 +44,20 @@ export const Form = ({
   );
 };
 
-export const Text = ({ name, label, placeholder = null, className = "" }) => (
+export const Text = ({
+  name,
+  autoComplete = false,
+  label,
+  placeholder = null,
+  className = "",
+}) => (
   <CommonFormElementWrapper
     name={name}
     className={className}
     label={label}
     placeholder={placeholder}
     type={"text"}
+    autoComplete={autoComplete}
   />
 );
 
@@ -77,12 +84,14 @@ const CommonFormElementWrapper = ({
   label,
   placeholder,
   type,
+  autoComplete = false,
 }) => {
   const [field, meta] = useField(name);
   return (
     <FormComponent.Group className={className} controlId={name}>
       <FloatingLabel label={label} className="mb-3">
         <FormComponent.Control
+          autoComplete={autoComplete ? "on" : "off"}
           type={type}
           placeholder={placeholder || name}
           isInvalid={!!meta.error}

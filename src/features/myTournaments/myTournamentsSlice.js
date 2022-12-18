@@ -5,13 +5,21 @@ import { getUserTournaments } from "api/tournaments";
 const initialState = {
   collaboratingTournaments: [],
   ownTournaments: [],
-  loadingData: false,
+  loadingData: true,
+  showForm: false,
 };
 
 const myTournamentsSlice = createSlice({
   name: "myTournaments",
   initialState,
-  reducers: {},
+  reducers: {
+    clickAddTournament: (state) => {
+      state.showForm = true;
+    },
+    closeAddTournament: (state) => {
+      state.showForm = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadTournamentsAsync.pending, (state, _action) => {
@@ -33,5 +41,8 @@ export const loadTournamentsAsync = createAsyncThunk(
     return await getUserTournaments();
   }
 );
+
+export const { clickAddTournament, closeAddTournament } =
+  myTournamentsSlice.actions;
 
 export const myTournamentsReducer = myTournamentsSlice.reducer;

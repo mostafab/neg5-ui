@@ -1,5 +1,6 @@
 const ContentSecurityPolicy = `
   default-src 'self';
+  img-src 'self' data:;
   script-src 'self' 'unsafe-eval';
   child-src 'self';
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
