@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 
 import { useAppDispatch } from "store";
-import { loadTournamentsAsync } from "features/myTournaments/myTournamentsSlice";
+import {
+  loadTournamentsAsync,
+  clickAddTournament,
+} from "features/myTournaments/myTournamentsSlice";
 
 import TournamentGallery from "components/tournaments/TournamentGallery";
 import Icon from "components/common/icon";
 import Button from "components/common/button";
 
-const MyTournaments = ({
-  collaboratingTournaments,
-  ownTournaments,
-}) => {
+const MyTournaments = ({ collaboratingTournaments, ownTournaments }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(loadTournamentsAsync());
@@ -27,7 +27,7 @@ const MyTournaments = ({
               <Button
                 className="m-3 btn-sm"
                 type="primary"
-                onClick={() => console.log(Math.random())}
+                onClick={() => dispatch(clickAddTournament())}
               >
                 <Icon name="Plus" size="20" />
               </Button>

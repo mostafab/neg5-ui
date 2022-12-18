@@ -6,12 +6,17 @@ const initialState = {
   collaboratingTournaments: [],
   ownTournaments: [],
   loadingData: true,
+  showForm: false,
 };
 
 const myTournamentsSlice = createSlice({
   name: "myTournaments",
   initialState,
-  reducers: {},
+  reducers: {
+    clickAddTournament: (state) => {
+      state.showForm = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadTournamentsAsync.pending, (state, _action) => {
@@ -33,5 +38,7 @@ export const loadTournamentsAsync = createAsyncThunk(
     return await getUserTournaments();
   }
 );
+
+export const { clickAddTournament } = myTournamentsSlice.actions;
 
 export const myTournamentsReducer = myTournamentsSlice.reducer;
