@@ -10,7 +10,9 @@ const initialValues = {
 };
 
 const validation = Yup.object({
-  name: Yup.string().required("Please enter a name."),
+  name: Yup.string().required(
+    "Please enter a name."
+  ),
 });
 
 const CreateTournamentForm = () => (
@@ -20,6 +22,7 @@ const CreateTournamentForm = () => (
       initialValues={initialValues}
       validation={validation}
       submitButtonText="Create"
+      onSubmit={values => console.log(values)}
     >
       <Text name="name" label="Name" />
       <Text name="location" label="Location" />
