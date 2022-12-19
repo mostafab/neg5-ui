@@ -28,15 +28,15 @@ const initialValues = {
   tossupValues: [
     {
       value: 15,
-      type: "Power",
+      answerType: "Power",
     },
     {
       value: 10,
-      type: "Base",
+      answerType: "Base",
     },
     {
       value: -5,
-      type: "Neg",
+      answerType: "Neg",
     },
   ],
 };
@@ -108,7 +108,7 @@ const CreateTournamentForm = ({ submitting }) => {
                             label="Value"
                           />
                           <Select
-                            name={`tossupValues[${idx}].type`}
+                            name={`tossupValues[${idx}].answerType`}
                             label="Type"
                             options={answerTypeOptions}
                           />
@@ -138,7 +138,7 @@ const CreateTournamentForm = ({ submitting }) => {
       submitButtonText="Create"
       onSubmit={(values) => {
         console.log(values);
-        // dispatch(createTournamentAsync({ values }));
+        dispatch(createTournamentAsync({ values }));
       }}
       submitting={submitting}
     >
