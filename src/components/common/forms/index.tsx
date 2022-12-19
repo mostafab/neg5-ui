@@ -5,7 +5,7 @@ import {
   FloatingLabel,
   Spinner,
 } from "react-bootstrap";
-import { Formik, Form as FormikForm, useField } from "formik";
+import { Formik, Form as FormikForm, useField, FieldArray } from "formik";
 
 export const Form = ({
   name,
@@ -43,6 +43,17 @@ export const Form = ({
     </Formik>
   );
 };
+
+export const RepeatField = ({ name, objects, objectRenderFunction }) => (
+  <FieldArray
+    name={name}
+    render={() =>
+      objects.map((obj, idx) => {
+        return objectRenderFunction(obj, idx);
+      })
+    }
+  />
+);
 
 export const Date = ({ name, label, placeholder = null, className = "" }) => (
   <CommonFormElementWrapper

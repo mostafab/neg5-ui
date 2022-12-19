@@ -67,6 +67,9 @@ const CreateTournamentForm = ({ submitting }) => {
                 <Checkbox name="usesBouncebacks" label="Bouncebacks?" />
                 <Checkbox name="allowTies" label="Allow Ties?" />
               </Col>
+              <Col md={7} lg={6} sm={6} xs={12}>
+                <h6>Tossup Point Values</h6>
+              </Col>
             </Row>
             <div className="d-flex justify-content-center mb-3">
               <Button onClick={() => setStage("required")} type="link">
