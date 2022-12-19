@@ -1,19 +1,13 @@
 import React, { useState } from "react";
-import { Row, Col, InputGroup } from "react-bootstrap";
 import * as Yup from "yup";
 
 import { useAppDispatch } from "store";
-import {
-  Form,
-  Text,
-  Date,
-  Checkbox,
-  Number,
-  RepeatField,
-  Select,
-} from "components/common/forms";
+import { Form } from "components/common/forms";
 import Button from "components/common/button";
 import { createTournamentAsync } from "features/myTournaments/myTournamentsSlice";
+
+import TournamentInfoFields from "components/tournaments/common/TournamentInfoFields";
+import ScoringRulesFields from "components/tournaments/common/ScoringRulesFields";
 
 const initialValues = {
   name: "",
@@ -55,12 +49,6 @@ const validation = Yup.object({
     .positive("Max active players should be positive."),
 });
 
-const answerTypeOptions = [
-  { label: "Base", value: "Base" },
-  { label: "Power", value: "Power" },
-  { label: "Neg", value: "Neg" },
-];
-
 const CreateTournamentForm = ({ submitting }) => {
   const dispatch = useAppDispatch();
   const [stage, setStage] = useState("required");
@@ -70,13 +58,10 @@ const CreateTournamentForm = ({ submitting }) => {
       case "required":
         return (
           <>
-            <Text name="name" label="Name" />
-            <Date name="tournamentDate" label="Date" />
-            <Text name="location" label="Location" />
-            <Text name="questionSet" label="Question Set" />
+            <TournamentInfoFields />
             <div className="d-flex justify-content-center mb-3">
               <Button onClick={() => setStage("rules")} type="link">
-                Set Custom Rules
+                Set Custom Scoring Rules
               </Button>
             </div>
           </>
@@ -84,41 +69,7 @@ const CreateTournamentForm = ({ submitting }) => {
       case "rules":
         return (
           <>
-            <Row>
-              <Col md={5} lg={6} sm={6} xs={12}>
-                <Number name="bonusPointValue" label="Bonus Point Value" />
-                <Number name="partsPerBonus" label="Parts Per Bonus" />
-                <Number
-                  name="maxActivePlayersPerTeam"
-                  label="Max # of Players"
-                />
-                <Checkbox name="usesBouncebacks" label="Bouncebacks?" />
-                <Checkbox name="allowTies" label="Allow Ties?" />
-              </Col>
-              <Col md={7} lg={6} sm={6} xs={12}>
-                <h6>Tossup Point Values</h6>
-                <RepeatField
-                  name="tossupValues"
-                  render={(_tv, idx) => {
-                    return (
-                      <Row key={idx}>
-                        <InputGroup>
-                          <Number
-                            name={`tossupValues[${idx}].value`}
-                            label="Value"
-                          />
-                          <Select
-                            name={`tossupValues[${idx}].answerType`}
-                            label="Type"
-                            options={answerTypeOptions}
-                          />
-                        </InputGroup>
-                      </Row>
-                    );
-                  }}
-                />
-              </Col>
-            </Row>
+            <ScoringRulesFields />
             <div className="d-flex justify-content-center mb-3">
               <Button onClick={() => setStage("required")} type="link">
                 Back
