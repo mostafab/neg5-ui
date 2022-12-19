@@ -3,7 +3,14 @@ import { Row, Col } from "react-bootstrap";
 import * as Yup from "yup";
 
 import { useAppDispatch } from "store";
-import { Form, Text, Date, Checkbox, Number } from "components/common/forms";
+import {
+  Form,
+  Text,
+  Date,
+  Checkbox,
+  Number,
+  RepeatField,
+} from "components/common/forms";
 import Button from "components/common/button";
 import { createTournamentAsync } from "features/myTournaments/myTournamentsSlice";
 
@@ -17,6 +24,20 @@ const initialValues = {
   maxActivePlayersPerTeam: 4,
   usesBouncebacks: false,
   allowTies: false,
+  tossupValues: [
+    {
+      value: 10,
+      type: "Base",
+    },
+    {
+      value: 15,
+      type: "Power",
+    },
+    {
+      value: -5,
+      type: "Neg",
+    },
+  ],
 };
 
 const validation = Yup.object({
@@ -69,6 +90,27 @@ const CreateTournamentForm = ({ submitting }) => {
               </Col>
               <Col md={7} lg={6} sm={6} xs={12}>
                 <h6>Tossup Point Values</h6>
+                <RepeatField
+                  name="tossupValues"
+                  render={(_tv, idx) => {
+                    return (
+                      <Row key={idx}>
+                        <Col lg={5} sm={5} md={5}>
+                          <Number
+                            name={`tossupValues[${idx}].value`}
+                            label="Value"
+                          />
+                        </Col>
+                        <Col lg={7} sm={7} md={7}>
+                          <Text
+                            name={`tossupValues[${idx}].type`}
+                            label="Type"
+                          />
+                        </Col>
+                      </Row>
+                    );
+                  }}
+                />
               </Col>
             </Row>
             <div className="d-flex justify-content-center mb-3">

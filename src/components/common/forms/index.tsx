@@ -44,16 +44,24 @@ export const Form = ({
   );
 };
 
-export const RepeatField = ({ name, objects, objectRenderFunction }) => (
-  <FieldArray
-    name={name}
-    render={() =>
-      objects.map((obj, idx) => {
-        return objectRenderFunction(obj, idx);
-      })
-    }
-  />
-);
+export const RepeatField = ({ name, render }) => {
+  const [field] = useField(name);
+  console.log(field);
+  return (
+    <FieldArray
+      name={name}
+      render={() => {
+        if (!Array.isArray(field.value)) {
+          console.error(
+            "Non-array field passed to RepeatField. Will not render anything."
+          );
+          return null;
+        }
+        return field.value.map((val, idx) => render(val, idx));
+      }}
+    />
+  );
+};
 
 export const Date = ({ name, label, placeholder = null, className = "" }) => (
   <CommonFormElementWrapper
