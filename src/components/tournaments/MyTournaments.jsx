@@ -10,7 +10,11 @@ import Button from "components/common/button";
 import TournamentGallery from "./TournamentGallery";
 import CreateTournamentDialog from "./CreateTournamentDialog";
 
-const MyTournaments = ({ collaboratingTournaments, ownTournaments }) => {
+const MyTournaments = ({
+  collaboratingTournaments,
+  ownTournaments,
+  submittingTournament,
+}) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(loadTournamentsAsync());
@@ -19,7 +23,10 @@ const MyTournaments = ({ collaboratingTournaments, ownTournaments }) => {
   return (
     <>
       {showForm && (
-        <CreateTournamentDialog onClose={() => setShowForm(false)} />
+        <CreateTournamentDialog
+          onClose={() => setShowForm(false)}
+          submitting={submittingTournament}
+        />
       )}
       <Container>
         <Row className="d-flex">
