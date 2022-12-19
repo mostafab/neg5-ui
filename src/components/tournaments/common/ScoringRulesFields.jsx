@@ -8,6 +8,7 @@ import {
   RepeatField,
   Select,
 } from "@components/common/forms";
+import Button from "@components/common/button";
 
 const answerTypeOptions = [
   { label: "Base", value: "Base" },
@@ -17,26 +18,32 @@ const answerTypeOptions = [
 
 const ScoringRulesFields = ({ className = "" }) => (
   <Row className={className}>
-    <Col md={5} lg={6} sm={6} xs={12}>
+    <Col md={5} lg={5} sm={6} xs={12}>
       <Number name="bonusPointValue" label="Bonus Point Value" />
       <Number name="partsPerBonus" label="Parts Per Bonus" />
       <Number name="maxActivePlayersPerTeam" label="Max # of Players" />
       <Checkbox name="usesBouncebacks" label="Bouncebacks?" />
       <Checkbox name="allowTies" label="Allow Ties?" />
     </Col>
-    <Col md={7} lg={6} sm={6} xs={12}>
+    <Col md={7} lg={7} sm={6} xs={12}>
       <h6>Tossup Point Values</h6>
       <RepeatField
         name="tossupValues"
-        render={(_tv, idx) => {
+        render={(_tv, idx, { remove }) => {
           return (
             <Row key={idx}>
-              <InputGroup>
+              <InputGroup size="sm">
                 <Number name={`tossupValues[${idx}].value`} label="Value" />
                 <Select
                   name={`tossupValues[${idx}].answerType`}
                   label="Type"
                   options={answerTypeOptions}
+                />
+                <Button
+                  type="outline-primary"
+                  className="mb-3"
+                  icon="X"
+                  onClick={() => remove(idx)}
                 />
               </InputGroup>
             </Row>

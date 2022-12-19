@@ -76,7 +76,7 @@ const CreateTournamentForm = ({ submitting }) => {
       submitButtonText="Create"
       onSubmit={(values) => {
         console.log(values);
-        dispatch(createTournamentAsync({ values }));
+        // dispatch(createTournamentAsync({ values }));
       }}
       submitting={submitting}
     >
