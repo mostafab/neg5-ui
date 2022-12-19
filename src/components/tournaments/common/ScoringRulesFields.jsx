@@ -15,8 +15,8 @@ const answerTypeOptions = [
   { label: "Neg", value: "Neg" },
 ];
 
-const ScoringRulesFields = () => (
-  <Row>
+const ScoringRulesFields = ({ className = "" }) => (
+  <Row className={className}>
     <Col md={5} lg={6} sm={6} xs={12}>
       <Number name="bonusPointValue" label="Bonus Point Value" />
       <Number name="partsPerBonus" label="Parts Per Bonus" />

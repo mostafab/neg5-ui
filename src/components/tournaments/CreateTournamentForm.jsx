@@ -59,7 +59,12 @@ const CreateTournamentForm = ({ submitting }) => {
             </Button>
           </div>
         )}
-        {showRules && <ScoringRulesFields />}
+        {showRules && (
+          <>
+            <hr />
+            <ScoringRulesFields className="mb-3" />
+          </>
+        )}
       </>
     );
   };
