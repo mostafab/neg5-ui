@@ -139,13 +139,6 @@ export const Password = ({ name, label, placeholder = "" }) => (
   />
 );
 
-export const RepeatField = ({ name, objects, render }) => (
-  <FieldArray
-    name={name}
-    render={() => objects.map((obj, idx) => render(obj, idx))}
-  />
-);
-
 const CommonFormElementWrapper = ({
   name,
   label,
