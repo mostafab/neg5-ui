@@ -22,13 +22,15 @@ const initialValues = {
 const validation = Yup.object({
   name: Yup.string().required("Please enter a name."),
   tournamentDate: Yup.string().required("Please enter a date."),
-  bonusPointValue: Yup.number().positive(
-    "Bonus point value should be positive."
-  ),
-  partsPerBonus: Yup.number().positive("Parts per bonus should be positive."),
-  maxActivePlayersPerTeam: Yup.number().positive(
-    "Max active players should be positive."
-  ),
+  bonusPointValue: Yup.number()
+    .required("Please enter a bonus point value.")
+    .positive("Bonus point value should be positive."),
+  partsPerBonus: Yup.number()
+    .required("Please enter parts per bonus")
+    .positive("Parts per bonus should be positive."),
+  maxActivePlayersPerTeam: Yup.number()
+    .required("Please enter max active players.")
+    .positive("Max active players should be positive."),
 });
 
 const CreateTournamentForm = ({ submitting }) => {
@@ -85,7 +87,7 @@ const CreateTournamentForm = ({ submitting }) => {
       submitButtonText="Create"
       onSubmit={(values) => {
         console.log(values);
-        dispatch(createTournamentAsync({ values }));
+        // dispatch(createTournamentAsync({ values }));
       }}
       submitting={submitting}
     >
