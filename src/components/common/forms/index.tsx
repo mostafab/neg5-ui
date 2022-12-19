@@ -46,7 +46,6 @@ export const Form = ({
 
 export const RepeatField = ({ name, render }) => {
   const [field] = useField(name);
-  console.log(field);
   return (
     <FieldArray
       name={name}
