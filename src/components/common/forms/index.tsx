@@ -63,10 +63,9 @@ export const RepeatField = ({ name, render }) => {
   );
 };
 
-export const Date = ({ name, label, placeholder = null, className = "" }) => (
+export const Date = ({ name, label, placeholder = null }) => (
   <CommonFormElementWrapper
     name={name}
-    className={className}
     label={label}
     placeholder={placeholder}
     type="date"
@@ -78,11 +77,9 @@ export const Text = ({
   autoComplete = false,
   label,
   placeholder = null,
-  className = "",
 }) => (
   <CommonFormElementWrapper
     name={name}
-    className={className}
     label={label}
     placeholder={placeholder}
     type={"text"}
@@ -95,11 +92,9 @@ export const Number = ({
   autoComplete = false,
   label,
   placeholder = null,
-  className = "",
 }) => (
   <CommonFormElementWrapper
     name={name}
-    className={className}
     label={label}
     placeholder={placeholder}
     type="number"
@@ -107,10 +102,10 @@ export const Number = ({
   />
 );
 
-export const Checkbox = ({ name, label, className = "" }) => {
+export const Checkbox = ({ name, label }) => {
   const [field] = useField(name);
   return (
-    <FormComponent.Group className={className} controlId={name}>
+    <FormComponent.Group controlId={name}>
       <FormComponent.Check
         type="checkbox"
         label={label}
@@ -121,10 +116,24 @@ export const Checkbox = ({ name, label, className = "" }) => {
   );
 };
 
-export const Password = ({ name, label, placeholder = "", className = "" }) => (
+export const Select = ({ name, label, options }) => {
+  const [field] = useField(name);
+  return (
+    <FloatingLabel label={label} className="mb-3">
+      <FormComponent.Select aria-label={label} {...field}>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </FormComponent.Select>
+    </FloatingLabel>
+  );
+};
+
+export const Password = ({ name, label, placeholder = "" }) => (
   <CommonFormElementWrapper
     name={name}
-    className={className}
     label={label}
     placeholder={placeholder}
     type={"password"}
@@ -133,7 +142,6 @@ export const Password = ({ name, label, placeholder = "", className = "" }) => (
 
 const CommonFormElementWrapper = ({
   name,
-  className = "",
   label,
   placeholder,
   type,
@@ -141,7 +149,7 @@ const CommonFormElementWrapper = ({
 }) => {
   const [field, meta] = useField(name);
   return (
-    <FormComponent.Group className={className} controlId={name}>
+    <>
       <FloatingLabel label={label} className="mb-3">
         <FormComponent.Control
           autoComplete={autoComplete ? "on" : "off"}
@@ -156,6 +164,6 @@ const CommonFormElementWrapper = ({
           </FormComponent.Control.Feedback>
         )}
       </FloatingLabel>
-    </FormComponent.Group>
+    </>
   );
 };

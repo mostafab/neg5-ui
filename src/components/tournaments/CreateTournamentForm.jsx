@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, InputGroup } from "react-bootstrap";
 import * as Yup from "yup";
 
 import { useAppDispatch } from "store";
@@ -10,6 +10,7 @@ import {
   Checkbox,
   Number,
   RepeatField,
+  Select,
 } from "components/common/forms";
 import Button from "components/common/button";
 import { createTournamentAsync } from "features/myTournaments/myTournamentsSlice";
@@ -54,6 +55,12 @@ const validation = Yup.object({
     .positive("Max active players should be positive."),
 });
 
+const answerTypeOptions = [
+  { label: "Base", value: "Base" },
+  { label: "Power", value: "Power" },
+  { label: "Neg", value: "Neg" },
+];
+
 const CreateTournamentForm = ({ submitting }) => {
   const dispatch = useAppDispatch();
   const [stage, setStage] = useState("required");
@@ -95,18 +102,17 @@ const CreateTournamentForm = ({ submitting }) => {
                   render={(_tv, idx) => {
                     return (
                       <Row key={idx}>
-                        <Col lg={5} sm={5} md={5}>
+                        <InputGroup>
                           <Number
                             name={`tossupValues[${idx}].value`}
                             label="Value"
                           />
-                        </Col>
-                        <Col lg={7} sm={7} md={7}>
-                          <Text
+                          <Select
                             name={`tossupValues[${idx}].type`}
                             label="Type"
+                            options={answerTypeOptions}
                           />
-                        </Col>
+                        </InputGroup>
                       </Row>
                     );
                   }}
