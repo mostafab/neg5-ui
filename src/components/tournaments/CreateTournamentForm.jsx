@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
 
-import { useAppDispatch } from "store";
+import { useAppDispatch } from "@store";
 import { Form } from "@components/common/forms";
 import Button from "@components/common/button";
 import { createTournamentAsync } from "@features/myTournaments/myTournamentsSlice";
@@ -13,7 +13,7 @@ import ScoringRulesFields, {
   validation as rulesValidation,
 } from "@components/tournaments/common/ScoringRulesFields";
 
-const initialValues = {
+const initialValues = () => ({
   name: "",
   tournamentDate: "",
   location: "",
@@ -37,7 +37,7 @@ const initialValues = {
       answerType: "Neg",
     },
   ],
-};
+});
 
 const validation = Yup.object({
   ...infoValidation(),
@@ -71,7 +71,7 @@ const CreateTournamentForm = ({ submitting }) => {
   return (
     <Form
       name="CreateTournamentForm"
-      initialValues={initialValues}
+      initialValues={initialValues()}
       validation={validation}
       submitButtonText="Create"
       onSubmit={(values) => {
