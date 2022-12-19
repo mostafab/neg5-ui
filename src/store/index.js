@@ -5,8 +5,8 @@ import { createLogger } from "redux-logger";
 
 import config from "config";
 
-import { loginReducer } from "features/login/loginSlice";
-import { myTournamentsReducer } from "features/myTournaments/myTournamentsSlice";
+import { loginReducer } from "@features/login/loginSlice";
+import { myTournamentsReducer } from "@features/myTournaments/myTournamentsSlice";
 
 const combinedReducer = combineReducers({
   loginReducer,

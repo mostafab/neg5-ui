@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { attemptLogin, attemptRegister } from "api/login";
-import { setLoginCookie } from "libs/cookies";
+import { attemptLogin, attemptRegister } from "@api/login";
+import { setLoginCookie } from "@libs/cookies";
 
 const initialState = {
   loggingIn: false,

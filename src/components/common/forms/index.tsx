@@ -26,7 +26,7 @@ export const Form = ({
       validateOnChange={false}
       validateOnBlur={false}
     >
-      <FormikForm name={name} noValidate>
+      <FormikForm name={name} noValidate className={name}>
         {children}
         <div className="d-grid">
           {onCancel && (
@@ -44,16 +44,41 @@ export const Form = ({
   );
 };
 
+export const RepeatField = ({ name, render }) => {
+  const [field] = useField(name);
+  return (
+    <FieldArray
+      name={name}
+      render={() => {
+        if (!Array.isArray(field.value)) {
+          console.error(
+            "Non-array field passed to RepeatField. Will not render anything."
+          );
+          return null;
+        }
+        return field.value.map((val, idx) => render(val, idx));
+      }}
+    />
+  );
+};
+
+export const Date = ({ name, label, placeholder = null }) => (
+  <CommonFormElementWrapper
+    name={name}
+    label={label}
+    placeholder={placeholder}
+    type="date"
+  />
+);
+
 export const Text = ({
   name,
   autoComplete = false,
   label,
   placeholder = null,
-  className = "",
 }) => (
   <CommonFormElementWrapper
     name={name}
-    className={className}
     label={label}
     placeholder={placeholder}
     type={"text"}
@@ -61,26 +86,61 @@ export const Text = ({
   />
 );
 
-export const Password = ({ name, label, placeholder = "", className = "" }) => (
+export const Number = ({
+  name,
+  autoComplete = false,
+  label,
+  placeholder = null,
+}) => (
   <CommonFormElementWrapper
     name={name}
-    className={className}
+    label={label}
+    placeholder={placeholder}
+    type="number"
+    autoComplete={autoComplete}
+  />
+);
+
+export const Checkbox = ({ name, label }) => {
+  const [field] = useField(name);
+  return (
+    <FormComponent.Group controlId={name}>
+      <FormComponent.Check
+        type="checkbox"
+        label={label}
+        {...field}
+        checked={field.value}
+      />
+    </FormComponent.Group>
+  );
+};
+
+export const Select = ({ name, label, options }) => {
+  const [field] = useField(name);
+  return (
+    <FloatingLabel label={label} className="mb-3">
+      <FormComponent.Select aria-label={label} {...field}>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </FormComponent.Select>
+    </FloatingLabel>
+  );
+};
+
+export const Password = ({ name, label, placeholder = "" }) => (
+  <CommonFormElementWrapper
+    name={name}
     label={label}
     placeholder={placeholder}
     type={"password"}
   />
 );
 
-export const RepeatField = ({ name, objects, render }) => (
-  <FieldArray
-    name={name}
-    render={() => objects.map((obj, idx) => render(obj, idx))}
-  />
-);
-
 const CommonFormElementWrapper = ({
   name,
-  className = "",
   label,
   placeholder,
   type,
@@ -88,7 +148,7 @@ const CommonFormElementWrapper = ({
 }) => {
   const [field, meta] = useField(name);
   return (
-    <FormComponent.Group className={className} controlId={name}>
+    <>
       <FloatingLabel label={label} className="mb-3">
         <FormComponent.Control
           autoComplete={autoComplete ? "on" : "off"}
@@ -103,6 +163,6 @@ const CommonFormElementWrapper = ({
           </FormComponent.Control.Feedback>
         )}
       </FloatingLabel>
-    </FormComponent.Group>
+    </>
   );
 };

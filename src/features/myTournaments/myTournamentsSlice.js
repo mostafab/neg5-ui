@@ -1,25 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getUserTournaments } from "api/tournaments";
+import { getUserTournaments, createTournament } from "@api/tournaments";
 
 const initialState = {
   collaboratingTournaments: [],
   ownTournaments: [],
   loadingData: true,
-  showForm: false,
+  submittingTournament: false,
+  submittingTournamentError: null,
 };
 
 const myTournamentsSlice = createSlice({
   name: "myTournaments",
   initialState,
-  reducers: {
-    clickAddTournament: (state) => {
-      state.showForm = true;
-    },
-    closeAddTournament: (state) => {
-      state.showForm = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loadTournamentsAsync.pending, (state, _action) => {
@@ -31,6 +25,16 @@ const myTournamentsSlice = createSlice({
         state.loadingData = false;
         state.collaboratingTournaments = collaboratingTournaments;
         state.ownTournaments = userOwnedTournaments;
+      })
+      .addCase(createTournamentAsync.pending, (state) => {
+        state.submittingTournament = true;
+      })
+      .addCase(createTournamentAsync.fulfilled, (state) => {
+        state.submittingTournament = false;
+      })
+      .addCase(createTournamentAsync.rejected, (state, action) => {
+        state.submittingTournament = false;
+        console.log(action);
       });
   },
 });
@@ -42,7 +46,23 @@ export const loadTournamentsAsync = createAsyncThunk(
   }
 );
 
-export const { clickAddTournament, closeAddTournament } =
-  myTournamentsSlice.actions;
+export const createTournamentAsync = createAsyncThunk(
+  "myTournamentsSlice/createTournament",
+  async ({ values, onSuccess }, thunkApi) => {
+    let result;
+    try {
+      result = await createTournament(values);
+    } catch (e) {
+      if (e.response?.status === 400) {
+        return thunkApi.rejectWithValue(e.response.data);
+      }
+      throw e;
+    }
+    if (onSuccess) {
+      onSuccess();
+    }
+    return result;
+  }
+);
 
 export const myTournamentsReducer = myTournamentsSlice.reducer;

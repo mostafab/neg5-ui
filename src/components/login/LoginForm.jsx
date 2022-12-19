@@ -2,9 +2,10 @@ import React from "react";
 import * as Yup from "yup";
 import { Image } from "react-bootstrap";
 
-import { useAppDispatch } from "store";
-import { loginAsync } from "features/login/loginSlice";
-import { Form, Text, Password } from "components/common/forms";
+import { useAppDispatch } from "@store";
+import { loginAsync } from "@features/login/loginSlice";
+import { Form, Text, Password } from "@components/common/forms";
+
 import styles from "./LoginPage.module.css";
 
 const validation = Yup.object({

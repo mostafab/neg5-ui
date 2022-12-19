@@ -1,7 +1,7 @@
 import { getServerSideUser } from "api/user";
 
-import AppLayout from "components/common/layout/AppLayout";
-import MyTournaments from "features/myTournaments/container";
+import AppLayout from "@components/common/layout/AppLayout";
+import MyTournaments from "@features/myTournaments/container";
 
 const TournamentPage = () => <MyTournaments />;
 

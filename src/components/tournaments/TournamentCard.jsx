@@ -1,6 +1,6 @@
 import React from "react";
 
-import Card from "components/common/cards";
+import Card from "@components/common/cards";
 
 const TournamentCard = ({
   name,

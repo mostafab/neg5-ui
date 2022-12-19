@@ -1,9 +1,9 @@
 import React from "react";
 import * as Yup from "yup";
 
-import { useAppDispatch } from "store";
-import { registerAsync } from "features/login/loginSlice";
-import { Form, Text, Password } from "components/common/forms";
+import { useAppDispatch } from "@store";
+import { registerAsync } from "@features/login/loginSlice";
+import { Form, Text, Password } from "@components/common/forms";
 
 const validation = Yup.object({
   email: Yup.string().email().required("Enter your email."),

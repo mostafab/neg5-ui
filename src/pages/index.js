@@ -1,5 +1,5 @@
-import LoginPage from "features/login/container";
-import { getServerSideUser } from "api/user";
+import LoginPage from "@features/login/container";
+import { getServerSideUser } from "@api/user";
 
 const IndexPage = () => <LoginPage />;
 
