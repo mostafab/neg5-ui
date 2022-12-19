@@ -27,12 +27,12 @@ const initialValues = {
   allowTies: false,
   tossupValues: [
     {
-      value: 10,
-      type: "Base",
-    },
-    {
       value: 15,
       type: "Power",
+    },
+    {
+      value: 10,
+      type: "Base",
     },
     {
       value: -5,
