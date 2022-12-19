@@ -71,6 +71,37 @@ export const Text = ({
   />
 );
 
+export const Number = ({
+  name,
+  autoComplete = false,
+  label,
+  placeholder = null,
+  className = "",
+}) => (
+  <CommonFormElementWrapper
+    name={name}
+    className={className}
+    label={label}
+    placeholder={placeholder}
+    type="number"
+    autoComplete={autoComplete}
+  />
+);
+
+export const Checkbox = ({ name, label, className = "" }) => {
+  const [field] = useField(name);
+  return (
+    <FormComponent.Group className={className} controlId={name}>
+      <FormComponent.Check
+        type="checkbox"
+        label={label}
+        {...field}
+        checked={field.value}
+      />
+    </FormComponent.Group>
+  );
+};
+
 export const Password = ({ name, label, placeholder = "", className = "" }) => (
   <CommonFormElementWrapper
     name={name}
