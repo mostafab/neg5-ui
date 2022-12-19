@@ -46,35 +46,22 @@ const validation = Yup.object({
 
 const CreateTournamentForm = ({ submitting }) => {
   const dispatch = useAppDispatch();
-  const [stage, setStage] = useState("required");
+  const [showRules, setShowRules] = useState(false);
 
-  const renderCurrentStage = () => {
-    switch (stage) {
-      case "required":
-        return (
-          <>
-            <TournamentInfoFields />
-            <div className="d-flex justify-content-center mb-3">
-              <Button onClick={() => setStage("rules")} type="link">
-                Set Custom Scoring Rules
-              </Button>
-            </div>
-          </>
-        );
-      case "rules":
-        return (
-          <>
-            <ScoringRulesFields />
-            <div className="d-flex justify-content-center mb-3">
-              <Button onClick={() => setStage("required")} type="link">
-                Back
-              </Button>
-            </div>
-          </>
-        );
-      default:
-        break;
-    }
+  const renderFields = () => {
+    return (
+      <>
+        <TournamentInfoFields />
+        {!showRules && (
+          <div className="d-flex justify-content-center mb-3">
+            <Button onClick={() => setShowRules(true)} type="link">
+              Set Custom Scoring Rules
+            </Button>
+          </div>
+        )}
+        {showRules && <ScoringRulesFields />}
+      </>
+    );
   };
   return (
     <Form
@@ -88,7 +75,7 @@ const CreateTournamentForm = ({ submitting }) => {
       }}
       submitting={submitting}
     >
-      {renderCurrentStage()}
+      {renderFields()}
     </Form>
   );
 };

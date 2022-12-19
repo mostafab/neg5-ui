@@ -49,8 +49,9 @@ export const loadTournamentsAsync = createAsyncThunk(
 export const createTournamentAsync = createAsyncThunk(
   "myTournamentsSlice/createTournament",
   async ({ values, onSuccess }, thunkApi) => {
+    let result;
     try {
-      return await createTournament(values);
+      result = await createTournament(values);
     } catch (e) {
       if (e.response?.status === 400) {
         return thunkApi.rejectWithValue(e.response.data);
@@ -60,6 +61,7 @@ export const createTournamentAsync = createAsyncThunk(
     if (onSuccess) {
       onSuccess();
     }
+    return result;
   }
 );
 
