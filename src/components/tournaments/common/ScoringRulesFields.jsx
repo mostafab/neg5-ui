@@ -2,7 +2,12 @@ import React from "react";
 import { Row, Col, InputGroup } from "react-bootstrap";
 import * as Yup from "yup";
 
-import { Checkbox, Number, RepeatField, Select } from "components/common/forms";
+import {
+  Checkbox,
+  Number,
+  RepeatField,
+  Select,
+} from "@components/common/forms";
 
 const answerTypeOptions = [
   { label: "Base", value: "Base" },

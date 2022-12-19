@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 
 import { useAppDispatch } from "store";
-import { Form } from "components/common/forms";
-import Button from "components/common/button";
-import { createTournamentAsync } from "features/myTournaments/myTournamentsSlice";
+import { Form } from "@components/common/forms";
+import Button from "@components/common/button";
+import { createTournamentAsync } from "@features/myTournaments/myTournamentsSlice";
 
 import TournamentInfoFields, {
   validation as infoValidation,
-} from "components/tournaments/common/TournamentInfoFields";
+} from "@components/tournaments/common/TournamentInfoFields";
 import ScoringRulesFields, {
   validation as rulesValidation,
-} from "components/tournaments/common/ScoringRulesFields";
+} from "@components/tournaments/common/ScoringRulesFields";
 
 const initialValues = {
   name: "",

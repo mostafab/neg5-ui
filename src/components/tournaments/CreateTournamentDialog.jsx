@@ -1,6 +1,6 @@
 import React from "react";
 
-import Modal from "components/common/modal";
+import Modal from "@components/common/modal";
 import CreateTournamentForm from "./CreateTournamentForm";
 
 const CreateTournamentDialog = ({ onClose, submitting }) => {

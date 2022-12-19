@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 
-import { useAppDispatch } from "store";
-import { loadTournamentsAsync } from "features/myTournaments/myTournamentsSlice";
+import { useAppDispatch } from "@store";
+import { loadTournamentsAsync } from "@features/myTournaments/myTournamentsSlice";
 
-import Icon from "components/common/icon";
-import Button from "components/common/button";
+import Icon from "@components/common/icon";
+import Button from "@components/common/button";
 
 import TournamentGallery from "./TournamentGallery";
 import CreateTournamentDialog from "./CreateTournamentDialog";

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-import MyTournaments from "components/tournaments/MyTournaments";
+import MyTournaments from "@components/tournaments/MyTournaments";
 
 const mapStateToProps = (state) => ({ ...state.myTournamentsReducer });
 

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 
-import { Text, Date } from "components/common/forms";
+import { Text, Date } from "@components/common/forms";
 
 const TournamentInfoFields = () => (
   <>

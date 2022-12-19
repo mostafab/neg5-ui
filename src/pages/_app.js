@@ -3,12 +3,12 @@ import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
 import styledNormalize from "styled-normalize";
 
-import { createStore } from "store";
+import { createStore } from "@store";
 import theme from "theme";
 
 import "bootswatch/dist/journal/bootstrap.min.css";
 
-import "styles/index.scss";
+import "@styles/index.scss";
 
 const GlobalStyle = createGlobalStyle`
   ${styledNormalize}

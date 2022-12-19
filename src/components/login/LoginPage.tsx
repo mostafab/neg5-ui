@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { useRouter } from "next/router";
 
-import Card from "components/common/cards";
-import { Error } from "components/common/alerts";
+import Card from "@components/common/cards";
+import { Error } from "@components/common/alerts";
 
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";

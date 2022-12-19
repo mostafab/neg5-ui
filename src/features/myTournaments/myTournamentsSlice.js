@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getUserTournaments, createTournament } from "api/tournaments";
+import { getUserTournaments, createTournament } from "@api/tournaments";
 
 const initialState = {
   collaboratingTournaments: [],
