@@ -6,8 +6,12 @@ import { Form } from "components/common/forms";
 import Button from "components/common/button";
 import { createTournamentAsync } from "features/myTournaments/myTournamentsSlice";
 
-import TournamentInfoFields from "components/tournaments/common/TournamentInfoFields";
-import ScoringRulesFields from "components/tournaments/common/ScoringRulesFields";
+import TournamentInfoFields, {
+  validation as infoValidation,
+} from "components/tournaments/common/TournamentInfoFields";
+import ScoringRulesFields, {
+  validation as rulesValidation,
+} from "components/tournaments/common/ScoringRulesFields";
 
 const initialValues = {
   name: "",
@@ -36,17 +40,8 @@ const initialValues = {
 };
 
 const validation = Yup.object({
-  name: Yup.string().required("Please enter a name."),
-  tournamentDate: Yup.string().required("Please enter a date."),
-  bonusPointValue: Yup.number()
-    .required("Please enter a bonus point value.")
-    .positive("Bonus point value should be positive."),
-  partsPerBonus: Yup.number()
-    .required("Please enter parts per bonus")
-    .positive("Parts per bonus should be positive."),
-  maxActivePlayersPerTeam: Yup.number()
-    .required("Please enter max active players.")
-    .positive("Max active players should be positive."),
+  ...infoValidation(),
+  ...rulesValidation(),
 });
 
 const CreateTournamentForm = ({ submitting }) => {

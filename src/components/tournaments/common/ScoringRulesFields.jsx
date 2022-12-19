@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col, InputGroup } from "react-bootstrap";
+import * as Yup from "yup";
 
 import { Checkbox, Number, RepeatField, Select } from "components/common/forms";
 
@@ -40,5 +41,17 @@ const ScoringRulesFields = () => (
     </Col>
   </Row>
 );
+
+export const validation = () => ({
+  bonusPointValue: Yup.number()
+    .required("Please enter a bonus point value.")
+    .positive("Bonus point value should be positive."),
+  partsPerBonus: Yup.number()
+    .required("Please enter parts per bonus")
+    .positive("Parts per bonus should be positive."),
+  maxActivePlayersPerTeam: Yup.number()
+    .required("Please enter max active players.")
+    .positive("Max active players should be positive."),
+});
 
 export default ScoringRulesFields;
