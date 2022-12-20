@@ -29,24 +29,35 @@ const ScoringRulesFields = ({ className = "" }) => (
       <h6>Tossup Point Values</h6>
       <RepeatField
         name="tossupValues"
-        render={(_tv, idx, { remove }) => {
+        render={(_tv, { index, isLast }, { remove, push }) => {
           return (
-            <Row key={idx}>
-              <InputGroup size="sm">
-                <Number name={`tossupValues[${idx}].value`} label="Value" />
-                <Select
-                  name={`tossupValues[${idx}].answerType`}
-                  label="Type"
-                  options={answerTypeOptions}
-                />
+            <div key={index}>
+              <Row>
+                <InputGroup size="sm">
+                  <Number name={`tossupValues[${index}].value`} label="Value" />
+                  <Select
+                    name={`tossupValues[${index}].answerType`}
+                    label="Type"
+                    options={answerTypeOptions}
+                  />
+                  <Button
+                    type="outline-primary"
+                    className="mb-3"
+                    icon="X"
+                    onClick={() => remove(index)}
+                  />
+                </InputGroup>
+              </Row>
+              {isLast && (
                 <Button
+                  className="float-end"
+                  size="sm"
+                  icon="Plus"
                   type="outline-primary"
-                  className="mb-3"
-                  icon="X"
-                  onClick={() => remove(idx)}
+                  onClick={() => push()}
                 />
-              </InputGroup>
-            </Row>
+              )}
+            </div>
           );
         }}
       />

@@ -73,18 +73,13 @@ const CreateTournamentForm = ({ submitting, error = null }) => {
       <>
         <TournamentInfoFields />
         {!showRules && (
-          <div className="d-flex justify-content-center mb-3">
+          <div className="d-flex justify-content-center">
             <Button onClick={() => setShowRules(true)} type="link">
               Set Custom Scoring Rules
             </Button>
           </div>
         )}
-        {showRules && (
-          <>
-            <hr />
-            <ScoringRulesFields className="mb-3" />
-          </>
-        )}
+        {showRules && <ScoringRulesFields className="mb-3" />}
         {renderError()}
       </>
     );
@@ -94,7 +89,7 @@ const CreateTournamentForm = ({ submitting, error = null }) => {
       name="CreateTournamentForm"
       initialValues={initialValues()}
       validation={validation}
-      submitButtonText="Create"
+      submitButtonText="Create Tournament"
       onSubmit={(values) => {
         dispatch(createTournamentAsync({ values }));
       }}

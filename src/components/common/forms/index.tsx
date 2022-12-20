@@ -34,6 +34,7 @@ export const Form = ({
               {cancelButtonText}
             </Button>
           )}
+          <hr />
           <Button variant="primary" type="submit" disabled={submitting}>
             {submitting ? "Submitting" : submitButtonText}
             {submitting && <Spinner animation="border" size="sm" />}
@@ -58,7 +59,15 @@ export const RepeatField = ({ name, render }) => {
           return null;
         }
         return (
-          <>{field.value.map((val, idx) => render(val, idx, arrayHelpers))}</>
+          <>
+            {field.value.map((val, idx) =>
+              render(
+                val,
+                { index: idx, isLast: idx === field.value.length - 1 },
+                arrayHelpers
+              )
+            )}
+          </>
         );
       }}
     />
