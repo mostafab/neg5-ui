@@ -10,8 +10,8 @@ export const splitByPastOrUpcoming = (tournaments) => {
       return;
     }
     const dayJsDate = dayjs(t.tournamentDate).startOf("day");
-    const diff = now.diff(dayJsDate);
-    if (diff < 0) {
+    const diff = now.diff(dayJsDate, "day");
+    if (diff <= 0) {
       upcoming.push(t);
     } else {
       past.push(t);
