@@ -1,25 +1,16 @@
-import { getServerSideUser } from "api/user";
-
-import AppLayout from "@components/common/layout/AppLayout";
+import AuthenticatedLayout from "@features/auth/container";
 import MyTournaments from "@features/myTournaments/container";
 
 const TournamentPage = () => <MyTournaments />;
 
-TournamentPage.getLayout = (page) => <AppLayout>{page}</AppLayout>;
+TournamentPage.getLayout = (page) => (
+  <AuthenticatedLayout>{page}</AuthenticatedLayout>
+);
 
-export const getServerSideProps = async (ctx) => {
-  const user = await getServerSideUser(ctx.req);
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/",
-      },
-    };
-  }
+export const getServerSideProps = async () => {
   return {
     props: {
       title: "Home | Neg 5",
-      user,
     },
   };
 };

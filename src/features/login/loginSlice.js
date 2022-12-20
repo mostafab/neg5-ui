@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { attemptLogin, attemptRegister } from "@api/login";
+import { getUser } from "@api/user";
 import { setLoginCookie } from "@libs/cookies";
 
 const initialState = {
@@ -8,6 +9,10 @@ const initialState = {
   requestingAccount: false,
   loginError: null,
   registerError: null,
+  currentUser: {
+    data: null,
+    loaded: false,
+  },
 };
 
 const loginSlice = createSlice({
@@ -43,9 +48,20 @@ const loginSlice = createSlice({
       .addCase(registerAsync.fulfilled, (state, _action) => {
         state.requestingAccount = false;
         state.registerError = null;
+      })
+      .addCase(getCurrentUserAsync.fulfilled, (state, action) => {
+        state.currentUser.data = action.payload;
+        state.currentUser.loaded = true;
       });
   },
 });
+
+export const getCurrentUserAsync = createAsyncThunk(
+  "loginSlice/currentUser",
+  async () => {
+    return await getUser();
+  }
+);
 
 export const loginAsync = createAsyncThunk(
   "loginSlice/login",
