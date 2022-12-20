@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getUserTournaments, createTournament } from "@api/tournaments";
+import { sanitizeFormValues } from "@libs/forms";
 
 const initialState = {
   collaboratingTournaments: [],
@@ -54,7 +55,7 @@ export const createTournamentAsync = createAsyncThunk(
   async ({ values, onSuccess }, thunkApi) => {
     let result;
     try {
-      result = await createTournament(values);
+      result = await createTournament(sanitizeFormValues(values));
     } catch (e) {
       if (e.response?.status === 400) {
         return thunkApi.rejectWithValue(e.response.data);
