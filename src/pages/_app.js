@@ -12,9 +12,6 @@ import "@styles/index.scss";
 
 const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
-  body {
-    background-color: #e7ebf3;
-  }
 `;
 
 export default function MyApp(props) {

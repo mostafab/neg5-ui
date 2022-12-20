@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { useAppDispatch } from "@store";
 import { Form } from "@components/common/forms";
 import Button from "@components/common/button";
+import { Error } from "@components/common/alerts";
 import { createTournamentAsync } from "@features/myTournaments/myTournamentsSlice";
 
 import TournamentInfoFields, {
@@ -44,27 +45,42 @@ const validation = Yup.object({
   ...rulesValidation(),
 });
 
-const CreateTournamentForm = ({ submitting }) => {
+const CreateTournamentForm = ({ submitting, error = null }) => {
   const dispatch = useAppDispatch();
   const [showRules, setShowRules] = useState(false);
+
+  const renderError = () => {
+    if (!error) {
+      return null;
+    }
+    const message = Array.isArray(error) ? (
+      <>
+        There was an issue submitting your request.
+        <ul>
+          {error.map((err, idx) => (
+            <li key={idx}>{err.message}</li>
+          ))}
+        </ul>
+      </>
+    ) : (
+      error
+    );
+    return <Error>{message}</Error>;
+  };
 
   const renderFields = () => {
     return (
       <>
         <TournamentInfoFields />
         {!showRules && (
-          <div className="d-flex justify-content-center mb-3">
+          <div className="d-flex justify-content-center">
             <Button onClick={() => setShowRules(true)} type="link">
               Set Custom Scoring Rules
             </Button>
           </div>
         )}
-        {showRules && (
-          <>
-            <hr />
-            <ScoringRulesFields className="mb-3" />
-          </>
-        )}
+        {showRules && <ScoringRulesFields className="mb-3" />}
+        {renderError()}
       </>
     );
   };
@@ -73,9 +89,8 @@ const CreateTournamentForm = ({ submitting }) => {
       name="CreateTournamentForm"
       initialValues={initialValues()}
       validation={validation}
-      submitButtonText="Create"
+      submitButtonText="Create Tournament"
       onSubmit={(values) => {
-        console.log(values);
         dispatch(createTournamentAsync({ values }));
       }}
       submitting={submitting}

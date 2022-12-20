@@ -8,13 +8,15 @@ const Button = ({
   href = null,
   onClick = null,
   className = "",
-  icon,
+  icon = null,
+  size = null,
 }) => (
   <BootstrapButton
     className={className}
     onClick={onClick}
     href={href}
     variant={type}
+    size={size}
   >
     {children}
     {icon && <Icon name={icon} />}

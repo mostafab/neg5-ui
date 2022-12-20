@@ -14,6 +14,7 @@ const MyTournaments = ({
   collaboratingTournaments,
   ownTournaments,
   submittingTournament,
+  submittingTournamentError,
 }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -26,6 +27,7 @@ const MyTournaments = ({
         <CreateTournamentDialog
           onClose={() => setShowForm(false)}
           submitting={submittingTournament}
+          error={submittingTournamentError}
         />
       )}
       <Container>

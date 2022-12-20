@@ -1,2 +1,8 @@
+@use "@styles/components/alerts.scss";
 @use "@styles/components/card.scss";
 @use "@styles/components/inputs.scss";
+@use "@styles/components/modal.scss";
+
+body {
+  background-color: #e7ebf3;
+}

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getUserTournaments, createTournament } from "@api/tournaments";
+import { sanitizeFormValues } from "@libs/forms";
 
 const initialState = {
   collaboratingTournaments: [],
@@ -28,13 +29,16 @@ const myTournamentsSlice = createSlice({
       })
       .addCase(createTournamentAsync.pending, (state) => {
         state.submittingTournament = true;
+        state.submittingTournamentError = null;
       })
       .addCase(createTournamentAsync.fulfilled, (state) => {
         state.submittingTournament = false;
       })
       .addCase(createTournamentAsync.rejected, (state, action) => {
         state.submittingTournament = false;
-        console.log(action);
+        state.submittingTournamentError =
+          action.payload?.errors ||
+          "There was an issue submitting your request.";
       });
   },
 });
@@ -51,7 +55,7 @@ export const createTournamentAsync = createAsyncThunk(
   async ({ values, onSuccess }, thunkApi) => {
     let result;
     try {
-      result = await createTournament(values);
+      result = await createTournament(sanitizeFormValues(values));
     } catch (e) {
       if (e.response?.status === 400) {
         return thunkApi.rejectWithValue(e.response.data);

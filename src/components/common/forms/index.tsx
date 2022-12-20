@@ -34,6 +34,7 @@ export const Form = ({
               {cancelButtonText}
             </Button>
           )}
+          <hr />
           <Button variant="primary" type="submit" disabled={submitting}>
             {submitting ? "Submitting" : submitButtonText}
             {submitting && <Spinner animation="border" size="sm" />}
@@ -49,14 +50,25 @@ export const RepeatField = ({ name, render }) => {
   return (
     <FieldArray
       name={name}
-      render={() => {
+      // https://formik.org/docs/api/fieldarray#fieldarray-helpers
+      render={(arrayHelpers) => {
         if (!Array.isArray(field.value)) {
           console.error(
             "Non-array field passed to RepeatField. Will not render anything."
           );
           return null;
         }
-        return field.value.map((val, idx) => render(val, idx));
+        return (
+          <>
+            {field.value.map((val, idx) =>
+              render(
+                val,
+                { index: idx, isLast: idx === field.value.length - 1 },
+                arrayHelpers
+              )
+            )}
+          </>
+        );
       }}
     />
   );
