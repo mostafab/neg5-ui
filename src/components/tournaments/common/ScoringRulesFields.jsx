@@ -57,13 +57,24 @@ const ScoringRulesFields = ({ className = "" }) => (
 export const validation = () => ({
   bonusPointValue: Yup.number()
     .required("Please enter a bonus point value.")
+    .integer("Please enter a whole number.")
     .positive("Bonus point value should be positive."),
   partsPerBonus: Yup.number()
-    .required("Please enter parts per bonus")
+    .required("Please enter parts per bonus.")
+    .integer("Please enter a whole number.")
     .positive("Parts per bonus should be positive."),
   maxActivePlayersPerTeam: Yup.number()
     .required("Please enter max active players.")
+    .integer("Please enter a whole number.")
     .positive("Max active players should be positive."),
+  tossupValues: Yup.array().of(
+    Yup.object().shape({
+      value: Yup.number()
+        .required("Please enter a value.")
+        .integer("Please enter a whole number."),
+      answerType: Yup.string().required("Please select an answer type."),
+    })
+  ),
 });
 
 export default ScoringRulesFields;

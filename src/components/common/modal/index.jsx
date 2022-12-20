@@ -7,6 +7,7 @@ const Modal = ({
   title,
   fullscreen = false,
   className = "",
+  size = null,
 }) => {
   return (
     <BootstrapModal
@@ -15,6 +16,7 @@ const Modal = ({
       fullscreen={fullscreen}
       onHide={onHide}
       dialogClassName={className}
+      size={size}
     >
       <BootstrapModal.Header closeButton>
         <BootstrapModal.Title className="h5">{title}</BootstrapModal.Title>

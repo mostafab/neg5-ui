@@ -28,13 +28,16 @@ const myTournamentsSlice = createSlice({
       })
       .addCase(createTournamentAsync.pending, (state) => {
         state.submittingTournament = true;
+        state.submittingTournamentError = null;
       })
       .addCase(createTournamentAsync.fulfilled, (state) => {
         state.submittingTournament = false;
       })
       .addCase(createTournamentAsync.rejected, (state, action) => {
         state.submittingTournament = false;
-        console.log(action);
+        state.submittingTournamentError =
+          action.payload?.errors ||
+          "There was an issue submitting your request.";
       });
   },
 });
