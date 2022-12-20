@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import orderBy from "lodash/orderBy";
 
 export const splitByPastOrUpcoming = (tournaments) => {
   const past = [];
@@ -17,8 +18,10 @@ export const splitByPastOrUpcoming = (tournaments) => {
       past.push(t);
     }
   });
+  const sortPropFunc = (t) =>
+    t.tournamentDate ? new Date(t.tournamentDate) : new Date(0);
   return {
-    past,
-    upcoming,
+    past: orderBy(past, sortPropFunc, ["desc"]),
+    upcoming: orderBy(upcoming, sortPropFunc, ["asc"]),
   };
 };

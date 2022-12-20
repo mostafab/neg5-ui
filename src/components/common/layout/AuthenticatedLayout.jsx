@@ -6,7 +6,7 @@ import { getCurrentUserAsync } from "@features/login/loginSlice";
 
 import Navbar from "@features/navbar/container";
 
-const Layout = ({ children, currentUser }) => {
+const AuthenticatedLayout = ({ children, currentUser }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -29,4 +29,4 @@ const Layout = ({ children, currentUser }) => {
   }
 };
 
-export default Layout;
+export default AuthenticatedLayout;

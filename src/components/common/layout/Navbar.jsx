@@ -3,7 +3,7 @@ import BootstrapNavbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 
 const Navbar = ({ currentUser = {} }) => (
-  <BootstrapNavbar variant="light" bg="light" className="shadow">
+  <BootstrapNavbar variant="light" bg="light" className="shadow-sm">
     <Container>
       <BootstrapNavbar.Toggle aria-controls="navbar" />
       <BootstrapNavbar.Collapse id="navbar" className="justify-content-end">
