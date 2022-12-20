@@ -47,7 +47,7 @@ const MyTournaments = ({
               }
             />
           </Col>
-          <Col sm={6} lg={12}>
+          <Col sm={6} md={12} lg={12}>
             <TournamentGallery
               title="Past Tournaments"
               emptyText=""
