@@ -1,4 +1,4 @@
-import { mapValues } from "lodash";
+import mapValues from "lodash/mapValues";
 
 export const sanitizeFormValues = (values) =>
   mapValues(values, (v) => {

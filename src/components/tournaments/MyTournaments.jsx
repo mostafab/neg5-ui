@@ -11,8 +11,8 @@ import TournamentGallery from "./TournamentGallery";
 import CreateTournamentDialog from "./CreateTournamentDialog";
 
 const MyTournaments = ({
-  collaboratingTournaments,
-  ownTournaments,
+  past,
+  upcoming,
   submittingTournament,
   submittingTournamentError,
 }) => {
@@ -35,7 +35,7 @@ const MyTournaments = ({
           <Col sm={12} lg={12}>
             <TournamentGallery
               title="Upcoming Tournaments"
-              tournaments={ownTournaments}
+              tournaments={upcoming}
               cta={
                 <Button
                   className="m-3 btn-sm"
@@ -51,7 +51,7 @@ const MyTournaments = ({
             <TournamentGallery
               title="Past Tournaments"
               emptyText=""
-              tournaments={collaboratingTournaments}
+              tournaments={past}
             />
           </Col>
         </Row>

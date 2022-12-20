@@ -17,7 +17,7 @@ const TournamentGallery = ({
       {cta}
       <Row>
         {tournaments.map((t) => (
-          <Col key={t.id} xs={12} sm={12} md={12} lg={4}>
+          <Col key={t.id} xs={12} sm={12} md={6} lg={4}>
             <TournamentCard
               {...t}
               onClick={() => router.push(`/tournaments/${t.id}`)}

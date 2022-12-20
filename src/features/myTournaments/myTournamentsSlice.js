@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getUserTournaments, createTournament } from "@api/tournaments";
+import { splitByPastOrUpcoming } from "@libs/tournaments";
 import { sanitizeFormValues } from "@libs/forms";
 
 const initialState = {
-  collaboratingTournaments: [],
-  ownTournaments: [],
+  past: [],
+  upcoming: [],
   loadingData: true,
   submittingTournament: false,
   submittingTournamentError: null,
@@ -21,11 +22,10 @@ const myTournamentsSlice = createSlice({
         state.loadingData = true;
       })
       .addCase(loadTournamentsAsync.fulfilled, (state, action) => {
-        const { collaboratingTournaments, userOwnedTournaments } =
-          action.payload;
         state.loadingData = false;
-        state.collaboratingTournaments = collaboratingTournaments;
-        state.ownTournaments = userOwnedTournaments;
+        const { past, upcoming } = action.payload;
+        state.past = past;
+        state.upcoming = upcoming;
       })
       .addCase(createTournamentAsync.pending, (state) => {
         state.submittingTournament = true;
@@ -46,7 +46,11 @@ const myTournamentsSlice = createSlice({
 export const loadTournamentsAsync = createAsyncThunk(
   "myTournamentsSlice/loadTournaments",
   async () => {
-    return await getUserTournaments();
+    const { collaboratingTournaments, userOwnedTournaments } =
+      await getUserTournaments();
+    return splitByPastOrUpcoming(
+      collaboratingTournaments.concat(userOwnedTournaments)
+    );
   }
 );
 
