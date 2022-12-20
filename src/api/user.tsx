@@ -1,8 +1,14 @@
 import axios from "axios";
 
-import { baseUrl } from "./_client";
+import client, { baseUrl } from "./_client";
 
 const TOKEN_NAME = "NEG5_TOKEN";
+
+export const getUser = async () => {
+  return await (
+    await client.get("/neg5-api/accounts/me")
+  ).data;
+};
 
 export const getServerSideUser = async (request) => {
   const userCookie = request.cookies[TOKEN_NAME];
