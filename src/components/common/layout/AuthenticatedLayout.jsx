@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 import { useAppDispatch } from "@store";
 import { getCurrentUserAsync } from "@features/login/loginSlice";
-
 import Navbar from "@features/navbar/container";
 
 const AuthenticatedLayout = ({ children, currentUser }) => {
