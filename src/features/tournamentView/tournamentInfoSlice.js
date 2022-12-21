@@ -15,12 +15,9 @@ const tournamentInfoSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      loadTournamentDataAsync.fulfilled,
-      (state, action) => {
-        Object.assign(state, action.payload);
-      }
-    );
+    builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
+      Object.assign(state, action.payload);
+    });
   },
 });
 

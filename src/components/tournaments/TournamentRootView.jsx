@@ -6,11 +6,9 @@ import { loadTournamentDataAsync } from "@features/tournamentView/tournamentInfo
 const TournamentRootView = ({ tournamentId }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(loadTournamentDataAsync(tournamentId))
+    dispatch(loadTournamentDataAsync(tournamentId));
   }, [tournamentId]);
-  return (
-    <div>Hello</div>
-  )
+  return <div>Hello</div>;
 };
 
 export default TournamentRootView;

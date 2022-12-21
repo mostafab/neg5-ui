@@ -16,6 +16,6 @@ export const getPermissions = async (tournamentId) =>
   ).data;
 
 export const loadInformation = async (tournamentId) =>
-    await (
-      await client.get(`/neg5-api/tournaments/${tournamentId}`)
-    ).data;
+  await (
+    await client.get(`/neg5-api/tournaments/${tournamentId}`)
+  ).data;
