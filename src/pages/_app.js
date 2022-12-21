@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function MyApp(props) {
-  const { Component, pageProps, ...rest } = props;
+  const { Component, pageProps } = props;
   const store = createStore();
   const title = pageProps.title || "Hello next.js Real World!";
   const getLayout = Component.getLayout || ((page) => page);

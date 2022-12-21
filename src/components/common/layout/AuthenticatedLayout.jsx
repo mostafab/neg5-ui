@@ -10,7 +10,7 @@ const AuthenticatedLayout = ({ children, currentUser }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getCurrentUserAsync());
-  }, []);
+  }, [children]);
   // Case 1: Just loaded, we don't have user data yet
   if (!currentUser.data && !currentUser.loaded) {
     return null;
