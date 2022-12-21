@@ -7,5 +7,10 @@ export const getUserTournaments = async () =>
 
 export const createTournament = async (data) =>
   await (
-    await client.post("neg5-api/tournaments", data)
+    await client.post("/neg5-api/tournaments", data)
+  ).data;
+
+export const getPermissions = async (tournamentId) =>
+  await (
+    await client.get(`/neg5-api/tournaments/${tournamentId}/permissions`)
   ).data;

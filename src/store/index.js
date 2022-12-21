@@ -7,10 +7,12 @@ import config from "config";
 
 import { loginReducer } from "@features/login/loginSlice";
 import { myTournamentsReducer } from "@features/myTournaments/myTournamentsSlice";
+import { tournamentPermissionsReducer } from "@features/tournamentPermissions/tournamentPermissionsSlice";
 
 const combinedReducer = combineReducers({
   loginReducer,
   myTournamentsReducer,
+  tournamentPermissionsReducer,
 });
 
 const reducer = (state, action) => {
