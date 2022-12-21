@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, cloneElement } from "react";
 import { useRouter } from "next/router";
 
 import { useAppDispatch } from "@store";
@@ -17,7 +17,7 @@ const WithTournamentAccess = ({ children, permissions }) => {
     router.push("/access-denied");
   } else {
     // Case 3: User is loaded
-    return <>{children}</>;
+    return <>{cloneElement(children, { tournamentId })}</>;
   }
 };
 
