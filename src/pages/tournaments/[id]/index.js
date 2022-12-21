@@ -6,6 +6,12 @@ TournamentPage.getLayout = (page) => (
   <AuthenticatedLayout>{page}</AuthenticatedLayout>
 );
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 export default TournamentPage;
 
 
