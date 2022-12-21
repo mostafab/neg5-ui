@@ -10,6 +10,7 @@ import { myTournamentsReducer } from "@features/myTournaments/myTournamentsSlice
 import { tournamentPermissionsReducer } from "@features/tournamentPermissions/tournamentPermissionsSlice";
 import { tournamentInfoReducer } from "@features/tournamentView/tournamentInfoSlice";
 import { tournamentMatchesReducer } from "@features/tournamentView/matchesSlice";
+import { tournamentRulesReducer } from "@features/tournamentView/rulesSlice";
 
 const combinedReducer = combineReducers({
   loginReducer,
@@ -17,6 +18,7 @@ const combinedReducer = combineReducers({
   tournamentPermissionsReducer,
   tournamentInfoReducer,
   tournamentMatchesReducer,
+  tournamentRulesReducer,
 });
 
 const reducer = (state, action) => {
