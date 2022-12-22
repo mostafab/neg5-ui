@@ -1,4 +1,5 @@
 import React from "react";
+import ListGroup from "react-bootstrap/ListGroup";
 
 import Card from "@components/common/cards";
 
@@ -12,9 +13,18 @@ const PoolCard = ({ pool, teams }) => (
     shadow={false}
     className="mt-4"
   >
-    {teams.map((t) => (
-      <p key={t.id}>{t.name}</p>
-    ))}
+    <hr />
+    <ListGroup>
+      {teams.map((t) => (
+        <ListGroup.Item
+          onClick={() => console.log(`pool=${pool.id}, team=${t.id}`)}
+          action
+          key={t.id}
+        >
+          {t.name}
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
   </Card>
 );
 
