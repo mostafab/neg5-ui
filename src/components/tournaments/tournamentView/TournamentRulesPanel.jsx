@@ -1,6 +1,7 @@
 import React from "react";
 
 import Card from "@components/common/cards";
+import TossupValuePill from "@components/tournaments/common/TossupValuePill";
 
 import { labelWithValue } from "./utilities";
 
@@ -11,6 +12,15 @@ const TournamentRulesPanel = ({ rules }) => {
       {labelWithValue("Parts Per Bonus", rules.partsPerBonus)}
       {labelWithValue("Max Players", rules.maxActivePlayersPerTeam)}
       {labelWithValue("Ties Allowed", rules.allowTies ? "Yes" : "No")}
+      <hr />
+      <h5>Tossup Point Values</h5>
+      {rules.tossupValues.map((tv) => {
+        return (
+          <span key={tv.value}>
+            <TossupValuePill {...tv} />{" "}
+          </span>
+        );
+      })}
     </Card>
   );
 };
