@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import orderBy from "lodash/orderBy";
 
 import { loadTournamentDataAsync } from "@features/tournamentView/tournamentInfoSlice";
 import { copyKeys } from "@libs/util";
@@ -21,6 +22,11 @@ const tournamentRulesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
       copyKeys(keys, state, action.payload);
+      state.tossupValues = orderBy(
+        action.payload.tossupValues,
+        ["value"],
+        ["desc"]
+      );
     });
   },
 });

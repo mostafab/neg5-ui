@@ -6,7 +6,7 @@ import styledNormalize from "styled-normalize";
 import { createStore } from "@store";
 import theme from "theme";
 
-import "bootswatch/dist/journal/bootstrap.min.css";
+import "bootswatch/dist/flatly/bootstrap.min.css";
 
 import "@styles/index.scss";
 
