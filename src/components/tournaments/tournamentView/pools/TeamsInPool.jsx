@@ -2,7 +2,7 @@ import React from "react";
 
 import Card from "@components/common/cards";
 
-const PoolCard = ({ pool }) => (
+const PoolCard = ({ pool, teams }) => (
   <Card
     title={
       <h6>
@@ -11,7 +11,11 @@ const PoolCard = ({ pool }) => (
     }
     shadow={false}
     className="mt-4"
-  ></Card>
+  >
+    {teams.map((t) => (
+      <p key={t.id}>{t.name}</p>
+    ))}
+  </Card>
 );
 
 export default PoolCard;

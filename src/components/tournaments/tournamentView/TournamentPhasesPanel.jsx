@@ -7,20 +7,31 @@ import Icon from "@components/common/icon";
 import Card from "@components/common/cards";
 import TeamsInPool from "@components/tournaments/tournamentView/pools/TeamsInPool";
 
-const TournamentPhasesPanel = ({ phases, pools }) => {
+const TournamentPhasesPanel = ({
+  phases,
+  pools,
+  poolTeams,
+  teamsNotAssignedPools,
+}) => {
   const renderPools = (phaseId) => {
+    const unassignedPool = { name: "Unassigned", id: null };
     const matching = pools.filter((p) => p.phaseId === phaseId);
     return (
       <Row>
         {matching.map((p) => (
           <Col lg={4} md={6} sm={12} key={p.id}>
-            <TeamsInPool key={p.id} pool={p} />
+            <TeamsInPool pool={p} teams={poolTeams[p.id] || []} />
           </Col>
         ))}
+        <Col lg={4} md={6} sm={12} key="unassigned">
+          <TeamsInPool
+            pool={unassignedPool}
+            teams={teamsNotAssignedPools[phaseId] || []}
+          />
+        </Col>
       </Row>
     );
   };
-
   return (
     <Card title="Team Pools">
       {phases.length > 0 && (
