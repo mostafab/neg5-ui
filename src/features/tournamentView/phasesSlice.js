@@ -14,7 +14,11 @@ const tournamentPhasesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
-      state.phases = orderBy(action.payload.phases, ["addedAt", "name"], ["asc"]);
+      state.phases = orderBy(
+        action.payload.phases,
+        ["addedAt", "name"],
+        ["asc"]
+      );
       state.pools = orderBy(action.payload.divisions, "name");
     });
   },

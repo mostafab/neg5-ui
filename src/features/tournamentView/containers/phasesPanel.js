@@ -8,4 +8,3 @@ const mapStateToProps = ({ tournamentPhasesReducer }) => ({
 });
 
 export default connect(mapStateToProps, null)(PhasesPanel);
-

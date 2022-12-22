@@ -24,12 +24,15 @@ const TournamentRootView = ({ tournamentId }) => {
             <Col lg={12} md={12} sm={12} className="mb-3">
               <RulesPanel />
             </Col>
+          </Row>
+        </Col>
+        <Col lg={9} md={7} sm={6}>
+          <Row>
             <Col lg={12} md={12} sm={12} className="mb-3">
               <PhasesPanel />
             </Col>
           </Row>
         </Col>
-        <Col lg={9} md={7} sm={6}></Col>
       </Row>
     </Container>
   );

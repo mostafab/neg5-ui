@@ -1,14 +1,21 @@
 import React from "react";
 import { Card as BootstrapCard } from "react-bootstrap";
 
-const Card = ({ title = null, children, className = "", onClick = null }) => (
+const Card = ({
+  title = null,
+  children,
+  className = "",
+  onClick = null,
+  shadow = true,
+  titleAs = undefined,
+}) => (
   <BootstrapCard
-    className={`shadow-sm ${className}`}
+    className={`${shadow ? "shadow-sm" : ""} ${className}`}
     body
     role={onClick ? "button" : null}
     onClick={onClick}
   >
-    {title && <BootstrapCard.Title> {title} </BootstrapCard.Title>}
+    {title && <BootstrapCard.Title as={titleAs}> {title} </BootstrapCard.Title>}
     {children}
   </BootstrapCard>
 );
