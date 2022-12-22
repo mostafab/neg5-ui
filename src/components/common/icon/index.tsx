@@ -8,7 +8,7 @@ const Icon = ({ name, ...props }) => {
   if (!Component) {
     throw new Error(`Invalid icon name: ${name} given.`);
   }
-  return <Component {...props} />;
+  return <Component {...props} role={props.onClick ? "button" : null} />;
 };
 
 export const Warning = (props) =>

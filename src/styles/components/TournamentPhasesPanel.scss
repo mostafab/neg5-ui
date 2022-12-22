@@ -1,0 +1,11 @@
+.TournamentPhasesModal {
+  .modal-body {
+    padding-top: 0;
+  }
+
+  .TournamentPhasesPanel {
+    &.card {
+      border: none;
+    }
+  }
+}

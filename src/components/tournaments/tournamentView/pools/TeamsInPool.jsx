@@ -8,7 +8,9 @@ const PoolCard = ({ pool, teams, isUnassigned = false }) => (
   <Card
     title={
       <h6>
-        <b>{pool.name}</b>
+        <b>
+          {pool.name} ({teams.length})
+        </b>
         {isUnassigned && teams.length > 0 && (
           <Warning
             className="float-end"
