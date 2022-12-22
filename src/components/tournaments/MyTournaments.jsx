@@ -34,7 +34,7 @@ const MyTournaments = ({
         <Row className="d-flex">
           <Col sm={12} lg={12}>
             <TournamentGallery
-              title="Upcoming Tournaments"
+              title="Current & Upcoming Tournaments"
               tournaments={upcoming}
               cta={
                 <Button

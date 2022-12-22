@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 import { useAppDispatch } from "@store";
 import { getCurrentUserAsync } from "@features/login/loginSlice";
-
 import Navbar from "@features/navbar/container";
 
 const AuthenticatedLayout = ({ children, currentUser }) => {
@@ -11,7 +10,7 @@ const AuthenticatedLayout = ({ children, currentUser }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getCurrentUserAsync());
-  }, []);
+  }, [children]);
   // Case 1: Just loaded, we don't have user data yet
   if (!currentUser.data && !currentUser.loaded) {
     return null;

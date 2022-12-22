@@ -1,9 +1,9 @@
 import AuthenticatedLayout from "@features/auth/container";
 import MyTournaments from "@features/myTournaments/container";
 
-const TournamentPage = () => <MyTournaments />;
+const MyTournamentsPage = () => <MyTournaments />;
 
-TournamentPage.getLayout = (page) => (
+MyTournamentsPage.getLayout = (page) => (
   <AuthenticatedLayout>{page}</AuthenticatedLayout>
 );
 
@@ -15,4 +15,4 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default TournamentPage;
+export default MyTournamentsPage;
