@@ -4,8 +4,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useAppDispatch } from "@store";
 import { loadTournamentDataAsync } from "@features/tournamentView/tournamentInfoSlice";
 
-import TournamentInfoPanel from "@features/tournamentView/containers/infoPanel";
-import TournamentRulesPanel from "@features/tournamentView/containers/rulesPanel";
+import InfoPanel from "@features/tournamentView/containers/infoPanel";
+import RulesPanel from "@features/tournamentView/containers/rulesPanel";
+import PhasesPanel from "@features/tournamentView/containers/phasesPanel";
 
 const TournamentRootView = ({ tournamentId }) => {
   const dispatch = useAppDispatch();
@@ -18,10 +19,13 @@ const TournamentRootView = ({ tournamentId }) => {
         <Col lg={3} md={5} sm={6}>
           <Row>
             <Col lg={12} md={12} sm={12} className="mb-3">
-              <TournamentInfoPanel />
+              <InfoPanel />
             </Col>
-            <Col lg={12} md={12} sm={12}>
-              <TournamentRulesPanel />
+            <Col lg={12} md={12} sm={12} className="mb-3">
+              <RulesPanel />
+            </Col>
+            <Col lg={12} md={12} sm={12} className="mb-3">
+              <PhasesPanel />
             </Col>
           </Row>
         </Col>
