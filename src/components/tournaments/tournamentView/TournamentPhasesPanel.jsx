@@ -13,7 +13,7 @@ const TournamentPhasesPanel = ({ phases, pools }) => {
     return (
       <Row>
         {matching.map((p) => (
-          <Col lg={3} md={6} sm={12} key={p.id}>
+          <Col lg={4} md={6} sm={12} key={p.id}>
             <TeamsInPool key={p.id} pool={p} />
           </Col>
         ))}
@@ -30,7 +30,7 @@ const TournamentPhasesPanel = ({ phases, pools }) => {
               {renderPools(p.id)}
             </Tab>
           ))}
-          <Tab eventKey="new" key="new" title={<Icon name="Plus" size="20"/>} />
+          <Tab eventKey="new" key="new" title={<Icon name="Plus" />} />
         </Tabs>
       )}
     </Card>

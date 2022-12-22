@@ -24,3 +24,8 @@ export const loadMatches = async (tournamentId) =>
   await (
     await client.get(`/neg5-api/tournaments/${tournamentId}/matches`)
   ).data;
+
+export const loadTeams = async (tournamentId) =>
+  await (
+    await client.get(`/neg5-api/tournaments/${tournamentId}/teams`)
+  ).data;
