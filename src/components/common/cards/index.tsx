@@ -15,7 +15,7 @@ const Card = ({
     role={onClick ? "button" : null}
     onClick={onClick}
   >
-    {title && <BootstrapCard.Title as={titleAs}> {title} </BootstrapCard.Title>}
+    {title && <BootstrapCard.Title> {title} </BootstrapCard.Title>}
     {children}
   </BootstrapCard>
 );

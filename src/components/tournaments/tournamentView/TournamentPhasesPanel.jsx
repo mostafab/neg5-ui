@@ -3,8 +3,9 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { Row, Col } from "react-bootstrap";
 
+import Icon from "@components/common/icon";
 import Card from "@components/common/cards";
-import PoolCard from "@components/tournaments/tournamentView/pools/PoolCard";
+import TeamsInPool from "@components/tournaments/tournamentView/pools/TeamsInPool";
 
 const TournamentPhasesPanel = ({ phases, pools }) => {
   const renderPools = (phaseId) => {
@@ -12,8 +13,8 @@ const TournamentPhasesPanel = ({ phases, pools }) => {
     return (
       <Row>
         {matching.map((p) => (
-          <Col lg={3} md={3} sm={2}>
-            <PoolCard key={p.id} pool={p} />
+          <Col lg={3} md={6} sm={12} key={p.id}>
+            <TeamsInPool key={p.id} pool={p} />
           </Col>
         ))}
       </Row>
@@ -21,7 +22,7 @@ const TournamentPhasesPanel = ({ phases, pools }) => {
   };
 
   return (
-    <Card title="Phases & Pools">
+    <Card title="Team Pools">
       {phases.length > 0 && (
         <Tabs defaultActiveKey={phases[0].id}>
           {phases.map((p) => (
@@ -29,6 +30,7 @@ const TournamentPhasesPanel = ({ phases, pools }) => {
               {renderPools(p.id)}
             </Tab>
           ))}
+          <Tab eventKey="new" key="new" title={<Icon name="Plus" size="20"/>} />
         </Tabs>
       )}
     </Card>
