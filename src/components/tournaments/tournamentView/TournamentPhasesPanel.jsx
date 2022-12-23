@@ -3,7 +3,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { Row, Col } from "react-bootstrap";
 
-import Icon from "@components/common/icon";
+import Icon, { Warning } from "@components/common/icon";
 import Card from "@components/common/cards";
 import Modal from "@components/common/modal";
 import TeamsInPool from "@components/tournaments/tournamentView/pools/TeamsInPool";
@@ -22,7 +22,6 @@ const TournamentPhasesPanel = ({
       <Row>
         <Col lg={3} md={6} sm={12} key="unassigned">
           <TeamsInPool
-            isUnassigned
             pool={unassignedPool}
             teams={teamsNotAssignedPools[phaseId] || []}
           />
@@ -39,7 +38,7 @@ const TournamentPhasesPanel = ({
     return (
       <Card
         className="TournamentPhasesPanel"
-        shadow={!showModal}
+        shadow
         title={
           <h5>
             {"View/Assign Team Pools"}
@@ -55,25 +54,32 @@ const TournamentPhasesPanel = ({
       ></Card>
     );
   }
-  const Wrapper = ({ children }) => {
-    return (
-      <Modal
-        className="TournamentPhasesModal"
-        onHide={() => setShowModal(false)}
-        title="Team Pools"
-        size="xl"
-      >
-        {children}
-      </Modal>
-    );
-  };
   return (
-    <Wrapper>
-      <Card className="TournamentPhasesPanel" shadow={!showModal} title={null}>
+    <Modal
+      className="TournamentPhasesModal"
+      onHide={() => setShowModal(false)}
+      title="Team Pools"
+      size="xl"
+    >
+      <Card className="TournamentPhasesPanel" shadow={false} title={null}>
         {phases.length > 0 && (
           <Tabs defaultActiveKey={phases[0].id}>
             {phases.map((p) => (
-              <Tab key={p.id} eventKey={p.id} title={p.name}>
+              <Tab
+                key={p.id}
+                eventKey={p.id}
+                title={
+                  <>
+                    <span className="m-1">{p.name}</span>
+                    {teamsNotAssignedPools[p.id].length > 0 && (
+                      <Warning
+                        className="float-end"
+                        message="Some teams aren't assigned a pool."
+                      />
+                    )}
+                  </>
+                }
+              >
                 {renderPools(p.id)}
               </Tab>
             ))}
@@ -81,7 +87,7 @@ const TournamentPhasesPanel = ({
           </Tabs>
         )}
       </Card>
-    </Wrapper>
+    </Modal>
   );
 };
 
