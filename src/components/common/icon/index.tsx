@@ -26,4 +26,8 @@ export const Warning = (props) =>
     <Icon {...props} name="ExclamationCircleFill" fill="orange" />
   );
 
+export const Expand = (props) => (
+  <Icon className="expand" name="ArrowsAngleExpand" {...props} />
+);
+
 export default Icon;
