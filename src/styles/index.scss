@@ -1,8 +1,11 @@
-@use "@styles/components/alerts.scss";
-@use "@styles/components/card.scss";
-@use "@styles/components/inputs.scss";
-@use "@styles/components/modal.scss";
-@use "@styles/components/tabs.scss";
+@use "@styles/common/alerts.scss";
+@use "@styles/common/card.scss";
+@use "@styles/common/inputs.scss";
+@use "@styles/common/lists.scss";
+@use "@styles/common/modal.scss";
+@use "@styles/common/tabs.scss";
+
+@use "@styles/components/index.scss";
 
 body {
   background-color: #e7ebf3;
