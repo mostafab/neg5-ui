@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Row, Col } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -36,39 +36,39 @@ const AssignTeamPoolsModal = ({
   };
   return (
     <Modal
-    className="TournamentPhasesModal"
-    onHide={onHide}
-    title="Team Pools"
-    size="xl"
-  >
-    <Card className="TournamentPhasesPanel" shadow={false} title={null}>
-      {phases.length > 0 && (
-        <Tabs defaultActiveKey={phases[0].id}>
-          {phases.map((p) => (
-            <Tab
-              key={p.id}
-              eventKey={p.id}
-              title={
-                <>
-                  <span className="m-1">{p.name}</span>
-                  {(teamsNotAssignedPools[p.id] || []).length > 0 && (
-                    <Warning
-                      className="float-end"
-                      message="Some teams aren't assigned to a pool."
-                    />
-                  )}
-                </>
-              }
-            >
-              {renderPools(p.id)}
-            </Tab>
-          ))}
-          <Tab eventKey="new" key="new" title={<Icon name="Plus" />} />
-        </Tabs>
-      )}
-    </Card>
-  </Modal>
-  )
-}
+      className="TournamentPhasesModal"
+      onHide={onHide}
+      title="Team Pools"
+      size="xl"
+    >
+      <Card className="TournamentPhasesPanel" shadow={false} title={null}>
+        {phases.length > 0 && (
+          <Tabs defaultActiveKey={phases[0].id}>
+            {phases.map((p) => (
+              <Tab
+                key={p.id}
+                eventKey={p.id}
+                title={
+                  <>
+                    <span className="m-1">{p.name}</span>
+                    {(teamsNotAssignedPools[p.id] || []).length > 0 && (
+                      <Warning
+                        className="float-end"
+                        message="Some teams aren't assigned to a pool."
+                      />
+                    )}
+                  </>
+                }
+              >
+                {renderPools(p.id)}
+              </Tab>
+            ))}
+            <Tab eventKey="new" key="new" title={<Icon name="Plus" />} />
+          </Tabs>
+        )}
+      </Card>
+    </Modal>
+  );
+};
 
 export default AssignTeamPoolsModal;
