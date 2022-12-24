@@ -27,6 +27,10 @@ const initialValues = (match) => ({
     overtimeTossupsGotten: team.overtimeTossupsGotten,
     bouncebackPoints: team.bouncebackPoints,
     forfeit: team.forfeit || false,
+    players: (team.players || []).map((player) => ({
+      playerId: player.playerId,
+      tossupsHeard: player.tossupsHeard || null,
+    })),
   })),
 });
 
@@ -48,7 +52,7 @@ const getTeamOptions = (teams) =>
     "label"
   );
 
-const MatchForm = ({ match, teams, rules }) => {
+const MatchForm = ({ match, teams, rules, playersById }) => {
   const teamOptions = getTeamOptions(teams);
   const { usesBouncebacks, tossupValues } = rules;
   return (
@@ -106,6 +110,25 @@ const MatchForm = ({ match, teams, rules }) => {
                       />
                     </Col>
                   )}
+                </Row>
+                <Row>
+                  <RepeatField
+                    name={`teams[${index}].players`}
+                    render={(_val, { index: playerFieldIndex, isLast }) => {
+                      const playerName = playersById[_val.playerId]?.name;
+                      return (
+                        <InputGroup key={playerFieldIndex} size="sm">
+                          <InputGroup.Text className="w-100">
+                            {playerName}
+                          </InputGroup.Text>
+                          <Number
+                            name={`teams[${index}].players[${playerFieldIndex}].tossupsHeard`}
+                            label="Tossups Heard"
+                          />
+                        </InputGroup>
+                      );
+                    }}
+                  />
                 </Row>
               </Col>
             );

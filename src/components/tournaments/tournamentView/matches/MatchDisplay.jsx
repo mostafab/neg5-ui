@@ -3,7 +3,13 @@ import { formatAddedAtDate } from "@libs/dates";
 
 import MatchForm from "./MatchForm";
 
-const MatchDisplay = ({ matches, selectedMatchId, teams, rules }) => {
+const MatchDisplay = ({
+  matches,
+  selectedMatchId,
+  teams,
+  rules,
+  playersById,
+}) => {
   const match = selectedMatchId
     ? matches.find((m) => m.id === selectedMatchId)
     : {};
@@ -14,7 +20,12 @@ const MatchDisplay = ({ matches, selectedMatchId, teams, rules }) => {
           Added {formatAddedAtDate(match.addedAt)}
         </p>
       )}
-      <MatchForm match={match} teams={teams} rules={rules} />
+      <MatchForm
+        match={match}
+        teams={teams}
+        rules={rules}
+        playersById={playersById}
+      />
     </div>
   );
 };
