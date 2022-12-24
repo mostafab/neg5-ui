@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Form as FormComponent,
   Button,
   FloatingLabel,
   Spinner,
 } from "react-bootstrap";
-import { Formik, Form as FormikForm, useField, FieldArray } from "formik";
+import {
+  Formik,
+  Form as FormikForm,
+  useField,
+  FieldArray,
+  useFormikContext,
+} from "formik";
 
 export const Form = ({
   name,
@@ -150,6 +156,14 @@ export const Password = ({ name, label, placeholder = "" }) => (
     type={"password"}
   />
 );
+
+export const ResetListener = ({ changeKey, initialValues = null }) => {
+  const { resetForm } = useFormikContext();
+  useEffect(() => {
+    resetForm(initialValues ? { values: initialValues() } : undefined);
+  }, [changeKey]);
+  return null;
+};
 
 const CommonFormElementWrapper = ({
   name,

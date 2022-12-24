@@ -4,6 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import Modal from "@components/common/modal";
 
 import MatchesAccordian from "./MatchesAccordian";
+import MatchDisplay from "./MatchDisplay";
 
 const MatchesModal = ({
   matches,
@@ -25,9 +26,7 @@ const MatchesModal = ({
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
-        <p className="sticky-top">
-          {selectedMatchId}
-        </p>
+        <MatchDisplay selectedMatchId={selectedMatchId} matches={matches} />
       </Col>
     </Row>
   </Modal>
