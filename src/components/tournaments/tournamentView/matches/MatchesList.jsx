@@ -3,9 +3,13 @@ import ListGroup from "react-bootstrap/ListGroup";
 import orderBy from "lodash/orderBy";
 import dayjs from "dayjs";
 
-import { Expand } from "@components/common/icon";
-
-const MatchesList = ({ matches, teamsById }) => (
+const MatchesList = ({
+  matches,
+  teamsById,
+  onSelectMatch,
+  selectedMatchId = null,
+  subtitled = true,
+}) => (
   <ListGroup variant="flush">
     {orderBy(matches, "addedAt", "desc").map((match) => {
       const matchTeamsDisplayString = orderBy(match.teams, "teamId")
@@ -16,14 +20,14 @@ const MatchesList = ({ matches, teamsById }) => (
         })
         .join(" vs ");
       return (
-        <ListGroup.Item key={match.id}>
-          <div>
-            {matchTeamsDisplayString}
-            <span className="float-end">
-              <Expand onClick={() => console.log(match)} />
-            </span>
-          </div>
-          {match.addedAt && (
+        <ListGroup.Item
+          key={match.id}
+          active={selectedMatchId === match.id}
+          action
+          onClick={() => onSelectMatch(match)}
+        >
+          <div>{matchTeamsDisplayString}</div>
+          {subtitled && match.addedAt && (
             <span className="small text-dark">
               Added {dayjs(match.addedAt).format("MMM DD h:mm A")}
             </span>
