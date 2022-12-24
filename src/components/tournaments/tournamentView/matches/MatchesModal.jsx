@@ -12,7 +12,7 @@ const MatchesModal = ({
   onHide,
   onSelectMatch,
 }) => (
-  <Modal title="Matches" size="xl" onHide={onHide}>
+  <Modal title="Matches" fullscreen onHide={onHide}>
     <Row>
       <Col lg={3} md={4} sm={0}>
         <MatchesAccordian
@@ -21,6 +21,7 @@ const MatchesModal = ({
           openMultiple={false}
           selectedMatchId={selectedMatchId}
           onSelectMatch={onSelectMatch}
+          subtitleItems={false}
         />
       </Col>
       <Col lg={9} md={8} sm={12}>

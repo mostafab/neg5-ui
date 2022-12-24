@@ -12,6 +12,7 @@ const MatchesAccordian = ({
   onSelectMatch,
   openMultiple = true,
   selectedMatchId = undefined,
+  subtitleItems = true,
 }) => {
   const matchesByRound = groupBy(matches, "round");
   const roundsInOrder = orderBy(
@@ -40,6 +41,7 @@ const MatchesAccordian = ({
               selectedMatchId={selectedMatchId}
               teamsById={teamsById}
               onSelectMatch={onSelectMatch}
+              subtitled={subtitleItems}
             />
           </Accordian.Body>
         </Accordian.Item>
