@@ -7,11 +7,11 @@ import { Form, Number, Text, ResetListener } from "@components/common/forms";
 const initialValues = (match) => ({
   round: match.round,
   tossupsHeard: match.tossupsHeard,
-  room: match.room,
-  moderator: match.moderator,
-  packet: match.packet,
-  serialId: match.serialId,
-  notes: match.notes,
+  room: match.room || "",
+  moderator: match.moderator || "",
+  packet: match.packet || "",
+  serialId: match.serialId || "",
+  notes: match.notes || "",
 });
 
 const validation = Yup.object({
@@ -38,11 +38,12 @@ const MatchForm = ({ match }) => {
       <Row>
         <Col lg={3} md={6}>
           <Number name="round" label="Round" />
-          <Number name="tossupsHeard" label="Tossups Heard" />
+          <Text name="moderator" label="Moderator" />
+          
           <Text name="room" label="Room" />
         </Col>
         <Col lg={3} md={6}>
-          <Text name="moderator" label="Moderator" />
+          <Number name="tossupsHeard" label="Tossups Heard" />
           <Text name="packet" label="Packet" />
           <Text name="serialId" label="Serial Id" />
         </Col>
