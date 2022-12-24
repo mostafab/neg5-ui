@@ -170,12 +170,14 @@ export const Password = ({ name, label, placeholder = "" }) => (
 );
 
 export const ResetListener = ({ changeKey, initialValues = null }) => {
-  const { resetForm } = useFormikContext();
+  const { resetForm } = useFormContext();
   useEffect(() => {
     resetForm(initialValues ? { values: initialValues() } : undefined);
   }, [changeKey]);
   return null;
 };
+
+export const useFormContext = () => useFormikContext();
 
 const CommonFormElementWrapper = ({
   name,

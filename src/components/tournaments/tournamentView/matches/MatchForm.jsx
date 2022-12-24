@@ -10,6 +10,7 @@ import {
   Select,
   RepeatField,
   ResetListener,
+  Checkbox,
 } from "@components/common/forms";
 
 const initialValues = (match) => ({
@@ -23,6 +24,9 @@ const initialValues = (match) => ({
   teams: (match.teams || []).map((team) => ({
     teamId: team.teamId,
     score: team.score,
+    overtimeTossupsGotten: team.overtimeTossupsGotten,
+    bouncebackPoints: team.bouncebackPoints,
+    forfeit: team.forfeit || false,
   })),
 });
 
@@ -44,14 +48,16 @@ const getTeamOptions = (teams) =>
     "label"
   );
 
-const MatchForm = ({ match, teams }) => {
+const MatchForm = ({ match, teams, rules }) => {
   const teamOptions = getTeamOptions(teams);
+  const { usesBouncebacks, tossupValues } = rules;
   return (
     <Form
       name="MatchForm"
       initialValues={initialValues(match)}
       submitButtonText="Save"
       validation={validation}
+      onSubmit={(values) => console.log(values)}
     >
       <ResetListener
         changeKey={match.id}
@@ -64,22 +70,49 @@ const MatchForm = ({ match, teams }) => {
             const teamLabelPrefix = `Team ${index + 1} `;
             return (
               <Col lg={6} md={12} key={index}>
-                <InputGroup>
-                  <Select
-                    name={`teams[${index}].teamId`}
-                    label={teamLabelPrefix}
-                    options={teamOptions}
-                  />
-                  <Number
-                    name={`teams[${index}].score`}
-                    label={`${teamLabelPrefix} Score`}
-                  />
-                </InputGroup>
+                <Row>
+                  <Col lg={6} sm={12} md={12} className="mb-3">
+                    <Checkbox
+                      name={`teams[${index}].forfeit`}
+                      label={`${teamLabelPrefix} Forfeits`}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <InputGroup>
+                    <Select
+                      name={`teams[${index}].teamId`}
+                      label={teamLabelPrefix}
+                      options={teamOptions}
+                    />
+                    <Number
+                      name={`teams[${index}].score`}
+                      label={`${teamLabelPrefix} Score`}
+                    />
+                  </InputGroup>
+                </Row>
+                <Row>
+                  <Col lg={6} sm={12} md={12}>
+                    <Number
+                      name={`teams[${index}].overtimeTossupsGotten`}
+                      label={`${teamLabelPrefix} Overtime TUs`}
+                    />
+                  </Col>
+                  {usesBouncebacks && (
+                    <Col lg={6} sm={12} md={12}>
+                      <Number
+                        name={`teams[${index}].bouncebackPoints`}
+                        label={`${teamLabelPrefix} Bounceback Points`}
+                      />
+                    </Col>
+                  )}
+                </Row>
               </Col>
             );
           }}
         />
       </Row>
+      <hr />
       <Row>
         <Col lg={3} md={6}>
           <Number name="round" label="Round" />

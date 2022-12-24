@@ -12,6 +12,7 @@ const MatchesModal = ({
   selectedMatchId,
   onHide,
   onSelectMatch,
+  rules,
 }) => (
   <Modal title="Matches" fullscreen onHide={onHide} className="MatchesModal">
     <Row>
@@ -30,6 +31,7 @@ const MatchesModal = ({
           teams={teams}
           selectedMatchId={selectedMatchId}
           matches={matches}
+          rules={rules}
         />
       </Col>
     </Row>

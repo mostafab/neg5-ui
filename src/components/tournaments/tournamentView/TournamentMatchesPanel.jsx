@@ -4,7 +4,7 @@ import Card from "@components/common/cards";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 
-const TournamentMatchesPanel = ({ matches, teams }) => {
+const TournamentMatchesPanel = ({ matches, teams, rules }) => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   return (
     <>
@@ -24,6 +24,7 @@ const TournamentMatchesPanel = ({ matches, teams }) => {
           selectedMatchId={selectedMatchId}
           onHide={() => setSelectedMatchId(null)}
           onSelectMatch={(match) => setSelectedMatchId(match.id)}
+          rules={rules}
         />
       )}
     </>
