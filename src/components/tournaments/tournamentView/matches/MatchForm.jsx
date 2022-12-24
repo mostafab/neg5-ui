@@ -117,9 +117,10 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                   )}
                 </Row>
                 <Row>
+                  <p>Team { index + 1 } Players</p>
                   <RepeatField
                     name={`teams[${index}].players`}
-                    render={(_val, { index: playerFieldIndex, isLast }) => {
+                    render={(_val, { index: playerFieldIndex }) => {
                       const playerName = playersById[_val.playerId]?.name;
                       return (
                         <InputGroup key={playerFieldIndex} size="sm">
