@@ -10,6 +10,8 @@ const initialValues = (match) => ({
   room: match.room,
   moderator: match.moderator,
   packet: match.packet,
+  serialId: match.serialId,
+  notes: match.notes,
 });
 
 const validation = Yup.object({
@@ -17,6 +19,8 @@ const validation = Yup.object({
   tossupsHeard: Yup.number().required().positive(),
   room: Yup.string(),
   packet: Yup.string(),
+  serialId: Yup.string(),
+  notes: Yup.string(),
 });
 
 const MatchForm = ({ match }) => {
@@ -32,12 +36,18 @@ const MatchForm = ({ match }) => {
         initialValues={() => initialValues(match)}
       />
       <Row>
-        <Col lg={3} md={12}>
+        <Col lg={3} md={6}>
           <Number name="round" label="Round" />
           <Number name="tossupsHeard" label="Tossups Heard" />
           <Text name="room" label="Room" />
+        </Col>
+        <Col lg={3} md={6}>
           <Text name="moderator" label="Moderator" />
           <Text name="packet" label="Packet" />
+          <Text name="serialId" label="Serial Id" />
+        </Col>
+        <Col lg={6} md={12}>
+          <Text textarea name="notes" label="Notes" />
         </Col>
       </Row>
     </Form>

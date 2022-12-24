@@ -80,6 +80,15 @@ export const RepeatField = ({ name, render }) => {
   );
 };
 
+export const Display = ({ name, label, placeholder = null }) => (
+  <CommonFormElementWrapper
+    name={name}
+    label={label}
+    placeholder={placeholder}
+    type="display"
+  />
+);
+
 export const Date = ({ name, label, placeholder = null }) => (
   <CommonFormElementWrapper
     name={name}
@@ -91,6 +100,8 @@ export const Date = ({ name, label, placeholder = null }) => (
 
 export const Text = ({
   name,
+  textarea = false,
+  rows = 10,
   autoComplete = false,
   label,
   placeholder = null,
@@ -99,7 +110,8 @@ export const Text = ({
     name={name}
     label={label}
     placeholder={placeholder}
-    type={"text"}
+    type={textarea ? "textarea" : "text"}
+    rows={rows}
     autoComplete={autoComplete}
   />
 );
@@ -171,14 +183,20 @@ const CommonFormElementWrapper = ({
   placeholder,
   type,
   autoComplete = false,
+  rows = null,
 }) => {
   const [field, meta] = useField(name);
+  const isDisplay = type === "display";
   return (
     <>
       <FloatingLabel label={label} className="mb-3">
         <FormComponent.Control
           autoComplete={autoComplete ? "on" : "off"}
-          type={type}
+          type={isDisplay ? undefined : type}
+          readOnly={isDisplay}
+          plaintext={isDisplay}
+          as={type === "textarea" ? "textarea" : undefined}
+          rows={type === "textarea" ? rows : undefined}
           placeholder={placeholder || name}
           isInvalid={!!meta.error}
           {...field}
