@@ -11,6 +11,7 @@ const TournamentRulesPanel = ({ rules }) => {
       {labelWithValue("Bonus Point Value", rules.bonusPointValue)}
       {labelWithValue("Parts Per Bonus", rules.partsPerBonus)}
       {labelWithValue("Max Players", rules.maxActivePlayersPerTeam)}
+      {labelWithValue("Bouncebacks", rules.usesBouncebacks ? "Yes" : "No")}
       {labelWithValue("Ties Allowed", rules.allowTies ? "Yes" : "No")}
       <hr />
       <h5>Tossup Point Values</h5>

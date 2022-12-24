@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Icon from "@components/common/icon";
+import { Expand } from "@components/common/icon";
 import Card from "@components/common/cards";
 import AssignTeamPoolsModal from "@components/tournaments/tournamentView/pools/AssignTeamPoolsModal";
 
@@ -18,11 +18,10 @@ const TournamentPhasesPanel = ({
         shadow
         title={
           <h5>
-            View/Assign Team Pools
+            Team Pools
             {
-              <Icon
+              <Expand
                 className="float-end"
-                name="ArrowsAngleExpand"
                 onClick={() => setShowModal(true)}
               />
             }

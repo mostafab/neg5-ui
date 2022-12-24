@@ -5,7 +5,13 @@ import dayjs from "dayjs";
 
 import { Expand } from "@components/common/icon";
 
-const MatchesList = ({ matches, teamsById }) => (
+const MatchesList = ({
+  matches,
+  teamsById,
+  onSelectMatch,
+  expandable = true,
+  selectedMatchId = null,
+}) => (
   <ListGroup variant="flush">
     {orderBy(matches, "addedAt", "desc").map((match) => {
       const matchTeamsDisplayString = orderBy(match.teams, "teamId")
@@ -16,12 +22,14 @@ const MatchesList = ({ matches, teamsById }) => (
         })
         .join(" vs ");
       return (
-        <ListGroup.Item key={match.id}>
+        <ListGroup.Item key={match.id} active={selectedMatchId === match.id}>
           <div>
             {matchTeamsDisplayString}
-            <span className="float-end">
-              <Expand onClick={() => console.log(match)} />
-            </span>
+            {expandable && (
+              <span className="float-end">
+                <Expand onClick={() => onSelectMatch(match)} />
+              </span>
+            )}
           </div>
           {match.addedAt && (
             <span className="small text-dark">
