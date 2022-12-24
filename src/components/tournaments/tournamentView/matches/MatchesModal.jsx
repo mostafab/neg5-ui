@@ -26,7 +26,11 @@ const MatchesModal = ({
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
-        <MatchDisplay selectedMatchId={selectedMatchId} matches={matches} />
+        <MatchDisplay
+          teams={teams}
+          selectedMatchId={selectedMatchId}
+          matches={matches}
+        />
       </Col>
     </Row>
   </Modal>
