@@ -20,14 +20,14 @@ const AssignTeamPoolsModal = ({
     const matching = pools.filter((p) => p.phaseId === phaseId);
     return (
       <Row>
-        <Col lg={3} md={6} sm={12} key="unassigned">
+        <Col lg={4} md={6} sm={12} key="unassigned">
           <TeamsInPool
             pool={unassignedPool}
             teams={teamsNotAssignedPools[phaseId] || []}
           />
         </Col>
         {matching.map((p) => (
-          <Col lg={3} md={6} sm={12} key={p.id}>
+          <Col lg={4} md={6} sm={12} key={p.id}>
             <TeamsInPool pool={p} teams={poolTeams[p.id] || []} />
           </Col>
         ))}
