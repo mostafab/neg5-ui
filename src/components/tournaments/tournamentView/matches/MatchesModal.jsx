@@ -4,6 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import Modal from "@components/common/modal";
 
 import MatchesAccordian from "./MatchesAccordian";
+import MatchDisplay from "./MatchDisplay";
 
 const MatchesModal = ({
   matches,
@@ -11,8 +12,10 @@ const MatchesModal = ({
   selectedMatchId,
   onHide,
   onSelectMatch,
+  rules,
+  playersById,
 }) => (
-  <Modal title="Matches" fullscreen onHide={onHide}>
+  <Modal title="Matches" fullscreen onHide={onHide} className="MatchesModal">
     <Row>
       <Col lg={3} md={4} sm={0}>
         <MatchesAccordian
@@ -25,7 +28,13 @@ const MatchesModal = ({
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
-        {selectedMatchId}
+        <MatchDisplay
+          teams={teams}
+          selectedMatchId={selectedMatchId}
+          matches={matches}
+          rules={rules}
+          playersById={playersById}
+        />
       </Col>
     </Row>
   </Modal>
