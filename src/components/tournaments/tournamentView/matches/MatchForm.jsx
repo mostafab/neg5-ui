@@ -68,6 +68,11 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
         initialValues={() => initialValues(match)}
       />
       <Row>
+        <Col lg={3} md={6}>
+          <Number name="round" label="Round" />
+        </Col>
+      </Row>
+      <Row>
         <RepeatField
           name="teams"
           render={(_val, { index }) => {
@@ -138,14 +143,13 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
       <hr />
       <Row>
         <Col lg={3} md={6}>
-          <Number name="round" label="Round" />
           <Text name="moderator" label="Moderator" />
           <Text name="room" label="Room" />
+          <Text name="serialId" label="Serial Id" />
         </Col>
         <Col lg={3} md={6}>
           <Number name="tossupsHeard" label="Tossups Heard" />
           <Text name="packet" label="Packet" />
-          <Text name="serialId" label="Serial Id" />
         </Col>
         <Col lg={6} md={12}>
           <Text textarea name="notes" label="Notes" />
