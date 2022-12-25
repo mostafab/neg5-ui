@@ -12,6 +12,7 @@ import {
   FieldArray,
   useFormikContext,
 } from "formik";
+import get from "lodash/get";
 
 export const Form = ({
   name,
@@ -145,18 +146,29 @@ export const Checkbox = ({ name, label }) => {
   );
 };
 
-export const Select = ({ name, label, options }) => {
+export const Select = ({ name, label, options, onChange = null }) => {
   const [field] = useField(name);
+  const formContext = useFormContext();
+  const internalOnChange = (e) => {
+    field.onChange(e);
+    onChange && onChange(e.target.value, formContext);
+  };
   return (
-    <FloatingLabel label={label} className="mb-3">
-      <FormComponent.Select aria-label={label} {...field}>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </FormComponent.Select>
-    </FloatingLabel>
+    <>
+      <FloatingLabel label={label} className="mb-3">
+        <FormComponent.Select
+          aria-label={label}
+          {...field}
+          onChange={internalOnChange}
+        >
+          {options.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </FormComponent.Select>
+      </FloatingLabel>
+    </>
   );
 };
 

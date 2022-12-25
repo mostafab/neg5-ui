@@ -14,6 +14,19 @@ import {
   ResetListener,
   Checkbox,
 } from "@components/common/forms";
+import { X } from "@components/common/icon";
+
+const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
+  const matchingTeam = teams.find((t) => t.id === selectedTeamId);
+  return matchingTeam.players.map((player) => ({
+    playerId: player.id,
+    tossupsHeard: "",
+    answers: tossupValues.map(({ value }) => ({
+      numberGotten: "",
+      tossupValue: value,
+    })),
+  }));
+};
 
 const initialValues = (match, tossupValues) => ({
   round: match.round,
@@ -114,6 +127,18 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                       name={`teams[${index}].teamId`}
                       label={teamLabelPrefix}
                       options={teamOptions}
+                      onChange={(newTeamId, formContext) => {
+                        const fieldHelper = formContext.getFieldHelpers(
+                          `teams[${index}].players`
+                        );
+                        fieldHelper.setValue(
+                          mapTeamChangeToNewPlayers(
+                            newTeamId,
+                            teams,
+                            tossupValues
+                          )
+                        );
+                      }}
                     />
                     <Number
                       name={`teams[${index}].score`}
@@ -141,13 +166,21 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                   <p>Team {index + 1} Players</p>
                   <RepeatField
                     name={`teams[${index}].players`}
-                    render={(playerFieldVal, { index: playerFieldIndex }) => {
+                    render={(
+                      playerFieldVal,
+                      { index: playerFieldIndex },
+                      { remove }
+                    ) => {
                       const playerName =
                         playersById[playerFieldVal.playerId]?.name;
                       return (
                         <InputGroup key={playerFieldIndex} size="sm">
-                          <InputGroup.Text className="w-100">
+                          <InputGroup.Text className="w-100 d-flex justify-content-between">
                             {playerName}
+                            <X
+                              size="20"
+                              onClick={() => remove(playerFieldIndex)}
+                            />
                           </InputGroup.Text>
                           <Number
                             name={`teams[${index}].players[${playerFieldIndex}].tossupsHeard`}
@@ -172,7 +205,7 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                                   name={`teams[${index}].players[${playerFieldIndex}].answers[${answerIndex}].numberGotten`}
                                   label={
                                     <label className={labelClass}>
-                                      # of {answerFieldValue.tossupValue}
+                                      # of {answerFieldValue.tossupValue}s
                                     </label>
                                   }
                                 />
