@@ -19,26 +19,26 @@ const toggleWrapper = forwardRef(({ children, onClick }, ref) => {
   );
 });
 
-const renderItem = (itemProps) => {
-  if (!itemProps) {
+const renderItem = (action) => {
+  if (!action) {
     return null;
   }
-  const { label, onClick } = itemProps;
+  const { label, onClick } = action;
   return (
-    <Dropdown.Item onClick={onClick} className="small">
+    <Dropdown.Item onClick={onClick} className="small" key={label}>
       {label}
     </Dropdown.Item>
   );
 };
 
-const DropdownActions = ({ className = "", deleteActionProps = null }) => {
+const DropdownActions = ({ className = "", actions = [] }) => {
   return (
     <Dropdown className={className}>
       <Dropdown.Toggle size="sm" as={toggleWrapper}>
         <Icon name="ThreeDots" size="20" />
       </Dropdown.Toggle>
       <Dropdown.Menu className="br-0">
-        {renderItem(deleteActionProps)}
+        {actions.map((action) => renderItem(action))}
       </Dropdown.Menu>
     </Dropdown>
   );
