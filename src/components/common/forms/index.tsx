@@ -153,7 +153,7 @@ export const Select = ({
   multiple = false,
   onChange = null,
 }) => {
-  const [field] = useField(name);
+  const [field, meta] = useField(name);
   const formContext = useFormContext();
   const internalOnChange = (opts) => {
     const value = multiple ? opts.map((o) => o.value) : opts.value;
@@ -161,33 +161,40 @@ export const Select = ({
     onChange && onChange(value, formContext);
   };
   return (
-    <ReactSelect
-      {...field}
-      placeholder={label}
-      styles={{
-        control: (base) => ({
-          ...base,
-          borderRadius: "0",
-          height: "100%",
-          zIndex: "1",
-        }),
-        menu: (base) => ({
-          ...base,
-          borderRadius: "0",
-          zIndex: "2",
-        }),
-      }}
-      className="mb-3"
-      isMulti={multiple}
-      aria-label={label}
-      options={options}
-      onChange={internalOnChange}
-      value={
-        multiple
-          ? options.filter((o) => field.value.indexOf(o.value) >= 0)
-          : options.find((o) => o.value === field.value) || ""
-      }
-    />
+    <>
+      <ReactSelect
+        {...field}
+        placeholder={label}
+        styles={{
+          control: (base) => ({
+            ...base,
+            borderRadius: "0",
+            height: "100%",
+            zIndex: "1",
+          }),
+          menu: (base) => ({
+            ...base,
+            borderRadius: "0",
+            zIndex: "2",
+          }),
+        }}
+        className="mb-3 form-floating"
+        isMulti={multiple}
+        aria-label={label}
+        options={options}
+        onChange={internalOnChange}
+        value={
+          multiple
+            ? options.filter((o) => field.value.indexOf(o.value) >= 0)
+            : options.find((o) => o.value === field.value) || ""
+        }
+      />
+      {meta.error && (
+        <FormComponent.Control.Feedback type="invalid">
+          {meta.error}
+        </FormComponent.Control.Feedback>
+      )}
+    </>
   );
 };
 
