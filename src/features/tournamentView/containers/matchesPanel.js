@@ -14,11 +14,13 @@ const mapStateToProps = ({
   tournamentMatchesReducer,
   tournamentTeamsReducer,
   tournamentRulesReducer,
+  tournamentPhasesReducer,
 }) => ({
   matches: tournamentMatchesReducer.matches,
   teams: tournamentTeamsReducer.teams,
   rules: tournamentRulesReducer,
   playersById: getPlayersById(tournamentTeamsReducer.teams),
+  phases: tournamentPhasesReducer.phases,
 });
 
 export default connect(mapStateToProps, null)(TournamentMatchesPanel);
