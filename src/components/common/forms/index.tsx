@@ -163,6 +163,7 @@ export const Select = ({
   return (
     <ReactSelect
       {...field}
+      placeholder={label}
       styles={{
         control: (base) => ({
           ...base,
