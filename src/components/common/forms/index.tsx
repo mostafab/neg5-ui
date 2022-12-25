@@ -146,7 +146,13 @@ export const Checkbox = ({ name, label }) => {
   );
 };
 
-export const Select = ({ name, label, options, onChange = null }) => {
+export const Select = ({
+  name,
+  label,
+  options,
+  multiple = false,
+  onChange = null,
+}) => {
   const [field] = useField(name);
   const formContext = useFormContext();
   const internalOnChange = (e) => {
@@ -160,6 +166,7 @@ export const Select = ({ name, label, options, onChange = null }) => {
           aria-label={label}
           {...field}
           onChange={internalOnChange}
+          multiple={multiple}
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>

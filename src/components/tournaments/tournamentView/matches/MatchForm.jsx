@@ -36,6 +36,7 @@ const initialValues = (match, tossupValues) => ({
   packet: match.packet || "",
   serialId: match.serialId || "",
   notes: match.notes || "",
+  phases: match.phases || [],
   teams: orderBy(match.teams || [], "teamId").map((team) => ({
     teamId: team.teamId,
     score: team.score,
@@ -76,14 +77,24 @@ const getTeamOptions = (teams) =>
     "label"
   );
 
+const getPhaseOptions = (phases) =>
+  orderBy(
+    phases.map((p) => ({
+      value: p.id,
+      label: p.name,
+    })),
+    "label"
+  );
+
 const answerTypeToClass = {
   Base: "info",
   Power: "success",
   Neg: "danger",
 };
 
-const MatchForm = ({ match, teams, rules, playersById }) => {
+const MatchForm = ({ match, teams, rules, playersById, phases }) => {
   const teamOptions = getTeamOptions(teams);
+  const phaseOptions = getPhaseOptions(phases);
   const { usesBouncebacks, tossupValues } = rules;
   const tossupValueAnswerTypes = mapValues(
     keyBy(tossupValues, "value"),
@@ -234,6 +245,12 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
           <Text name="packet" label="Packet" />
         </Col>
         <Col lg={6} md={12}>
+          <Select
+            name="phases"
+            label="Phases"
+            options={phaseOptions}
+            multiple
+          />
           <Text textarea name="notes" label="Notes" />
         </Col>
       </Row>

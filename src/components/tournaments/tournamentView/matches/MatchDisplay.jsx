@@ -9,6 +9,7 @@ const MatchDisplay = ({
   teams,
   rules,
   playersById,
+  phases,
 }) => {
   const match = selectedMatchId
     ? matches.find((m) => m.id === selectedMatchId)
@@ -25,6 +26,7 @@ const MatchDisplay = ({
         teams={teams}
         rules={rules}
         playersById={playersById}
+        phases={phases}
       />
     </div>
   );

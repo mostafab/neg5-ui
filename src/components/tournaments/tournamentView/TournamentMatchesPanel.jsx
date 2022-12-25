@@ -4,7 +4,13 @@ import Card from "@components/common/cards";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 
-const TournamentMatchesPanel = ({ matches, teams, rules, playersById }) => {
+const TournamentMatchesPanel = ({
+  matches,
+  teams,
+  rules,
+  playersById,
+  phases,
+}) => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   return (
     <>
@@ -26,6 +32,7 @@ const TournamentMatchesPanel = ({ matches, teams, rules, playersById }) => {
           onSelectMatch={(match) => setSelectedMatchId(match.id)}
           rules={rules}
           playersById={playersById}
+          phases={phases}
         />
       )}
     </>
