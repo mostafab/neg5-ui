@@ -77,15 +77,14 @@ const getTeamOptions = (teams) =>
     "label"
   );
 
-const getPhaseOptions = (phases) => (
+const getPhaseOptions = (phases) =>
   orderBy(
-    phases.map(p => ({
+    phases.map((p) => ({
       value: p.id,
       label: p.name,
     })),
     "label"
-  )
-)
+  );
 
 const answerTypeToClass = {
   Base: "info",
@@ -246,7 +245,12 @@ const MatchForm = ({ match, teams, rules, playersById, phases }) => {
           <Text name="packet" label="Packet" />
         </Col>
         <Col lg={6} md={12}>
-          <Select name="phases" label="Phases" options={phaseOptions} multiple />
+          <Select
+            name="phases"
+            label="Phases"
+            options={phaseOptions}
+            multiple
+          />
           <Text textarea name="notes" label="Notes" />
         </Col>
       </Row>

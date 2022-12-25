@@ -4,7 +4,13 @@ import Card from "@components/common/cards";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 
-const TournamentMatchesPanel = ({ matches, teams, rules, playersById, phases }) => {
+const TournamentMatchesPanel = ({
+  matches,
+  teams,
+  rules,
+  playersById,
+  phases,
+}) => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   return (
     <>

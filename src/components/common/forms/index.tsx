@@ -146,7 +146,13 @@ export const Checkbox = ({ name, label }) => {
   );
 };
 
-export const Select = ({ name, label, options, multiple = false, onChange = null }) => {
+export const Select = ({
+  name,
+  label,
+  options,
+  multiple = false,
+  onChange = null,
+}) => {
   const [field] = useField(name);
   const formContext = useFormContext();
   const internalOnChange = (e) => {
