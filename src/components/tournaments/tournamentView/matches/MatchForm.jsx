@@ -23,7 +23,7 @@ const initialValues = (match, tossupValues) => ({
   packet: match.packet || "",
   serialId: match.serialId || "",
   notes: match.notes || "",
-  teams: orderBy((match.teams || []), "teamId").map((team) => ({
+  teams: orderBy(match.teams || [], "teamId").map((team) => ({
     teamId: team.teamId,
     score: team.score,
     overtimeTossupsGotten: team.overtimeTossupsGotten,
