@@ -14,6 +14,7 @@ import {
   ResetListener,
   Checkbox,
 } from "@components/common/forms";
+import { X } from "@components/common/icon";
 
 const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
   const matchingTeam = teams.find((t) => t.id === selectedTeamId);
@@ -165,13 +166,21 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                   <p>Team {index + 1} Players</p>
                   <RepeatField
                     name={`teams[${index}].players`}
-                    render={(playerFieldVal, { index: playerFieldIndex }) => {
+                    render={(
+                      playerFieldVal,
+                      { index: playerFieldIndex },
+                      { remove }
+                    ) => {
                       const playerName =
                         playersById[playerFieldVal.playerId]?.name;
                       return (
                         <InputGroup key={playerFieldIndex} size="sm">
-                          <InputGroup.Text className="w-100">
+                          <InputGroup.Text className="w-100 d-flex justify-content-between">
                             {playerName}
+                            <X
+                              size="20"
+                              onClick={() => remove(playerFieldIndex)}
+                            />
                           </InputGroup.Text>
                           <Number
                             name={`teams[${index}].players[${playerFieldIndex}].tossupsHeard`}
