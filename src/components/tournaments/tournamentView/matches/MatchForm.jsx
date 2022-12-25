@@ -15,6 +15,18 @@ import {
   Checkbox,
 } from "@components/common/forms";
 
+const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
+  const matchingTeam = teams.find((t) => t.id === selectedTeamId);
+  return matchingTeam.players.map((player) => ({
+    playerId: player.id,
+    tossupsHeard: null,
+    answers: tossupValues.map(({ value }) => ({
+      numberGotten: null,
+      tossupValue: value,
+    })),
+  }));
+};
+
 const initialValues = (match, tossupValues) => ({
   round: match.round,
   tossupsHeard: match.tossupsHeard,
@@ -114,6 +126,18 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                       name={`teams[${index}].teamId`}
                       label={teamLabelPrefix}
                       options={teamOptions}
+                      onChange={(newTeamId, formContext) => {
+                        const fieldHelper = formContext.getFieldHelpers(
+                          `teams[${index}].players`
+                        );
+                        fieldHelper.setValue(
+                          mapTeamChangeToNewPlayers(
+                            newTeamId,
+                            teams,
+                            tossupValues
+                          )
+                        );
+                      }}
                     />
                     <Number
                       name={`teams[${index}].score`}
@@ -172,7 +196,7 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                                   name={`teams[${index}].players[${playerFieldIndex}].answers[${answerIndex}].numberGotten`}
                                   label={
                                     <label className={labelClass}>
-                                      # of {answerFieldValue.tossupValue}
+                                      # of {answerFieldValue.tossupValue}s
                                     </label>
                                   }
                                 />

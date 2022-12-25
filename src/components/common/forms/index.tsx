@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   Form as FormComponent,
   Button,
@@ -12,6 +12,7 @@ import {
   FieldArray,
   useFormikContext,
 } from "formik";
+import get from "lodash/get";
 
 export const Form = ({
   name,
@@ -145,18 +146,21 @@ export const Checkbox = ({ name, label }) => {
   );
 };
 
-export const Select = ({ name, label, options }) => {
+export const Select = ({ name, label, options, onChange }) => {
   const [field] = useField(name);
   return (
-    <FloatingLabel label={label} className="mb-3">
-      <FormComponent.Select aria-label={label} {...field}>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </FormComponent.Select>
-    </FloatingLabel>
+    <>
+      <FloatingLabel label={label} className="mb-3">
+        <FormComponent.Select aria-label={label} {...field}>
+          {options.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </FormComponent.Select>
+      </FloatingLabel>
+      {onChange && <ChangeListener fieldKey={field.name} onChange={onChange} />}
+    </>
   );
 };
 
@@ -174,6 +178,15 @@ export const ResetListener = ({ changeKey, initialValues = null }) => {
   useEffect(() => {
     resetForm(initialValues ? { values: initialValues() } : undefined);
   }, [changeKey]);
+  return null;
+};
+
+export const ChangeListener = ({ onChange, fieldKey }) => {
+  const context = useFormContext();
+  const value = get(context.values, fieldKey);
+  useLayoutEffect(() => {
+    onChange && onChange(value, context);
+  }, [value]);
   return null;
 };
 
