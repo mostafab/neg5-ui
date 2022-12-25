@@ -14,6 +14,12 @@ input[type="number"]::-webkit-outer-spin-button {
 .input-group-text,
 .form-check-input[type="checkbox"] {
   border-radius: 0 !important;
+
+  &:focus {
+    border-color: #2684ff;
+    border-width: 2px;
+    box-shadow: none;
+  }
 }
 
 .input-group-text.w-100 {
