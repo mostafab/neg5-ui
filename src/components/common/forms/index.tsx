@@ -241,6 +241,9 @@ const CommonFormElementWrapper = ({
           rows={type === "textarea" ? rows : undefined}
           placeholder={placeholder || name}
           isInvalid={!!meta.error}
+          onWheel={
+            type !== "number" ? undefined : (e) => e.currentTarget.blur()
+          }
           {...field}
         />
         {meta.error && (

@@ -3,6 +3,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import orderBy from "lodash/orderBy";
 import dayjs from "dayjs";
 
+import { getMatchTeamsDisplayString } from "@libs/matches";
+
 const MatchesList = ({
   matches,
   teamsById,
@@ -12,13 +14,10 @@ const MatchesList = ({
 }) => (
   <ListGroup variant="flush">
     {orderBy(matches, "addedAt", "desc").map((match) => {
-      const matchTeamsDisplayString = orderBy(match.teams, "teamId")
-        .map((t) => {
-          const teamName = teamsById[t.teamId]?.name;
-          const score = t.score;
-          return `${teamName} (${score})`;
-        })
-        .join(" vs ");
+      const matchTeamsDisplayString = getMatchTeamsDisplayString(
+        match,
+        teamsById
+      );
       return (
         <ListGroup.Item
           key={match.id}
