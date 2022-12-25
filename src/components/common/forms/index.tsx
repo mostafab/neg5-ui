@@ -156,24 +156,37 @@ export const Select = ({
   const [field] = useField(name);
   const formContext = useFormContext();
   const internalOnChange = (opts) => {
-    const value = Array.isArray(opts)
-      ? opts.map(o => o.value)
-      : opts.value;
+    const value = multiple ? opts.map((o) => o.value) : opts.value;
     formContext.getFieldHelpers(name).setValue(value);
     onChange && onChange(value, formContext);
   };
   return (
     <ReactSelect
-    {...field}
-    className="mb-3"
-    isMulti={multiple}
-    aria-label={label}
-    options={options}
-    onChange={internalOnChange}
-    value={multiple
-      ? options.filter(o => field.value.indexOf(o.value) >= 0) :
-      (options.find(o => o.value === field.value) || '')}
-  />
+      {...field}
+      styles={{
+        control: (base) => ({
+          ...base,
+          borderRadius: "0",
+          height: "100%",
+          zIndex: "1",
+        }),
+        menu: (base) => ({
+          ...base,
+          borderRadius: "0",
+          zIndex: "2",
+        }),
+      }}
+      className="mb-3"
+      isMulti={multiple}
+      aria-label={label}
+      options={options}
+      onChange={internalOnChange}
+      value={
+        multiple
+          ? options.filter((o) => field.value.indexOf(o.value) >= 0)
+          : options.find((o) => o.value === field.value) || ""
+      }
+    />
   );
 };
 
