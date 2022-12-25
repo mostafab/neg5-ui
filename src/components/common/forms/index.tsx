@@ -135,7 +135,7 @@ export const Number = ({
 export const Checkbox = ({ name, label }) => {
   const [field] = useField(name);
   return (
-    <FormComponent.Group controlId={name}>
+    <FormComponent.Group controlId={name} className="mb-3">
       <FormComponent.Check
         type="checkbox"
         label={label}

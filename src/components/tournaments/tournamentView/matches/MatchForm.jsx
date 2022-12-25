@@ -46,6 +46,7 @@ const initialValues = (match, tossupValues) => ({
   serialId: match.serialId || "",
   notes: match.notes || "",
   phases: match.phases || [],
+  isTiebreaker: match.isTiebreaker || "",
   teams: orderBy(
     match.teams || [initialTeamsValue(), initialTeamsValue()],
     "teamId"
@@ -256,6 +257,7 @@ const MatchForm = ({ match, teams, rules, playersById, phases }) => {
           <Text name="packet" label="Packet" />
         </Col>
         <Col lg={6} md={12}>
+          <Checkbox name="isTiebreaker" label="Tiebreaker" />
           <Select
             name="phases"
             label="Phases"

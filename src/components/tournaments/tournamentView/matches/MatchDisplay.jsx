@@ -19,7 +19,7 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
           <DropdownActions
             actions={[
               {
-                label: "Delete Match",
+                label: <span className="text-danger">Delete Match</span>,
                 onClick: () => console.log(match),
               },
             ]}
