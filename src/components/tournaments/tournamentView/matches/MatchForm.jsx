@@ -2,6 +2,8 @@ import React from "react";
 import { Row, Col, InputGroup } from "react-bootstrap";
 import * as Yup from "yup";
 import orderBy from "lodash/orderBy";
+import keyBy from "lodash/keyBy";
+import mapValues from "lodash/mapValues";
 
 import {
   Form,
@@ -13,7 +15,7 @@ import {
   Checkbox,
 } from "@components/common/forms";
 
-const initialValues = (match) => ({
+const initialValues = (match, tossupValues) => ({
   round: match.round,
   tossupsHeard: match.tossupsHeard,
   room: match.room || "",
@@ -21,7 +23,7 @@ const initialValues = (match) => ({
   packet: match.packet || "",
   serialId: match.serialId || "",
   notes: match.notes || "",
-  teams: (match.teams || []).map((team) => ({
+  teams: orderBy(match.teams || [], "teamId").map((team) => ({
     teamId: team.teamId,
     score: team.score,
     overtimeTossupsGotten: team.overtimeTossupsGotten,
@@ -30,6 +32,15 @@ const initialValues = (match) => ({
     players: (team.players || []).map((player) => ({
       playerId: player.playerId,
       tossupsHeard: player.tossupsHeard || null,
+      answers: orderBy(tossupValues, "value", "desc").map(({ value }) => {
+        const numberGotten =
+          player.answers.find((a) => a.tossupValue === value)?.numberGotten ||
+          0;
+        return {
+          tossupValue: value,
+          numberGotten,
+        };
+      }),
     })),
   })),
 });
@@ -52,20 +63,30 @@ const getTeamOptions = (teams) =>
     "label"
   );
 
+const answerTypeToClass = {
+  Base: "info",
+  Power: "success",
+  Neg: "danger",
+};
+
 const MatchForm = ({ match, teams, rules, playersById }) => {
   const teamOptions = getTeamOptions(teams);
   const { usesBouncebacks, tossupValues } = rules;
+  const tossupValueAnswerTypes = mapValues(
+    keyBy(tossupValues, "value"),
+    (v) => v.answerType
+  );
   return (
     <Form
       name="MatchForm"
-      initialValues={initialValues(match)}
+      initialValues={initialValues(match, tossupValues)}
       submitButtonText="Save"
       validation={validation}
       onSubmit={(values) => console.log(values)}
     >
       <ResetListener
         changeKey={match.id}
-        initialValues={() => initialValues(match)}
+        initialValues={() => initialValues(match, tossupValues)}
       />
       <Row>
         <Col lg={3} md={6}>
@@ -117,10 +138,12 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                   )}
                 </Row>
                 <Row>
+                  <p>Team {index + 1} Players</p>
                   <RepeatField
                     name={`teams[${index}].players`}
-                    render={(_val, { index: playerFieldIndex, isLast }) => {
-                      const playerName = playersById[_val.playerId]?.name;
+                    render={(playerFieldVal, { index: playerFieldIndex }) => {
+                      const playerName =
+                        playersById[playerFieldVal.playerId]?.name;
                       return (
                         <InputGroup key={playerFieldIndex} size="sm">
                           <InputGroup.Text className="w-100">
@@ -128,7 +151,33 @@ const MatchForm = ({ match, teams, rules, playersById }) => {
                           </InputGroup.Text>
                           <Number
                             name={`teams[${index}].players[${playerFieldIndex}].tossupsHeard`}
-                            label="Tossups Heard"
+                            label="TUHs"
+                          />
+                          <RepeatField
+                            name={`teams[${index}].players[${playerFieldIndex}].answers`}
+                            render={(
+                              answerFieldValue,
+                              { index: answerIndex }
+                            ) => {
+                              const labelClass = `text-${
+                                answerTypeToClass[
+                                  tossupValueAnswerTypes[
+                                    answerFieldValue.tossupValue
+                                  ]
+                                ]
+                              }`;
+                              return (
+                                <Number
+                                  key={answerIndex}
+                                  name={`teams[${index}].players[${playerFieldIndex}].answers[${answerIndex}].numberGotten`}
+                                  label={
+                                    <label className={labelClass}>
+                                      # of {answerFieldValue.tossupValue}
+                                    </label>
+                                  }
+                                />
+                              );
+                            }}
                           />
                         </InputGroup>
                       );
