@@ -10,14 +10,13 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
   return (
     <div>
       {match.id && (
-        <div className="mb-3">
+        <div className="mb-3 d-flex justify-content-between">
           {match.addedAt && (
             <span className="small text-dark">
               Added {formatAddedAtDate(match.addedAt)}
             </span>
           )}
           <DropdownActions
-            className="float-end"
             actions={[
               {
                 label: "Delete Match",
