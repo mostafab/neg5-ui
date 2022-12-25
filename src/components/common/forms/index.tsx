@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Form as FormComponent,
   Button,
@@ -146,12 +146,21 @@ export const Checkbox = ({ name, label }) => {
   );
 };
 
-export const Select = ({ name, label, options, onChange }) => {
+export const Select = ({ name, label, options, onChange = null }) => {
   const [field] = useField(name);
+  const formContext = useFormContext();
+  const internalOnChange = (e) => {
+    field.onChange(e);
+    onChange && onChange(e.target.value, formContext);
+  };
   return (
     <>
       <FloatingLabel label={label} className="mb-3">
-        <FormComponent.Select aria-label={label} {...field}>
+        <FormComponent.Select
+          aria-label={label}
+          {...field}
+          onChange={internalOnChange}
+        >
           {options.map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}
@@ -159,7 +168,6 @@ export const Select = ({ name, label, options, onChange }) => {
           ))}
         </FormComponent.Select>
       </FloatingLabel>
-      {onChange && <ChangeListener fieldKey={field.name} onChange={onChange} />}
     </>
   );
 };
@@ -178,15 +186,6 @@ export const ResetListener = ({ changeKey, initialValues = null }) => {
   useEffect(() => {
     resetForm(initialValues ? { values: initialValues() } : undefined);
   }, [changeKey]);
-  return null;
-};
-
-export const ChangeListener = ({ onChange, fieldKey }) => {
-  const context = useFormContext();
-  const value = get(context.values, fieldKey);
-  useLayoutEffect(() => {
-    onChange && onChange(value, context);
-  }, [value]);
   return null;
 };
 

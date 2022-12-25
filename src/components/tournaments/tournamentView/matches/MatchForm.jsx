@@ -19,9 +19,9 @@ const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
   const matchingTeam = teams.find((t) => t.id === selectedTeamId);
   return matchingTeam.players.map((player) => ({
     playerId: player.id,
-    tossupsHeard: null,
+    tossupsHeard: "",
     answers: tossupValues.map(({ value }) => ({
-      numberGotten: null,
+      numberGotten: "",
       tossupValue: value,
     })),
   }));
