@@ -5,6 +5,7 @@ import {
   FloatingLabel,
   Spinner,
 } from "react-bootstrap";
+import ReactSelect from "react-select";
 import {
   Formik,
   Form as FormikForm,
@@ -154,27 +155,25 @@ export const Select = ({
 }) => {
   const [field] = useField(name);
   const formContext = useFormContext();
-  const internalOnChange = (e) => {
-    field.onChange(e);
-    onChange && onChange(e.target.value, formContext);
+  const internalOnChange = (opts) => {
+    const value = Array.isArray(opts)
+      ? opts.map(o => o.value)
+      : opts.value;
+    formContext.getFieldHelpers(name).setValue(value);
+    onChange && onChange(value, formContext);
   };
   return (
-    <>
-      <FloatingLabel label={label} className="mb-3">
-        <FormComponent.Select
-          aria-label={label}
-          {...field}
-          onChange={internalOnChange}
-          multiple={multiple}
-        >
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </FormComponent.Select>
-      </FloatingLabel>
-    </>
+    <ReactSelect
+    {...field}
+    className="mb-3"
+    isMulti={multiple}
+    aria-label={label}
+    options={options}
+    onChange={internalOnChange}
+    value={multiple
+      ? options.filter(o => field.value.indexOf(o.value) >= 0) :
+      (options.find(o => o.value === field.value) || '')}
+  />
   );
 };
 
