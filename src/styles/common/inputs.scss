@@ -19,3 +19,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .input-group-text.w-100 {
   border-bottom: none;
 }
+
+.form-select[multiple] {
+  height: auto;
+}
