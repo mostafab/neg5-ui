@@ -36,12 +36,12 @@ export const Form = ({
       <FormikForm name={name} noValidate className={name}>
         {children}
         <div className="d-grid">
+          <hr />
           {onCancel && (
             <Button variant="secondary" onClick={onCancel}>
               {cancelButtonText}
             </Button>
           )}
-          <hr />
           <Button variant="primary" type="submit" disabled={submitting}>
             {submitting ? "Submitting" : submitButtonText}
             {submitting && <Spinner animation="border" size="sm" />}
@@ -152,6 +152,7 @@ export const Select = ({
   options,
   multiple = false,
   onChange = null,
+  searchable = false,
 }) => {
   const [field, meta] = useField(name);
   const formContext = useFormContext();
@@ -178,6 +179,7 @@ export const Select = ({
             zIndex: "2",
           }),
         }}
+        isSearchable={searchable}
         className="mb-3 form-floating"
         isMulti={multiple}
         aria-label={label}

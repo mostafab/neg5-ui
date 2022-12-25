@@ -3,17 +3,8 @@ import { formatAddedAtDate } from "@libs/dates";
 
 import MatchForm from "./MatchForm";
 
-const MatchDisplay = ({
-  matches,
-  selectedMatchId,
-  teams,
-  rules,
-  playersById,
-  phases,
-}) => {
-  const match = selectedMatchId
-    ? matches.find((m) => m.id === selectedMatchId)
-    : {};
+const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
+  const match = selectedMatch;
   return (
     <div className="sticky-top">
       {match.addedAt && (

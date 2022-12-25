@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import Card from "@components/common/cards";
+import { Add } from "@components/common/icon";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 
@@ -11,25 +12,32 @@ const TournamentMatchesPanel = ({
   playersById,
   phases,
 }) => {
-  const [selectedMatchId, setSelectedMatchId] = useState(null);
+  const [selectedMatch, setSelectedMatch] = useState(null);
   return (
     <>
       {
-        <Card title={`Matches (${matches.length})`}>
+        <Card
+          title={
+            <>
+              <span>Matches ({matches.length})</span>
+              <Add className="float-end" onClick={() => setSelectedMatch({})} />
+            </>
+          }
+        >
           <MatchesAccordian
             matches={matches}
             teams={teams}
-            onSelectMatch={(match) => setSelectedMatchId(match.id)}
+            onSelectMatch={(match) => setSelectedMatch(match)}
           />
         </Card>
       }
-      {selectedMatchId && (
+      {selectedMatch && (
         <MatchesModal
           matches={matches}
           teams={teams}
-          selectedMatchId={selectedMatchId}
-          onHide={() => setSelectedMatchId(null)}
-          onSelectMatch={(match) => setSelectedMatchId(match.id)}
+          selectedMatch={selectedMatch}
+          onHide={() => setSelectedMatch(null)}
+          onSelectMatch={(match) => setSelectedMatch(match)}
           rules={rules}
           playersById={playersById}
           phases={phases}

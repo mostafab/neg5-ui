@@ -28,16 +28,28 @@ const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
   }));
 };
 
+const initialTeamsValue = () => ({
+  teamId: "",
+  score: "",
+  forfeit: "",
+  bouncebackPoints: "",
+  overtimeTossupsGotten: "",
+  players: [],
+});
+
 const initialValues = (match, tossupValues) => ({
-  round: match.round,
-  tossupsHeard: match.tossupsHeard,
+  round: match.round || "",
+  tossupsHeard: match.tossupsHeard || "",
   room: match.room || "",
   moderator: match.moderator || "",
   packet: match.packet || "",
   serialId: match.serialId || "",
   notes: match.notes || "",
   phases: match.phases || [],
-  teams: orderBy(match.teams || [], "teamId").map((team) => ({
+  teams: orderBy(
+    match.teams || [initialTeamsValue(), initialTeamsValue()],
+    "teamId"
+  ).map((team) => ({
     teamId: team.teamId,
     score: team.score,
     overtimeTossupsGotten: team.overtimeTossupsGotten,
@@ -60,8 +72,8 @@ const initialValues = (match, tossupValues) => ({
 });
 
 const validation = Yup.object({
-  round: Yup.number().required().positive(),
-  tossupsHeard: Yup.number().required().positive(),
+  round: Yup.number().required("Enter a round").positive(),
+  tossupsHeard: Yup.number().positive(),
   room: Yup.string(),
   packet: Yup.string(),
   serialId: Yup.string(),
@@ -174,7 +186,6 @@ const MatchForm = ({ match, teams, rules, playersById, phases }) => {
                   )}
                 </Row>
                 <Row>
-                  <p>Team {index + 1} Players</p>
                   <RepeatField
                     name={`teams[${index}].players`}
                     render={(
