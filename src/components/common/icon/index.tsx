@@ -8,19 +8,20 @@ const Icon = ({ name, ...props }) => {
   if (!Component) {
     throw new Error(`Invalid icon name: ${name} given.`);
   }
-  const component = <Component {...props} role={props.onClick ? "button" : null} />;
-  return (
-    props.message ? (
-      <OverlayTrigger
-        trigger={["hover", "focus", "click"]}
-        placement="top"
-        overlay={<Tooltip id="warning-tooltip">{props.message}</Tooltip>}
-      >
-        <span className={props.className}>
-          {component}
-        </span>
-      </OverlayTrigger>
-    ): component);
+  const component = (
+    <Component {...props} role={props.onClick ? "button" : null} />
+  );
+  return props.message ? (
+    <OverlayTrigger
+      trigger={["hover", "focus", "click"]}
+      placement="top"
+      overlay={<Tooltip id="warning-tooltip">{props.message}</Tooltip>}
+    >
+      <span className={props.className}>{component}</span>
+    </OverlayTrigger>
+  ) : (
+    component
+  );
 };
 
 export const Warning = (props) =>
