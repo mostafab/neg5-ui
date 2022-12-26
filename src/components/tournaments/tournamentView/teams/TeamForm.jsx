@@ -16,6 +16,7 @@ import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
 const initialPlayerValue = () => ({
   name: "",
   year: "",
+  id: "",
 });
 
 const initialValues = (team) => ({
@@ -24,6 +25,7 @@ const initialValues = (team) => ({
     (player) => ({
       name: player.name || "",
       year: player.year || "",
+      id: player.id || "",
     })
   ),
 });
