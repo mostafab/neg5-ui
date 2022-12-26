@@ -105,7 +105,15 @@ const answerTypeToClass = {
   Neg: "danger",
 };
 
-const MatchForm = ({ match, teams, rules, playersById, phases }) => {
+const MatchForm = ({
+  match,
+  teams,
+  rules,
+  playersById,
+  phases,
+  readOnly = false,
+  onCancel = null,
+}) => {
   const teamOptions = getTeamOptions(teams);
   const phaseOptions = getPhaseOptions(phases);
   const { usesBouncebacks, tossupValues } = rules;
@@ -120,6 +128,8 @@ const MatchForm = ({ match, teams, rules, playersById, phases }) => {
       submitButtonText="Save"
       validation={validation}
       onSubmit={(values) => console.log(values)}
+      readOnly={readOnly}
+      onCancel={onCancel}
     >
       <ResetListener
         changeKey={match.id}
@@ -191,7 +201,7 @@ const MatchForm = ({ match, teams, rules, playersById, phases }) => {
                     name={`teams[${index}].players`}
                     render={(
                       playerFieldVal,
-                      { index: playerFieldIndex },
+                      { index: playerFieldIndex, readOnly },
                       { remove }
                     ) => {
                       const playerName =
@@ -200,10 +210,12 @@ const MatchForm = ({ match, teams, rules, playersById, phases }) => {
                         <InputGroup key={playerFieldIndex} size="sm">
                           <InputGroup.Text className="w-100 d-flex justify-content-between">
                             {playerName}
-                            <X
-                              size="20"
-                              onClick={() => remove(playerFieldIndex)}
-                            />
+                            {!readOnly && (
+                              <X
+                                size="20"
+                                onClick={() => remove(playerFieldIndex)}
+                              />
+                            )}
                           </InputGroup.Text>
                           <Number
                             name={`teams[${index}].players[${playerFieldIndex}].tossupsHeard`}

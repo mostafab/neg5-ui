@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { formatAddedAtDate } from "@libs/dates";
 import DropdownActions from "@components/common/DropdownActions";
@@ -7,6 +7,7 @@ import MatchForm from "./MatchForm";
 
 const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
   const match = selectedMatch;
+  const [readOnly, setReadOnly] = useState(true);
   return (
     <div>
       {match.id && (
@@ -20,7 +21,7 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
             actions={[
               {
                 label: <span className="text-gray">Edit</span>,
-                onClick: () => console.log(match),
+                onClick: () => setReadOnly(false),
                 separator: <hr className="mt-1 mb-1" />,
               },
               {
@@ -37,6 +38,8 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
         rules={rules}
         playersById={playersById}
         phases={phases}
+        readOnly={readOnly && match.id}
+        onCancel={() => setReadOnly(true)}
       />
     </div>
   );
