@@ -22,10 +22,11 @@ const MatchesModal = ({
       <Col lg={3} md={4} className="d-none d-md-block d-lg-block d-xl-block">
         <div className="d-grid">
           <Button type="outline-primary mb-3" onClick={() => onSelectMatch({})}>
-            Add New Match
+            Add A New Match
           </Button>
         </div>
         <MatchesAccordian
+          shadow
           matches={matches}
           teams={teams}
           openMultiple={false}

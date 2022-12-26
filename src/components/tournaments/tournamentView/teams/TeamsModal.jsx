@@ -24,7 +24,7 @@ const TeamsModal = ({
             className="mb-3"
             onClick={() => onSelectTeam({})}
           >
-            Add New Team
+            Add A New Team
           </Button>
         </div>
         <TeamsList

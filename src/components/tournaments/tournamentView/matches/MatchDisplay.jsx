@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { formatAddedAtDate } from "@libs/dates";
 import DropdownActions from "@components/common/DropdownActions";
+import Card from "@components/common/cards";
 
 import MatchForm from "./MatchForm";
 
@@ -9,7 +10,7 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
   const match = selectedMatch;
   const [readOnly, setReadOnly] = useState(true);
   return (
-    <div>
+    <Card>
       {match.id && (
         <div className="mb-3 d-flex justify-content-between">
           {match.addedAt && (
@@ -41,7 +42,7 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
         readOnly={readOnly && match.id}
         onCancel={() => setReadOnly(true)}
       />
-    </div>
+    </Card>
   );
 };
 
