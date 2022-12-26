@@ -7,7 +7,7 @@ import Card from "@components/common/cards";
 import TeamsModal from "@components/tournaments/tournamentView/teams/TeamsModal";
 import TeamsList from "@components/tournaments/tournamentView/teams/TeamsList";
 
-const TournamentTeamsPanel = ({ teams }) => {
+const TournamentTeamsPanel = ({ teams, matches }) => {
   const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
   const [selectedTeam, setSelectedTeam] = useState(null);
   return (
@@ -31,6 +31,7 @@ const TournamentTeamsPanel = ({ teams }) => {
           onHide={() => setSelectedTeam(null)}
           onSelectTeam={setSelectedTeam}
           selectedTeam={selectedTeam}
+          matches={matches}
         />
       )}
     </>

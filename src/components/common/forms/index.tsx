@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import {
   Form as FormComponent,
-  Button,
+  Button as BootstrapButton,
   FloatingLabel,
   Spinner,
 } from "react-bootstrap";
@@ -13,6 +13,8 @@ import {
   FieldArray,
   useFormikContext,
 } from "formik";
+
+import Button from "@components/common/button";
 
 export const Form = ({
   name,
@@ -50,7 +52,7 @@ export const Form = ({
   );
 };
 
-export const RepeatField = ({ name, render }) => {
+export const RepeatField = ({ name, render, addObjectProps = null }) => {
   const [field] = useField(name);
   return (
     <FieldArray
@@ -71,6 +73,16 @@ export const RepeatField = ({ name, render }) => {
                 { index: idx, isLast: idx === field.value.length - 1 },
                 arrayHelpers
               )
+            )}
+            {addObjectProps && (
+              <div className="d-flex justify-content-center">
+                <Button
+                  type="link"
+                  onClick={() => arrayHelpers.push(addObjectProps.newObject())}
+                >
+                  {addObjectProps.buttonText}
+                </Button>
+              </div>
             )}
           </>
         );
@@ -232,14 +244,14 @@ const ContextAwareFormButtons = ({
     <>
       <hr />
       {onCancel && (
-        <Button variant="secondary" onClick={onCancel}>
+        <BootstrapButton variant="secondary" onClick={onCancel}>
           {cancelButtonText}
-        </Button>
+        </BootstrapButton>
       )}
-      <Button variant="primary" type="submit" disabled={submitting}>
+      <BootstrapButton variant="primary" type="submit" disabled={submitting}>
         {submitting ? "Submitting" : submitButtonText}
         {submitting && <Spinner animation="border" size="sm" />}
-      </Button>
+      </BootstrapButton>
     </>
   );
 };

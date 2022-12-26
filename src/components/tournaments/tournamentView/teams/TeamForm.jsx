@@ -2,6 +2,7 @@ import React from "react";
 import { InputGroup } from "react-bootstrap";
 
 import * as Yup from "yup";
+import orderBy from "lodash/orderBy";
 
 import {
   Form,
@@ -10,7 +11,6 @@ import {
   ResetListener,
 } from "@components/common/forms";
 import { X } from "@components/common/icon";
-import Button from "@components/common/button";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
 
 const initialPlayerValue = () => ({
@@ -20,10 +20,12 @@ const initialPlayerValue = () => ({
 
 const initialValues = (team) => ({
   name: team.name || "",
-  players: (team.players || [initialPlayerValue()]).map((player) => ({
-    name: player.name || "",
-    year: player.year || "",
-  })),
+  players: orderBy(team.players || [initialPlayerValue()], "name").map(
+    (player) => ({
+      name: player.name || "",
+      year: player.year || "",
+    })
+  ),
 });
 
 const validation = Yup.object({
@@ -38,7 +40,6 @@ const TeamForm = ({ team }) => {
       initialValues={initialValues(team)}
       validation={validation}
       onSubmit={(values) => console.log(values)}
-      dirtySubmitOnly
     >
       <ResetListener
         changeKey={team.id}
@@ -48,7 +49,11 @@ const TeamForm = ({ team }) => {
       <p className="d-flex justify-content-center">Players</p>
       <RepeatField
         name="players"
-        render={(_val, { index, isLast }, { remove, push }) => {
+        addObjectProps={{
+          buttonText: "Add a Player",
+          newObject: () => initialPlayerValue(),
+        }}
+        render={(_val, { index }, { remove }) => {
           const labelPrefix = `Player ${index + 1}`;
           return (
             <div key={index}>
@@ -69,13 +74,6 @@ const TeamForm = ({ team }) => {
                   <X />
                 </InputGroup.Text>
               </InputGroup>
-              {isLast && (
-                <div className="d-flex justify-content-center">
-                  <Button className="pt-0" onClick={() => push()} type="link">
-                    Add a Player
-                  </Button>
-                </div>
-              )}
             </div>
           );
         }}
