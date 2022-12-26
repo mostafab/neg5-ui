@@ -31,6 +31,8 @@ const TeamForm = ({ team }) => {
       submitButtonText="Save Changes"
       initialValues={initialValues(team)}
       validation={validation}
+      onSubmit={(values) => console.log(values)}
+      dirtySubmitOnly
     >
       <ResetListener
         changeKey={team.id}

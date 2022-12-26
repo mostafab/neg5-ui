@@ -6,14 +6,14 @@ import Card from "@components/common/cards";
 import TeamForm from "./TeamForm";
 
 const TeamDisplay = ({ team }) => (
-  <Row>
-    <Col lg={6} md={6} sm={12}>
-      <Card>
+  <Card>
+    <Row>
+      <Col lg={6} md={6} sm={12}>
         <TeamForm team={team} />
-      </Card>
-    </Col>
-    <Col lg={6} md={6} sm={12}></Col>
-  </Row>
+      </Col>
+      <Col lg={6} md={6} sm={12}></Col>
+    </Row>
+  </Card>
 );
 
 export default TeamDisplay;

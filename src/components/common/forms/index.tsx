@@ -24,6 +24,7 @@ export const Form = ({
   onCancel = null,
   cancelButtonText = "Cancel",
   submitting = false,
+  dirtySubmitOnly = false,
 }) => {
   return (
     <Formik
@@ -42,10 +43,11 @@ export const Form = ({
               {cancelButtonText}
             </Button>
           )}
-          <Button variant="primary" type="submit" disabled={submitting}>
-            {submitting ? "Submitting" : submitButtonText}
-            {submitting && <Spinner animation="border" size="sm" />}
-          </Button>
+          <ContextAwareSubmitButton
+            submitButtonText={submitButtonText}
+            submitting={submitting}
+            dirtySubmitOnly={dirtySubmitOnly}
+          />
         </div>
       </FormikForm>
     </Formik>
@@ -218,6 +220,23 @@ export const ResetListener = ({ changeKey, initialValues = null }) => {
 };
 
 export const useFormContext = () => useFormikContext();
+
+const ContextAwareSubmitButton = ({
+  submitting,
+  submitButtonText,
+  dirtySubmitOnly,
+}) => {
+  const { dirty } = useFormContext();
+  if (dirtySubmitOnly && !dirty) {
+    return null;
+  }
+  return (
+    <Button variant="primary" type="submit" disabled={submitting}>
+      {submitting ? "Submitting" : submitButtonText}
+      {submitting && <Spinner animation="border" size="sm" />}
+    </Button>
+  );
+};
 
 const CommonFormElementWrapper = ({
   name,
