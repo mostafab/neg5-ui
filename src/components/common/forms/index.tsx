@@ -188,6 +188,10 @@ export const Select = ({
             borderRadius: "0",
             zIndex: "2",
           }),
+          indicatorSeparator: (base) => ({
+            ...base,
+            display: "none",
+          }),
         }}
         isSearchable={searchable}
         className="mb-3 form-floating"
