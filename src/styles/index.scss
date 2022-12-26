@@ -8,6 +8,7 @@
 
 @use "@styles/components/index.scss";
 
-body {
+body,
+.modal-body {
   background-color: #e7ebf3;
 }

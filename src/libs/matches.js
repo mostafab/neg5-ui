@@ -1,5 +1,7 @@
 import orderBy from "lodash/orderBy";
 
+import { MatchResult } from "@libs/enums";
+
 export const getMatchTeamsDisplayString = (
   match,
   teamsById,
@@ -20,4 +22,24 @@ export const getMatchTeamsDisplayString = (
     return `Round ${match.round}: ${base}`;
   }
   return base;
+};
+
+export const getTeamMatchResult = (teamId, match) => {
+  if (match.teams.length !== 2) {
+    throw Error("Invalid match given. Cannot calculate result");
+  }
+  const matchingTeamIndex = match.teams.findIndex((t) => t.teamId === teamId);
+  const thisTeam = match.teams[matchingTeamIndex];
+  const otherTeam = match.teams[matchingTeamIndex === 0 ? 1 : 0];
+  if (thisTeam.forfeit) {
+    return MatchResult.Forfeit;
+  } else if (otherTeam.forfeit) {
+    return MatchResult.Win;
+  }
+  if (thisTeam.score > otherTeam.score) {
+    return MatchResult.Win;
+  } else if (thisTeam.score < otherTeam.score) {
+    return MatchResult.Loss;
+  }
+  return MatchResult.Tie;
 };

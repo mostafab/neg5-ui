@@ -14,6 +14,7 @@ const MatchesList = ({
   flush = true,
   displayRound = false,
   rowTeamsOrderParams = null,
+  rowSideRender = null,
 }) => (
   <ListGroup variant={flush ? "flush" : undefined}>
     {orderBy(matches, ["round", "addedAt"], ["desc", "desc"]).map((match) => {
@@ -32,7 +33,10 @@ const MatchesList = ({
           action={onSelectMatch !== null}
           onClick={onSelectMatch ? () => onSelectMatch(match) : null}
         >
-          <div>{matchTeamsDisplayString}</div>
+          <div>
+            {matchTeamsDisplayString}
+            {rowSideRender && rowSideRender(match)}
+          </div>
           {subtitled && match.addedAt && (
             <span className="small text-dark">
               Added {dayjs(match.addedAt).format("MMM DD h:mm A")}

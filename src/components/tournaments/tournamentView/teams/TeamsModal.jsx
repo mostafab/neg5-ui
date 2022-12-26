@@ -19,7 +19,11 @@ const TeamsModal = ({
     <Row>
       <Col lg={3} md={4} className="d-none d-md-block d-lg-block d-xl-block">
         <div className="d-grid">
-          <Button type="outline-primary mb-3" onClick={() => onSelectTeam({})}>
+          <Button
+            type="outline-primary"
+            className="mb-3"
+            onClick={() => onSelectTeam({})}
+          >
             Add New Team
           </Button>
         </div>
@@ -27,6 +31,7 @@ const TeamsModal = ({
           selectedTeam={selectedTeam}
           onSelectTeam={onSelectTeam}
           teams={teams}
+          shadow
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
