@@ -10,7 +10,6 @@ import TeamsList from "@components/tournaments/tournamentView/teams/TeamsList";
 const TournamentTeamsPanel = ({ teams }) => {
   const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
   const [selectedTeam, setSelectedTeam] = useState(null);
-  console.log(selectedTeam);
   return (
     <>
       <Card title={`Teams (${teams.length})`}>

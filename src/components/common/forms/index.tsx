@@ -37,16 +37,12 @@ export const Form = ({
       <FormikForm name={name} noValidate className={name}>
         {children}
         <div className="d-grid">
-          <hr />
-          {onCancel && (
-            <Button variant="secondary" onClick={onCancel}>
-              {cancelButtonText}
-            </Button>
-          )}
-          <ContextAwareSubmitButton
+          <ContextAwareFormButtons
+            onCancel={onCancel}
             submitButtonText={submitButtonText}
             submitting={submitting}
             dirtySubmitOnly={dirtySubmitOnly}
+            cancelButtonText={cancelButtonText}
           />
         </div>
       </FormikForm>
@@ -221,20 +217,30 @@ export const ResetListener = ({ changeKey, initialValues = null }) => {
 
 export const useFormContext = () => useFormikContext();
 
-const ContextAwareSubmitButton = ({
+const ContextAwareFormButtons = ({
   submitting,
   submitButtonText,
   dirtySubmitOnly,
+  onCancel,
+  cancelButtonText,
 }) => {
   const { dirty } = useFormContext();
   if (dirtySubmitOnly && !dirty) {
     return null;
   }
   return (
-    <Button variant="primary" type="submit" disabled={submitting}>
-      {submitting ? "Submitting" : submitButtonText}
-      {submitting && <Spinner animation="border" size="sm" />}
-    </Button>
+    <>
+      <hr />
+      {onCancel && (
+        <Button variant="secondary" onClick={onCancel}>
+          {cancelButtonText}
+        </Button>
+      )}
+      <Button variant="primary" type="submit" disabled={submitting}>
+        {submitting ? "Submitting" : submitButtonText}
+        {submitting && <Spinner animation="border" size="sm" />}
+      </Button>
+    </>
   );
 };
 
