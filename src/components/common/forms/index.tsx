@@ -24,6 +24,7 @@ export const Form = ({
   onCancel = null,
   cancelButtonText = "Cancel",
   submitting = false,
+  dirtySubmitOnly = false,
 }) => {
   return (
     <Formik
@@ -36,16 +37,13 @@ export const Form = ({
       <FormikForm name={name} noValidate className={name}>
         {children}
         <div className="d-grid">
-          {onCancel && (
-            <Button variant="secondary" onClick={onCancel}>
-              {cancelButtonText}
-            </Button>
-          )}
-          <hr />
-          <Button variant="primary" type="submit" disabled={submitting}>
-            {submitting ? "Submitting" : submitButtonText}
-            {submitting && <Spinner animation="border" size="sm" />}
-          </Button>
+          <ContextAwareFormButtons
+            onCancel={onCancel}
+            submitButtonText={submitButtonText}
+            submitting={submitting}
+            dirtySubmitOnly={dirtySubmitOnly}
+            cancelButtonText={cancelButtonText}
+          />
         </div>
       </FormikForm>
     </Formik>
@@ -135,7 +133,7 @@ export const Number = ({
 export const Checkbox = ({ name, label }) => {
   const [field] = useField(name);
   return (
-    <FormComponent.Group controlId={name}>
+    <FormComponent.Group controlId={name} className="mb-3">
       <FormComponent.Check
         type="checkbox"
         label={label}
@@ -152,6 +150,7 @@ export const Select = ({
   options,
   multiple = false,
   onChange = null,
+  searchable = false,
 }) => {
   const [field, meta] = useField(name);
   const formContext = useFormContext();
@@ -178,6 +177,7 @@ export const Select = ({
             zIndex: "2",
           }),
         }}
+        isSearchable={searchable}
         className="mb-3 form-floating"
         isMulti={multiple}
         aria-label={label}
@@ -217,6 +217,33 @@ export const ResetListener = ({ changeKey, initialValues = null }) => {
 
 export const useFormContext = () => useFormikContext();
 
+const ContextAwareFormButtons = ({
+  submitting,
+  submitButtonText,
+  dirtySubmitOnly,
+  onCancel,
+  cancelButtonText,
+}) => {
+  const { dirty } = useFormContext();
+  if (dirtySubmitOnly && !dirty) {
+    return null;
+  }
+  return (
+    <>
+      <hr />
+      {onCancel && (
+        <Button variant="secondary" onClick={onCancel}>
+          {cancelButtonText}
+        </Button>
+      )}
+      <Button variant="primary" type="submit" disabled={submitting}>
+        {submitting ? "Submitting" : submitButtonText}
+        {submitting && <Spinner animation="border" size="sm" />}
+      </Button>
+    </>
+  );
+};
+
 const CommonFormElementWrapper = ({
   name,
   label,
@@ -239,6 +266,9 @@ const CommonFormElementWrapper = ({
           rows={type === "textarea" ? rows : undefined}
           placeholder={placeholder || name}
           isInvalid={!!meta.error}
+          onWheel={
+            type !== "number" ? undefined : (e) => e.currentTarget.blur()
+          }
           {...field}
         />
         {meta.error && (

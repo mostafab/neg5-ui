@@ -11,7 +11,7 @@ const MatchesAccordian = ({
   teams,
   onSelectMatch,
   openMultiple = true,
-  selectedMatchId = undefined,
+  selectedMatch = null,
   subtitleItems = true,
 }) => {
   const matchesByRound = groupBy(matches, "round");
@@ -21,10 +21,11 @@ const MatchesAccordian = ({
     ["desc"]
   );
   const teamsById = keyBy(teams, "id");
-  const selectedMatch = matches.find((m) => m.id === selectedMatchId);
   return (
     <Accordian
-      defaultActiveKey={selectedMatch ? `${selectedMatch.round}` : undefined}
+      defaultActiveKey={
+        selectedMatch?.round ? `${selectedMatch.round}` : undefined
+      }
       alwaysOpen={openMultiple}
       className="MatchesAcoordian"
     >
@@ -38,7 +39,7 @@ const MatchesAccordian = ({
           <Accordian.Body className="p-0">
             <MatchesList
               matches={matchesByRound[round]}
-              selectedMatchId={selectedMatchId}
+              selectedMatchId={selectedMatch?.id}
               teamsById={teamsById}
               onSelectMatch={onSelectMatch}
               subtitled={subtitleItems}

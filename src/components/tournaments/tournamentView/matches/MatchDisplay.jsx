@@ -1,25 +1,30 @@
 import React from "react";
+
 import { formatAddedAtDate } from "@libs/dates";
+import DropdownActions from "@components/common/DropdownActions";
 
 import MatchForm from "./MatchForm";
 
-const MatchDisplay = ({
-  matches,
-  selectedMatchId,
-  teams,
-  rules,
-  playersById,
-  phases,
-}) => {
-  const match = selectedMatchId
-    ? matches.find((m) => m.id === selectedMatchId)
-    : {};
+const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
+  const match = selectedMatch;
   return (
-    <div className="sticky-top">
-      {match.addedAt && (
-        <p className="small text-dark">
-          Added {formatAddedAtDate(match.addedAt)}
-        </p>
+    <div>
+      {match.id && (
+        <div className="mb-3 d-flex justify-content-between">
+          {match.addedAt && (
+            <span className="small text-dark">
+              Added {formatAddedAtDate(match.addedAt)}
+            </span>
+          )}
+          <DropdownActions
+            actions={[
+              {
+                label: <span className="text-danger">Delete Match</span>,
+                onClick: () => console.log(match),
+              },
+            ]}
+          />
+        </div>
       )}
       <MatchForm
         match={match}
