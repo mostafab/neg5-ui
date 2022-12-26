@@ -270,6 +270,7 @@ const ContextAwareFormButtons = ({
       {onCancel && (
         <BootstrapButton
           variant="secondary"
+          className="mb-3"
           onClick={() => {
             resetForm({ values: initialValues });
             onCancel();
