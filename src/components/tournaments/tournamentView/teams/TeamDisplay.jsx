@@ -16,6 +16,11 @@ const TeamDisplay = ({ team, matches, teams }) => (
             className="mb-3"
             actions={[
               {
+                label: <span className="text-gray">Edit</span>,
+                onClick: () => console.log(team),
+                separator: <hr className="mt-1 mb-1" />,
+              },
+              {
                 label: <span className="text-danger">Delete Team</span>,
                 onClick: () => console.log(team),
               },
