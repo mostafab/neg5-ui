@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ListGroup from "react-bootstrap/ListGroup";
 import { Col, Row } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
@@ -21,7 +20,7 @@ const TournamentTeamsPanel = ({ teams }) => {
               <TeamsList
                 teams={chunk}
                 selectedTeam={selectedTeam}
-                onSelectTeam={(team) => setSelectedTeam(team)}
+                onSelectTeam={setSelectedTeam}
               />
             </Col>
           ))}
@@ -31,7 +30,7 @@ const TournamentTeamsPanel = ({ teams }) => {
         <TeamsModal
           teams={teams}
           onHide={() => setSelectedTeam(null)}
-          onSelectTeam={(team) => setSelectedTeam(team)}
+          onSelectTeam={setSelectedTeam}
           selectedTeam={selectedTeam}
         />
       )}

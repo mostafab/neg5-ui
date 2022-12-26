@@ -5,6 +5,7 @@ import Modal from "@components/common/modal";
 import Button from "@components/common/button";
 
 import TeamsList from "./TeamsList";
+import TeamDisplay from "./TeamDisplay";
 
 const TeamsModal = ({
   matches,
@@ -28,7 +29,9 @@ const TeamsModal = ({
           teams={teams}
         />
       </Col>
-      <Col lg={9} md={8} sm={12}></Col>
+      <Col lg={9} md={8} sm={12}>
+        <TeamDisplay team={selectedTeam} matches={matches} />
+      </Col>
     </Row>
   </Modal>
 );
