@@ -20,6 +20,7 @@ const initialPlayerValue = () => ({
 });
 
 const initialValues = (team) => ({
+  id: team.id || null,
   name: team.name || "",
   players: orderBy(team.players || [initialPlayerValue()], "name").map(
     (player) => ({
