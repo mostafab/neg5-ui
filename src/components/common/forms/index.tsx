@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, createContext, useContext } from "react";
 import {
   Form as FormComponent,
-  Button,
+  Button as BootstrapButton,
   FloatingLabel,
   Spinner,
 } from "react-bootstrap";
@@ -14,6 +14,12 @@ import {
   useFormikContext,
 } from "formik";
 
+import Button from "@components/common/button";
+
+const ReadOnlyContext = createContext(false);
+
+export const useReadOnlyContext = () => useContext(ReadOnlyContext);
+
 export const Form = ({
   name,
   children,
@@ -25,33 +31,38 @@ export const Form = ({
   cancelButtonText = "Cancel",
   submitting = false,
   dirtySubmitOnly = false,
+  readOnly = false,
 }) => {
   return (
-    <Formik
-      onSubmit={(values) => onSubmit(values)}
-      initialValues={initialValues}
-      validationSchema={validation}
-      validateOnChange={false}
-      validateOnBlur={false}
-    >
-      <FormikForm name={name} noValidate className={name}>
-        {children}
-        <div className="d-grid">
-          <ContextAwareFormButtons
-            onCancel={onCancel}
-            submitButtonText={submitButtonText}
-            submitting={submitting}
-            dirtySubmitOnly={dirtySubmitOnly}
-            cancelButtonText={cancelButtonText}
-          />
-        </div>
-      </FormikForm>
-    </Formik>
+    <ReadOnlyContext.Provider value={readOnly}>
+      <Formik
+        onSubmit={(values) => onSubmit(values)}
+        initialValues={initialValues}
+        validationSchema={validation}
+        validateOnChange={false}
+        validateOnBlur={false}
+      >
+        <FormikForm name={name} noValidate className={name}>
+          {children}
+          <div className="d-grid">
+            <ContextAwareFormButtons
+              onCancel={onCancel}
+              initialValues={initialValues}
+              submitButtonText={submitButtonText}
+              submitting={submitting}
+              dirtySubmitOnly={dirtySubmitOnly}
+              cancelButtonText={cancelButtonText}
+            />
+          </div>
+        </FormikForm>
+      </Formik>
+    </ReadOnlyContext.Provider>
   );
 };
 
-export const RepeatField = ({ name, render }) => {
+export const RepeatField = ({ name, render, addObjectProps = null }) => {
   const [field] = useField(name);
+  const readOnly = useReadOnlyContext();
   return (
     <FieldArray
       name={name}
@@ -68,9 +79,23 @@ export const RepeatField = ({ name, render }) => {
             {field.value.map((val, idx) =>
               render(
                 val,
-                { index: idx, isLast: idx === field.value.length - 1 },
+                {
+                  index: idx,
+                  isLast: idx === field.value.length - 1,
+                  readOnly,
+                },
                 arrayHelpers
               )
+            )}
+            {addObjectProps && !readOnly && (
+              <div className="d-flex justify-content-center">
+                <Button
+                  type="link"
+                  onClick={() => arrayHelpers.push(addObjectProps.newObject())}
+                >
+                  {addObjectProps.buttonText}
+                </Button>
+              </div>
             )}
           </>
         );
@@ -132,10 +157,13 @@ export const Number = ({
 
 export const Checkbox = ({ name, label }) => {
   const [field] = useField(name);
+  const readOnly = useReadOnlyContext();
   return (
     <FormComponent.Group controlId={name} className="mb-3">
       <FormComponent.Check
         type="checkbox"
+        readOnly={readOnly}
+        disabled={readOnly}
         label={label}
         {...field}
         checked={field.value}
@@ -154,6 +182,7 @@ export const Select = ({
 }) => {
   const [field, meta] = useField(name);
   const formContext = useFormContext();
+  const isReadOnly = useReadOnlyContext();
   const internalOnChange = (opts) => {
     const value = multiple ? opts.map((o) => o.value) : opts.value;
     formContext.getFieldHelpers(name).setValue(value);
@@ -176,8 +205,13 @@ export const Select = ({
             borderRadius: "0",
             zIndex: "2",
           }),
+          indicatorSeparator: (base) => ({
+            ...base,
+            display: "none",
+          }),
         }}
         isSearchable={searchable}
+        isDisabled={isReadOnly}
         className="mb-3 form-floating"
         isMulti={multiple}
         aria-label={label}
@@ -223,23 +257,33 @@ const ContextAwareFormButtons = ({
   dirtySubmitOnly,
   onCancel,
   cancelButtonText,
+  initialValues,
 }) => {
-  const { dirty } = useFormContext();
-  if (dirtySubmitOnly && !dirty) {
+  const { dirty, resetForm } = useFormContext();
+  const readOnly = useReadOnlyContext();
+  if (readOnly || (dirtySubmitOnly && !dirty)) {
     return null;
   }
   return (
     <>
       <hr />
       {onCancel && (
-        <Button variant="secondary" onClick={onCancel}>
+        <BootstrapButton
+          variant="secondary"
+          className="mb-3"
+          onClick={() => {
+            resetForm({ values: initialValues });
+            onCancel();
+          }}
+          disabled={submitting}
+        >
           {cancelButtonText}
-        </Button>
+        </BootstrapButton>
       )}
-      <Button variant="primary" type="submit" disabled={submitting}>
+      <BootstrapButton variant="primary" type="submit" disabled={submitting}>
         {submitting ? "Submitting" : submitButtonText}
         {submitting && <Spinner animation="border" size="sm" />}
-      </Button>
+      </BootstrapButton>
     </>
   );
 };
@@ -254,14 +298,15 @@ const CommonFormElementWrapper = ({
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
+  const readOnly = isDisplay || useReadOnlyContext();
   return (
     <>
       <FloatingLabel label={label} className="mb-3">
         <FormComponent.Control
           autoComplete={autoComplete ? "on" : "off"}
-          type={isDisplay ? undefined : type}
-          readOnly={isDisplay}
-          plaintext={isDisplay}
+          type={type === "display" ? undefined : type}
+          readOnly={readOnly}
+          plaintext={readOnly}
           as={type === "textarea" ? "textarea" : undefined}
           rows={type === "textarea" ? rows : undefined}
           placeholder={placeholder || name}

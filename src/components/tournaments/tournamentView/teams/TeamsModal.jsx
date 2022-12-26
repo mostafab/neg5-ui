@@ -17,20 +17,25 @@ const TeamsModal = ({
 }) => (
   <Modal title="Teams" fullscreen onHide={onHide} className="TeamsModal">
     <Row>
-      <Col lg={3} md={4} sm={0}>
+      <Col lg={3} md={4} className="d-none d-md-block d-lg-block d-xl-block">
         <div className="d-grid">
-          <Button type="outline-primary mb-3" onClick={() => onSelectTeam({})}>
-            Add New Team
+          <Button
+            type="outline-primary"
+            className="mb-3"
+            onClick={() => onSelectTeam({})}
+          >
+            Add A New Team
           </Button>
         </div>
         <TeamsList
           selectedTeam={selectedTeam}
           onSelectTeam={onSelectTeam}
           teams={teams}
+          shadow
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
-        <TeamDisplay team={selectedTeam} matches={matches} />
+        <TeamDisplay team={selectedTeam} matches={matches} teams={teams} />
       </Col>
     </Row>
   </Modal>

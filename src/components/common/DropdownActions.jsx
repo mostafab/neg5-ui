@@ -25,7 +25,7 @@ const renderItem = (action) => {
   }
   const { label, onClick } = action;
   return (
-    <Dropdown.Item onClick={onClick} className="small" key={label}>
+    <Dropdown.Item onClick={onClick} className="small">
       {label}
     </Dropdown.Item>
   );
@@ -38,7 +38,14 @@ const DropdownActions = ({ className = "", actions = [] }) => {
         <Icon name="ThreeDots" size="20" />
       </Dropdown.Toggle>
       <Dropdown.Menu className="br-0">
-        {actions.map((action) => renderItem(action))}
+        {actions.map((action, idx) => {
+          return (
+            <span key={idx}>
+              {renderItem(action)}
+              {action.separator && action.separator}
+            </span>
+          );
+        })}
       </Dropdown.Menu>
     </Dropdown>
   );

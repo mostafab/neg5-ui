@@ -13,6 +13,7 @@ const MatchesAccordian = ({
   openMultiple = true,
   selectedMatch = null,
   subtitleItems = true,
+  shadow = false,
 }) => {
   const matchesByRound = groupBy(matches, "round");
   const roundsInOrder = orderBy(
@@ -27,7 +28,7 @@ const MatchesAccordian = ({
         selectedMatch?.round ? `${selectedMatch.round}` : undefined
       }
       alwaysOpen={openMultiple}
-      className="MatchesAcoordian"
+      className={`MatchesAcoordian ${shadow ? "shadow-sm" : ""}`}
     >
       {roundsInOrder.map((round) => (
         <Accordian.Item eventKey={round} key={round}>

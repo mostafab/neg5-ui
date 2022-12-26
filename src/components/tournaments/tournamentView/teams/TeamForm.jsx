@@ -2,6 +2,7 @@ import React from "react";
 import { InputGroup } from "react-bootstrap";
 
 import * as Yup from "yup";
+import orderBy from "lodash/orderBy";
 
 import {
   Form,
@@ -9,36 +10,42 @@ import {
   RepeatField,
   ResetListener,
 } from "@components/common/forms";
-import { X } from "@components/common/icon";
 import Button from "@components/common/button";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
 
 const initialPlayerValue = () => ({
   name: "",
   year: "",
+  id: "",
 });
 
 const initialValues = (team) => ({
+  id: team.id || null,
   name: team.name || "",
-  players: (team.players || [initialPlayerValue()]).map((player) => ({
-    name: player.name || "",
-    year: player.year || "",
-  })),
+  players: orderBy(team.players || [initialPlayerValue()], "name").map(
+    (player) => ({
+      name: player.name || "",
+      year: player.year || "",
+      id: player.id || "",
+    })
+  ),
 });
 
 const validation = Yup.object({
   name: Yup.string().required("Please provide a team name."),
 });
 
-const TeamForm = ({ team }) => {
+const TeamForm = ({ team, readOnly = false, onCancel = null }) => {
   return (
     <Form
       name="TeamForm"
-      submitButtonText="Save Changes"
+      submitButtonText="Save"
       initialValues={initialValues(team)}
       validation={validation}
       onSubmit={(values) => console.log(values)}
-      dirtySubmitOnly
+      readOnly={readOnly}
+      cancelButtonText="Cancel"
+      onCancel={onCancel}
     >
       <ResetListener
         changeKey={team.id}
@@ -48,7 +55,11 @@ const TeamForm = ({ team }) => {
       <p className="d-flex justify-content-center">Players</p>
       <RepeatField
         name="players"
-        render={(_val, { index, isLast }, { remove, push }) => {
+        addObjectProps={{
+          buttonText: "Add a Player",
+          newObject: initialPlayerValue,
+        }}
+        render={(_val, { index, readOnly }, { remove }) => {
           const labelPrefix = `Player ${index + 1}`;
           return (
             <div key={index}>
@@ -61,21 +72,15 @@ const TeamForm = ({ team }) => {
                   name={`players[${index}].year`}
                   label={`${labelPrefix} Year`}
                 />
-                <InputGroup.Text
-                  className="mb-3"
-                  role="button"
-                  onClick={() => remove(index)}
-                >
-                  <X />
-                </InputGroup.Text>
+                {!readOnly && (
+                  <Button
+                    type="outline-danger"
+                    className="mb-3"
+                    icon="X"
+                    onClick={() => remove(index)}
+                  />
+                )}
               </InputGroup>
-              {isLast && (
-                <div className="d-flex justify-content-center">
-                  <Button className="pt-0" onClick={() => push()} type="link">
-                    Add a Player
-                  </Button>
-                </div>
-              )}
             </div>
           );
         }}

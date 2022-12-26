@@ -16,6 +16,11 @@ const answerTypeOptions = [
   { label: "Neg", value: "Neg" },
 ];
 
+const newTossupValue = () => ({
+  value: "",
+  answerType: "",
+});
+
 const ScoringRulesFields = ({ className = "" }) => (
   <Row className={className}>
     <Col md={5} lg={5} sm={6} xs={12}>
@@ -29,7 +34,11 @@ const ScoringRulesFields = ({ className = "" }) => (
       <h6>Tossup Point Values</h6>
       <RepeatField
         name="tossupValues"
-        render={(_tv, { index, isLast }, { remove, push }) => {
+        addObjectProps={{
+          buttonText: "Add a Tossup Value",
+          newObject: newTossupValue,
+        }}
+        render={(_tv, { index }, { remove }) => {
           return (
             <div key={index}>
               <Row>
@@ -48,15 +57,6 @@ const ScoringRulesFields = ({ className = "" }) => (
                   />
                 </InputGroup>
               </Row>
-              {isLast && (
-                <Button
-                  className="float-end"
-                  size="sm"
-                  icon="Plus"
-                  type="outline-primary"
-                  onClick={() => push()}
-                />
-              )}
             </div>
           );
         }}

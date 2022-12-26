@@ -26,7 +26,7 @@ const playerYearOptions = () => [
 ];
 
 const PlayerYearSelect = ({ name, label }) => (
-  <Select name={name} label={label} options={playerYearOptions()} />
+  <Select name={name} label={label} options={playerYearOptions()} searchable />
 );
 
 export default PlayerYearSelect;
