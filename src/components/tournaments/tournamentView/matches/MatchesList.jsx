@@ -8,22 +8,29 @@ import { getMatchTeamsDisplayString } from "@libs/matches";
 const MatchesList = ({
   matches,
   teamsById,
-  onSelectMatch,
+  onSelectMatch = null,
   selectedMatchId = null,
   subtitled = true,
+  flush = true,
+  displayRound = false,
+  rowTeamsOrderParams = null,
 }) => (
-  <ListGroup variant="flush">
-    {orderBy(matches, "addedAt", "desc").map((match) => {
+  <ListGroup variant={flush ? "flush" : undefined}>
+    {orderBy(matches, ["round", "addedAt"], ["desc", "desc"]).map((match) => {
       const matchTeamsDisplayString = getMatchTeamsDisplayString(
         match,
-        teamsById
+        teamsById,
+        {
+          includeRound: displayRound,
+          teamSortParams: rowTeamsOrderParams,
+        }
       );
       return (
         <ListGroup.Item
           key={match.id}
           active={selectedMatchId === match.id}
-          action
-          onClick={() => onSelectMatch(match)}
+          action={onSelectMatch !== null}
+          onClick={onSelectMatch ? () => onSelectMatch(match) : null}
         >
           <div>{matchTeamsDisplayString}</div>
           {subtitled && match.addedAt && (

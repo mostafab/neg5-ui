@@ -10,7 +10,7 @@ import {
   RepeatField,
   ResetListener,
 } from "@components/common/forms";
-import { X } from "@components/common/icon";
+import Button from "@components/common/button";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
 
 const initialPlayerValue = () => ({
@@ -39,7 +39,7 @@ const TeamForm = ({ team }) => {
   return (
     <Form
       name="TeamForm"
-      submitButtonText="Save Changes"
+      submitButtonText="Save"
       initialValues={initialValues(team)}
       validation={validation}
       onSubmit={(values) => console.log(values)}
@@ -54,7 +54,7 @@ const TeamForm = ({ team }) => {
         name="players"
         addObjectProps={{
           buttonText: "Add a Player",
-          newObject: () => initialPlayerValue(),
+          newObject: initialPlayerValue,
         }}
         render={(_val, { index }, { remove }) => {
           const labelPrefix = `Player ${index + 1}`;
@@ -69,13 +69,12 @@ const TeamForm = ({ team }) => {
                   name={`players[${index}].year`}
                   label={`${labelPrefix} Year`}
                 />
-                <InputGroup.Text
+                <Button
+                  type="outline-danger"
                   className="mb-3"
-                  role="button"
+                  icon="X"
                   onClick={() => remove(index)}
-                >
-                  <X />
-                </InputGroup.Text>
+                />
               </InputGroup>
             </div>
           );

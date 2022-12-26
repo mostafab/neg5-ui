@@ -30,7 +30,7 @@ const TeamsModal = ({
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
-        <TeamDisplay team={selectedTeam} matches={matches} />
+        <TeamDisplay team={selectedTeam} matches={matches} teams={teams} />
       </Col>
     </Row>
   </Modal>
