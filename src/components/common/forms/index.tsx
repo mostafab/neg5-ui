@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, createContext, useContext } from "react";
 import {
   Form as FormComponent,
   Button as BootstrapButton,
@@ -16,6 +16,10 @@ import {
 
 import Button from "@components/common/button";
 
+const ReadOnlyContext = createContext(false);
+
+export const useReadOnlyContext = () => useContext(ReadOnlyContext);
+
 export const Form = ({
   name,
   children,
@@ -27,33 +31,38 @@ export const Form = ({
   cancelButtonText = "Cancel",
   submitting = false,
   dirtySubmitOnly = false,
+  readOnly = false,
 }) => {
   return (
-    <Formik
-      onSubmit={(values) => onSubmit(values)}
-      initialValues={initialValues}
-      validationSchema={validation}
-      validateOnChange={false}
-      validateOnBlur={false}
-    >
-      <FormikForm name={name} noValidate className={name}>
-        {children}
-        <div className="d-grid">
-          <ContextAwareFormButtons
-            onCancel={onCancel}
-            submitButtonText={submitButtonText}
-            submitting={submitting}
-            dirtySubmitOnly={dirtySubmitOnly}
-            cancelButtonText={cancelButtonText}
-          />
-        </div>
-      </FormikForm>
-    </Formik>
+    <ReadOnlyContext.Provider value={readOnly}>
+      <Formik
+        onSubmit={(values) => onSubmit(values)}
+        initialValues={initialValues}
+        validationSchema={validation}
+        validateOnChange={false}
+        validateOnBlur={false}
+      >
+        <FormikForm name={name} noValidate className={name}>
+          {children}
+          <div className="d-grid">
+            <ContextAwareFormButtons
+              onCancel={onCancel}
+              initialValues={initialValues}
+              submitButtonText={submitButtonText}
+              submitting={submitting}
+              dirtySubmitOnly={dirtySubmitOnly}
+              cancelButtonText={cancelButtonText}
+            />
+          </div>
+        </FormikForm>
+      </Formik>
+    </ReadOnlyContext.Provider>
   );
 };
 
 export const RepeatField = ({ name, render, addObjectProps = null }) => {
   const [field] = useField(name);
+  const readOnly = useReadOnlyContext();
   return (
     <FieldArray
       name={name}
@@ -70,11 +79,15 @@ export const RepeatField = ({ name, render, addObjectProps = null }) => {
             {field.value.map((val, idx) =>
               render(
                 val,
-                { index: idx, isLast: idx === field.value.length - 1 },
+                {
+                  index: idx,
+                  isLast: idx === field.value.length - 1,
+                  readOnly,
+                },
                 arrayHelpers
               )
             )}
-            {addObjectProps && (
+            {addObjectProps && !readOnly && (
               <div className="d-flex justify-content-center">
                 <Button
                   type="link"
@@ -144,10 +157,13 @@ export const Number = ({
 
 export const Checkbox = ({ name, label }) => {
   const [field] = useField(name);
+  const readOnly = useReadOnlyContext();
   return (
     <FormComponent.Group controlId={name} className="mb-3">
       <FormComponent.Check
         type="checkbox"
+        readOnly={readOnly}
+        disabled={readOnly}
         label={label}
         {...field}
         checked={field.value}
@@ -166,6 +182,7 @@ export const Select = ({
 }) => {
   const [field, meta] = useField(name);
   const formContext = useFormContext();
+  const isReadOnly = useReadOnlyContext();
   const internalOnChange = (opts) => {
     const value = multiple ? opts.map((o) => o.value) : opts.value;
     formContext.getFieldHelpers(name).setValue(value);
@@ -194,6 +211,7 @@ export const Select = ({
           }),
         }}
         isSearchable={searchable}
+        isDisabled={isReadOnly}
         className="mb-3 form-floating"
         isMulti={multiple}
         aria-label={label}
@@ -239,16 +257,24 @@ const ContextAwareFormButtons = ({
   dirtySubmitOnly,
   onCancel,
   cancelButtonText,
+  initialValues,
 }) => {
-  const { dirty } = useFormContext();
-  if (dirtySubmitOnly && !dirty) {
+  const { dirty, resetForm } = useFormContext();
+  const readOnly = useReadOnlyContext();
+  if (readOnly || (dirtySubmitOnly && !dirty)) {
     return null;
   }
   return (
     <>
       <hr />
       {onCancel && (
-        <BootstrapButton variant="secondary" onClick={onCancel}>
+        <BootstrapButton
+          variant="secondary"
+          onClick={() => {
+            resetForm({ values: initialValues });
+            onCancel();
+          }}
+        >
           {cancelButtonText}
         </BootstrapButton>
       )}
@@ -270,14 +296,15 @@ const CommonFormElementWrapper = ({
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
+  const readOnly = isDisplay || useReadOnlyContext();
   return (
     <>
       <FloatingLabel label={label} className="mb-3">
         <FormComponent.Control
           autoComplete={autoComplete ? "on" : "off"}
-          type={isDisplay ? undefined : type}
-          readOnly={isDisplay}
-          plaintext={isDisplay}
+          type={type === "display" ? undefined : type}
+          readOnly={readOnly}
+          plaintext={readOnly}
           as={type === "textarea" ? "textarea" : undefined}
           rows={type === "textarea" ? rows : undefined}
           placeholder={placeholder || name}

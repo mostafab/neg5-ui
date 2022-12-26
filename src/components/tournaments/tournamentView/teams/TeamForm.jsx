@@ -35,7 +35,7 @@ const validation = Yup.object({
   name: Yup.string().required("Please provide a team name."),
 });
 
-const TeamForm = ({ team }) => {
+const TeamForm = ({ team, readOnly = false, onCancel = null }) => {
   return (
     <Form
       name="TeamForm"
@@ -43,6 +43,9 @@ const TeamForm = ({ team }) => {
       initialValues={initialValues(team)}
       validation={validation}
       onSubmit={(values) => console.log(values)}
+      readOnly={readOnly}
+      cancelButtonText="Cancel"
+      onCancel={onCancel}
     >
       <ResetListener
         changeKey={team.id}
@@ -56,7 +59,7 @@ const TeamForm = ({ team }) => {
           buttonText: "Add a Player",
           newObject: initialPlayerValue,
         }}
-        render={(_val, { index }, { remove }) => {
+        render={(_val, { index, readOnly }, { remove }) => {
           const labelPrefix = `Player ${index + 1}`;
           return (
             <div key={index}>
@@ -69,12 +72,14 @@ const TeamForm = ({ team }) => {
                   name={`players[${index}].year`}
                   label={`${labelPrefix} Year`}
                 />
-                <Button
-                  type="outline-danger"
-                  className="mb-3"
-                  icon="X"
-                  onClick={() => remove(index)}
-                />
+                {!readOnly && (
+                  <Button
+                    type="outline-danger"
+                    className="mb-3"
+                    icon="X"
+                    onClick={() => remove(index)}
+                  />
+                )}
               </InputGroup>
             </div>
           );
