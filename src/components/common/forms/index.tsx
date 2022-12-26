@@ -275,6 +275,7 @@ const ContextAwareFormButtons = ({
             resetForm({ values: initialValues });
             onCancel();
           }}
+          disabled={submitting}
         >
           {cancelButtonText}
         </BootstrapButton>
