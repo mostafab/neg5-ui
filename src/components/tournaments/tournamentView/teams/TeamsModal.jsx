@@ -17,7 +17,7 @@ const TeamsModal = ({
 }) => (
   <Modal title="Teams" fullscreen onHide={onHide} className="TeamsModal">
     <Row>
-      <Col lg={3} md={4} className="d-none d-mb-block d-lg-block d-xl-block">
+      <Col lg={3} md={4} className="d-none d-md-block d-lg-block d-xl-block">
         <div className="d-grid">
           <Button type="outline-primary mb-3" onClick={() => onSelectTeam({})}>
             Add New Team
