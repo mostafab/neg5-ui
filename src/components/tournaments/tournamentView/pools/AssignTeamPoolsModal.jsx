@@ -41,7 +41,7 @@ const AssignTeamPoolsModal = ({
       title="Team Pools"
       size="xl"
     >
-      <Card className="TournamentPhasesPanel" shadow={false} title={null}>
+      <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
         {phases.length > 0 && (
           <Tabs defaultActiveKey={phases[0].id}>
             {phases.map((p) => (
