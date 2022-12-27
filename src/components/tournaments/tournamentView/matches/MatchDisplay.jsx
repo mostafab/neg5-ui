@@ -13,12 +13,7 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
     <Card>
       {match.id && (
         <div className="mb-3 d-flex justify-content-between">
-          {match.addedAt && (
-            <span className="small text-dark">
-              Added {formatAddedAtDate(match.addedAt)}
-            </span>
-          )}
-          <DropdownActions
+          {readOnly && <DropdownActions
             actions={[
               {
                 label: <span className="text-gray">Edit</span>,
@@ -30,7 +25,12 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
                 onClick: () => console.log(match),
               },
             ]}
-          />
+          />}
+          {match.addedAt && (
+            <span className="small text-dark">
+              Added {formatAddedAtDate(match.addedAt)}
+            </span>
+          )}
         </div>
       )}
       <MatchForm
