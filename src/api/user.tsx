@@ -10,6 +10,12 @@ export const getUser = async () => {
   ).data;
 };
 
+export const searchForUsers = async (query) => {
+  return await (
+    await client.get(`/neg5-api/accounts/search?query=${query}`)
+  ).data;
+};
+
 export const getServerSideUser = async (request) => {
   const userCookie = request.cookies[TOKEN_NAME];
   if (!userCookie) {

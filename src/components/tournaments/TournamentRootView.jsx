@@ -9,6 +9,7 @@ import RulesPanel from "@features/tournamentView/containers/rulesPanel";
 import PhasesPanel from "@features/tournamentView/containers/phasesPanel";
 import TeamsPanel from "@features/tournamentView/containers/teamsPanel";
 import MatchesPanel from "@features/tournamentView/containers/matchesPanel";
+import CollaboratorsPanel from "@features/tournamentView/containers/collaboratorsPanel";
 
 const TournamentRootView = ({ tournamentId }) => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,9 @@ const TournamentRootView = ({ tournamentId }) => {
           <Row>
             <Col lg={12} md={12} sm={12} className="mb-3">
               <InfoPanel />
+            </Col>
+            <Col lg={12} md={12} sm={12} className="mb-3">
+              <CollaboratorsPanel />
             </Col>
             <Col lg={12} md={12} sm={12} className="mb-3">
               <RulesPanel />

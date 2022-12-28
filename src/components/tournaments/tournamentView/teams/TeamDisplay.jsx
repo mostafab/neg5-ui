@@ -13,7 +13,7 @@ const TeamDisplay = ({ team, matches, teams }) => {
     <Card>
       <Row>
         <Col lg={team.id ? 6 : 12} md={12} sm={12}>
-          {team.id && (
+          {team.id && readOnly && (
             <DropdownActions
               className="mb-3"
               actions={[
