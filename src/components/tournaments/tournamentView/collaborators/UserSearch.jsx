@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import Spinner from "react-bootstrap/Spinner";
 import debounce from "lodash/debounce";
 import orderBy from "lodash/orderBy";
 
@@ -68,7 +69,7 @@ const UserSearch = ({
       >
         {queryResults.results.map((res) => (
           <ListGroup.Item action key={res.id} onClick={() => onClickUser(res)}>
-            {res.id}
+            {res.id} {res.name && `(${res.name})`}
           </ListGroup.Item>
         ))}
       </ListGroup>
@@ -80,9 +81,18 @@ const UserSearch = ({
       <Form name="UserSearch" initialValues={initialValues} customCtaButtons>
         <Text
           name="query"
-          label={placeholder}
+          label={
+            queryResults.loading ? (
+              <span>
+                Loading <Spinner animation="border" size="sm" />
+              </span>
+            ) : (
+              placeholder
+            )
+          }
           onChange={onChange}
           onBlur={() => setShowResults(false)}
+          onFocus={() => setShowResults(true)}
         />
       </Form>
       {renderResults()}

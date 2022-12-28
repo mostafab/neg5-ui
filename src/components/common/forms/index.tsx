@@ -134,6 +134,7 @@ export const Text = ({
   placeholder = null,
   onChange = null,
   onBlur = null,
+  onFocus = null,
 }) => (
   <CommonFormElementWrapper
     name={name}
@@ -144,6 +145,7 @@ export const Text = ({
     autoComplete={autoComplete}
     onChange={onChange}
     onBlur={onBlur}
+    onFocus={onFocus}
   />
 );
 
@@ -304,6 +306,7 @@ const CommonFormElementWrapper = ({
   rows = null,
   onChange = null,
   onBlur = null,
+  onFocus = null,
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
@@ -334,6 +337,7 @@ const CommonFormElementWrapper = ({
           {...field}
           onChange={internalOnChange}
           onBlur={internalOnBlur}
+          onFocus={onFocus}
         />
         {meta.error && (
           <FormComponent.Control.Feedback type="invalid">
