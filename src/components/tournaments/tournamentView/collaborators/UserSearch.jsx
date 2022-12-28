@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import ListGroup from "react-bootstrap/ListGroup";
 import debounce from "lodash/debounce";
+import orderBy from "lodash/orderBy";
 
 import { searchForUsers } from "@api/user";
 import { Form, Text } from "@components/common/forms";
@@ -16,21 +18,75 @@ const UserSearch = ({
     loading: false,
     results: [],
   });
-  const initiateSearch = debounce(async (query) => {
+  const [showResults, setShowResults] = useState(true);
+  const performSearch = debounce(async (query) => {
+    setQueryResults({
+      ...queryResults,
+      loading: true,
+    });
     const results = (await searchForUsers(query)).filter(
       (item) => !filterFunction || filterFunction(item)
     );
-    console.log(results);
+    setQueryResults({
+      loading: false,
+      results: orderBy(results, "id"),
+    });
   }, 500);
   const onChange = (value) => {
     if (value.trim().length >= 3) {
-      initiateSearch(value.trim());
+      performSearch(value.trim());
     }
+    if (value.trim().length === 0 && queryResults.results.length > 0) {
+      setQueryResults({
+        loading: false,
+        results: [],
+      });
+    }
+    setShowResults(true);
   };
+
+  const onClickUser = (user) => {
+    console.log(user);
+    setShowResults(false);
+  };
+
+  const renderResults = () => {
+    if (!showResults) {
+      return null;
+    }
+    return (
+      <ListGroup
+        className="shadow"
+        style={{
+          width: "93.5%",
+          position: "absolute",
+          zIndex: 2,
+          top: "15.5%",
+          maxHeight: "30vh",
+          overflow: "scroll",
+        }}
+      >
+        {queryResults.results.map((res) => (
+          <ListGroup.Item action key={res.id} onClick={() => onClickUser(res)}>
+            {res.id}
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    );
+  };
+
   return (
-    <Form name="UserSearch" initialValues={initialValues} customCtaButtons>
-      <Text name="query" label={placeholder} onChange={onChange} />
-    </Form>
+    <>
+      <Form name="UserSearch" initialValues={initialValues} customCtaButtons>
+        <Text
+          name="query"
+          label={placeholder}
+          onChange={onChange}
+          onBlur={() => setShowResults(false)}
+        />
+      </Form>
+      {renderResults()}
+    </>
   );
 };
 

@@ -14,7 +14,7 @@ const CollaboratorsModal = ({ collaborators, onHide }) => (
         !collaborators.find((collab) => collab.userId === c.id)
       }
     />
-    <Info>
+    <Info className="mt-3">
       All collaborators can add matches and players. Admin-level collaborators
       can edit and delete teams, players and matches they didn't create, as well
       as assign team pools.
