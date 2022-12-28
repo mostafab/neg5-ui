@@ -133,6 +133,8 @@ export const Text = ({
   label,
   placeholder = null,
   onChange = null,
+  onBlur = null,
+  onFocus = null,
 }) => (
   <CommonFormElementWrapper
     name={name}
@@ -142,6 +144,8 @@ export const Text = ({
     rows={rows}
     autoComplete={autoComplete}
     onChange={onChange}
+    onBlur={onBlur}
+    onFocus={onFocus}
   />
 );
 
@@ -301,6 +305,8 @@ const CommonFormElementWrapper = ({
   autoComplete = false,
   rows = null,
   onChange = null,
+  onBlur = null,
+  onFocus = null,
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
@@ -308,6 +314,10 @@ const CommonFormElementWrapper = ({
   const internalOnChange = (e) => {
     field.onChange(e);
     onChange && onChange(e.target.value);
+  };
+  const internalOnBlur = (e) => {
+    field.onBlur(e);
+    onBlur && onBlur(e);
   };
   return (
     <>
@@ -326,6 +336,8 @@ const CommonFormElementWrapper = ({
           }
           {...field}
           onChange={internalOnChange}
+          onBlur={internalOnBlur}
+          onFocus={onFocus}
         />
         {meta.error && (
           <FormComponent.Control.Feedback type="invalid">
