@@ -25,9 +25,7 @@ const UserSearch = ({
       ...queryResults,
       loading: true,
     });
-    const results = (await searchForUsers(query)).filter(
-      (item) => !filterFunction || filterFunction(item)
-    );
+    const results = await searchForUsers(query);
     setQueryResults({
       loading: false,
       results: orderBy(results, "id"),
@@ -67,11 +65,17 @@ const UserSearch = ({
           overflow: "scroll",
         }}
       >
-        {queryResults.results.map((res) => (
-          <ListGroup.Item action key={res.id} onClick={() => onClickUser(res)}>
-            {res.id} {res.name && `(${res.name})`}
-          </ListGroup.Item>
-        ))}
+        {queryResults.results
+          .filter((r) => !filterFunction || filterFunction(r))
+          .map((res) => (
+            <ListGroup.Item
+              action
+              key={res.id}
+              onClick={() => onClickUser(res)}
+            >
+              {res.id} {res.name && `(${res.name})`}
+            </ListGroup.Item>
+          ))}
       </ListGroup>
     );
   };
