@@ -13,19 +13,21 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
     <Card>
       {match.id && (
         <div className="mb-3 d-flex justify-content-between">
-          {readOnly && <DropdownActions
-            actions={[
-              {
-                label: <span className="text-gray">Edit</span>,
-                onClick: () => setReadOnly(false),
-                separator: <hr className="mt-1 mb-1" />,
-              },
-              {
-                label: <span className="text-danger">Delete Match</span>,
-                onClick: () => console.log(match),
-              },
-            ]}
-          />}
+          {readOnly && (
+            <DropdownActions
+              actions={[
+                {
+                  label: <span className="text-gray">Edit</span>,
+                  onClick: () => setReadOnly(false),
+                  separator: <hr className="mt-1 mb-1" />,
+                },
+                {
+                  label: <span className="text-danger">Delete Match</span>,
+                  onClick: () => console.log(match),
+                },
+              ]}
+            />
+          )}
           {match.addedAt && (
             <span className="small text-dark">
               Added {formatAddedAtDate(match.addedAt)}

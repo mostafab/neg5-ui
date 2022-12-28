@@ -11,6 +11,7 @@ import {
   ResetListener,
 } from "@components/common/forms";
 import Button from "@components/common/button";
+import { Info } from "@components/common/alerts";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
 
 const initialPlayerValue = () => ({
@@ -85,6 +86,12 @@ const TeamForm = ({ team, readOnly = false, onCancel = null }) => {
           );
         }}
       />
+      {!team.id && (
+        <Info className="mt-3">
+          After creating a team, you can assign it a pool in the "Team Pools"
+          panel.
+        </Info>
+      )}
     </Form>
   );
 };

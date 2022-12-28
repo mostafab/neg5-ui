@@ -32,6 +32,7 @@ export const Form = ({
   submitting = false,
   dirtySubmitOnly = false,
   readOnly = false,
+  customCtaButtons = false,
 }) => {
   return (
     <ReadOnlyContext.Provider value={readOnly}>
@@ -44,16 +45,18 @@ export const Form = ({
       >
         <FormikForm name={name} noValidate className={name}>
           {children}
-          <div className="d-grid">
-            <ContextAwareFormButtons
-              onCancel={onCancel}
-              initialValues={initialValues}
-              submitButtonText={submitButtonText}
-              submitting={submitting}
-              dirtySubmitOnly={dirtySubmitOnly}
-              cancelButtonText={cancelButtonText}
-            />
-          </div>
+          {!customCtaButtons && (
+            <div className="d-grid">
+              <ContextAwareFormButtons
+                onCancel={onCancel}
+                initialValues={initialValues}
+                submitButtonText={submitButtonText}
+                submitting={submitting}
+                dirtySubmitOnly={dirtySubmitOnly}
+                cancelButtonText={cancelButtonText}
+              />
+            </div>
+          )}
         </FormikForm>
       </Formik>
     </ReadOnlyContext.Provider>
@@ -129,6 +132,7 @@ export const Text = ({
   autoComplete = false,
   label,
   placeholder = null,
+  onChange = null,
 }) => (
   <CommonFormElementWrapper
     name={name}
@@ -137,6 +141,7 @@ export const Text = ({
     type={textarea ? "textarea" : "text"}
     rows={rows}
     autoComplete={autoComplete}
+    onChange={onChange}
   />
 );
 
@@ -295,10 +300,15 @@ const CommonFormElementWrapper = ({
   type,
   autoComplete = false,
   rows = null,
+  onChange = null,
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
   const readOnly = isDisplay || useReadOnlyContext();
+  const internalOnChange = (e) => {
+    field.onChange(e);
+    onChange && onChange(e.target.value);
+  };
   return (
     <>
       <FloatingLabel label={label} className="mb-3">
@@ -315,6 +325,7 @@ const CommonFormElementWrapper = ({
             type !== "number" ? undefined : (e) => e.currentTarget.blur()
           }
           {...field}
+          onChange={internalOnChange}
         />
         {meta.error && (
           <FormComponent.Control.Feedback type="invalid">
