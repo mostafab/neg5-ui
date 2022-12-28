@@ -8,13 +8,18 @@ const initialValues = {
   query: "",
 };
 
-const UserSearch = ({}) => {
+const UserSearch = ({
+  filterFunction = null,
+  placeholder = "Search for users",
+}) => {
   const [queryResults, setQueryResults] = useState({
     loading: false,
     results: [],
   });
   const initiateSearch = debounce(async (query) => {
-    const results = await searchForUsers(query);
+    const results = (await searchForUsers(query)).filter(
+      (item) => !filterFunction || filterFunction(item)
+    );
     console.log(results);
   }, 500);
   const onChange = (value) => {
@@ -24,7 +29,7 @@ const UserSearch = ({}) => {
   };
   return (
     <Form name="UserSearch" initialValues={initialValues} customCtaButtons>
-      <Text name="query" label="Add people" onChange={onChange} />
+      <Text name="query" label={placeholder} onChange={onChange} />
     </Form>
   );
 };
