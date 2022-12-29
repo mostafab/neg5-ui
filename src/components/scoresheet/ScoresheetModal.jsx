@@ -11,7 +11,7 @@ const ScoresheetModal = ({ onHide, teams, rules, phases }) => {
       <Row>
         <Col lg={4} md={3} />
         <Col lg={4} md={6}>
-          <Card>
+          <Card title="Enter a few fields to get started." className="mt-lg-5">
             <ScoresheetStartForm
               teams={teams}
               phases={phases}

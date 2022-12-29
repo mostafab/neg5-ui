@@ -5,24 +5,26 @@ import * as Yup from "yup";
 import { Form, Text, Number, Select } from "@components/common/forms";
 import { getTeamOptions, getPhaseOptions } from "@libs/tournamentForms";
 
-const initialValues = () => ({
+const initialValues = (phases) => ({
   round: "",
   team1Id: "",
   team2Id: "",
   moderator: "",
   room: "",
   packet: "",
-  phases: [],
+  phases: phases.length === 1 ? [phases[0].id] : [],
 });
 
 const validation = Yup.object({
-  round: Yup.number().required("Enter a round").positive(),
-  team1Id: Yup.string().required(),
-  team2Id: Yup.string().required(),
+  round: Yup.number()
+    .required("Enter a round.")
+    .positive("Enter a positive number."),
+  team1Id: Yup.string().required("Choose a team."),
+  team2Id: Yup.string().required("Choose a team."),
   room: Yup.string(),
   moderator: Yup.string(),
   packet: Yup.string(),
-  phases: Yup.array().required(),
+  phases: Yup.array().required().min(1, "Choose at least one phase."),
 });
 
 const ScoresheetStartForm = ({ teams, phases, onSubmit }) => (
@@ -30,7 +32,7 @@ const ScoresheetStartForm = ({ teams, phases, onSubmit }) => (
     name="ScoresheetStartForm"
     onSubmit={onSubmit}
     submitButtonText="Start"
-    initialValues={initialValues()}
+    initialValues={initialValues(phases)}
     validation={validation}
   >
     <Row>
@@ -46,8 +48,9 @@ const ScoresheetStartForm = ({ teams, phases, onSubmit }) => (
           options={getTeamOptions(teams)}
         />
         <Row>
-          <Col lg={6} md={6}>
+          <Col lg={12} md={12}>
             <Select
+              multiple
               name="phases"
               label="Phases"
               options={getPhaseOptions(phases)}
@@ -56,10 +59,6 @@ const ScoresheetStartForm = ({ teams, phases, onSubmit }) => (
           <Col lg={6} md={6}>
             <Number name="round" label="Round" />
           </Col>
-        </Row>
-      </Col>
-      <Col lg={12}>
-        <Row>
           <Col lg={6} md={6}>
             <Text name="moderator" label="Moderator" />
           </Col>
