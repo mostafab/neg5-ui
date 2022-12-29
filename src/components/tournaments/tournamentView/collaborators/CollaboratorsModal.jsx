@@ -6,11 +6,12 @@ import { Info } from "@components/common/alerts";
 import UserSearch from "./UserSearch";
 import CollaboratorsList from "./CollaboratorsList";
 
-const CollaboratorsModal = ({ collaborators, onHide }) => (
+const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => (
   <Modal size="md" title="Update Collaborators" onHide={onHide}>
     <UserSearch
       placeholder="Add people"
       filterFunction={(c) =>
+        c.id !== currentUserId &&
         !collaborators.find((collab) => collab.userId === c.id)
       }
     />

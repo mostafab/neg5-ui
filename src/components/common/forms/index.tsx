@@ -198,7 +198,7 @@ export const Select = ({
     onChange && onChange(value, formContext);
   };
   return (
-    <>
+    <div className="mb-3">
       <ReactSelect
         {...field}
         placeholder={label}
@@ -206,6 +206,7 @@ export const Select = ({
           control: (base) => ({
             ...base,
             borderRadius: "0",
+            borderColor: meta.error ? "#e74c3c !important" : "#ced4da",
             height: "100%",
             zIndex: "1",
           }),
@@ -221,7 +222,7 @@ export const Select = ({
         }}
         isSearchable={searchable}
         isDisabled={isReadOnly}
-        className="mb-3 form-floating"
+        className="form-floating"
         isMulti={multiple}
         aria-label={label}
         options={options}
@@ -232,12 +233,8 @@ export const Select = ({
             : options.find((o) => o.value === field.value) || ""
         }
       />
-      {meta.error && (
-        <FormComponent.Control.Feedback type="invalid">
-          {meta.error}
-        </FormComponent.Control.Feedback>
-      )}
-    </>
+      {meta.error && <span className="text-danger small">{meta.error}</span>}
+    </div>
   );
 };
 

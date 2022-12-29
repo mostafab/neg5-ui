@@ -4,7 +4,7 @@ import Card from "@components/common/cards";
 import { Expand } from "@components/common/icon";
 import CollaboratorsModal from "./CollaboratorsModal";
 
-const TournamentCollaboratorsPanel = ({ collaborators }) => {
+const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
   const [showModal, setShowModal] = useState(false);
   const renderTitle = () => (
     <span>
@@ -31,6 +31,7 @@ const TournamentCollaboratorsPanel = ({ collaborators }) => {
           <CollaboratorsModal
             collaborators={collaborators}
             onHide={() => setShowModal(false)}
+            currentUserId={currentUserId}
           />
         )}
       </Card>
