@@ -18,18 +18,29 @@ const UserSearch = ({
   const [queryResults, setQueryResults] = useState({
     loading: false,
     results: [],
+    error: null,
   });
   const [showResults, setShowResults] = useState(true);
   const performSearch = debounce(async (query) => {
     setQueryResults({
       ...queryResults,
       loading: true,
+      error: null,
     });
-    const results = await searchForUsers(query);
-    setQueryResults({
-      loading: false,
-      results: orderBy(results, "id"),
-    });
+    try {
+      const results = await searchForUsers(query);
+      setQueryResults({
+        loading: false,
+        results: orderBy(results, "id"),
+      });
+    } catch (e) {
+      console.error(e);
+      setQueryResults({
+        loading: false,
+        results: [],
+        error: true,
+      });
+    }
   }, 500);
   const onChange = (value) => {
     if (value.trim().length >= 3) {
@@ -86,7 +97,9 @@ const UserSearch = ({
         <Text
           name="query"
           label={
-            queryResults.loading ? (
+            queryResults.error ? (
+              <span className="text-danger">There was an error.</span>
+            ) : queryResults.loading ? (
               <span>
                 Loading <Spinner animation="border" size="sm" />
               </span>
