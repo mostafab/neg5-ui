@@ -17,3 +17,9 @@ export const getPhaseOptions = (phases) =>
     })),
     "label"
   );
+
+export const answerTypeToPillType = {
+  Power: "success",
+  Base: "info",
+  Neg: "danger",
+};

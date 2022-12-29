@@ -4,3 +4,8 @@ export const MatchResult = {
   Tie: "T",
   Forfeit: "F",
 };
+
+export const CycleStage = {
+  Tossup: "tossup",
+  Bonus: "bonus",
+};
