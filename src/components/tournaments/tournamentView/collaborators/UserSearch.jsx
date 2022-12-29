@@ -71,7 +71,7 @@ const UserSearch = ({
           width: "93.5%",
           position: "absolute",
           zIndex: 2,
-          top: "15.5%",
+          top: "75px",
           maxHeight: "30vh",
           overflow: "scroll",
         }}

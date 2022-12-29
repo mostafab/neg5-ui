@@ -17,7 +17,11 @@ const TournamentTeamsPanel = ({ teams, matches }) => {
         title={
           <>
             <span>Teams ({teams.length})</span>
-            <Add className="float-end" onClick={() => setSelectedTeam({})} />
+            <Add
+              message="Add a Team"
+              className="float-end"
+              onClick={() => setSelectedTeam({})}
+            />
           </>
         }
       >

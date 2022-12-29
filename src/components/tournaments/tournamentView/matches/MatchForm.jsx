@@ -15,6 +15,7 @@ import {
   Checkbox,
 } from "@components/common/forms";
 import { X } from "@components/common/icon";
+import { getTeamOptions, getPhaseOptions } from "@libs/tournamentForms";
 
 const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
   const matchingTeam = teams.find((t) => t.id === selectedTeamId);
@@ -80,24 +81,6 @@ const validation = Yup.object({
   serialId: Yup.string(),
   notes: Yup.string(),
 });
-
-const getTeamOptions = (teams) =>
-  orderBy(
-    teams.map((t) => ({
-      value: t.id,
-      label: t.name,
-    })),
-    "label"
-  );
-
-const getPhaseOptions = (phases) =>
-  orderBy(
-    phases.map((p) => ({
-      value: p.id,
-      label: p.name,
-    })),
-    "label"
-  );
 
 const answerTypeToClass = {
   Base: "info",
