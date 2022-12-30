@@ -9,7 +9,10 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
   const getPlayerDisplay = (player) => player.name.substring(0, 2);
 
   const renderScoresheetCycleRow = (cycle) => (
-    <tr className="active" key={cycle.number}>
+    <tr
+      className={cycle === currentCycle ? "table-success" : ""}
+      key={cycle.number}
+    >
       {firstTeam.players.map((player) => (
         <td key={player.id}></td>
       ))}
