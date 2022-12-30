@@ -38,6 +38,8 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       if (stage === CycleStage.Bonus) {
         draft.currentCycle.stage = CycleStage.Tossup;
         draft.currentCycle.answers.pop();
+      } else {
+        draft.currentCycle = draft.cycles.pop();
       }
     });
     setScoresheetState(nextState);
@@ -53,6 +55,10 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       ...scoresheetState,
       currentCycle: currentCycleNextState,
     });
+  };
+
+  const onNoAnswer = () => {
+    onNextTossup();
   };
 
   const onBonus = (teamId, bonusIndex) => {
@@ -88,6 +94,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           onBack={onBack}
           onBonus={onBonus}
           onNextTossup={onNextTossup}
+          onNoAnswer={onNoAnswer}
         />
       </Col>
     </Row>
