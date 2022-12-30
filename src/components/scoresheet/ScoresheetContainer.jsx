@@ -51,7 +51,6 @@ const recalculateScoringData = (scoresheetState, teams) => {
         result.teams[answeringTeamId].score += value;
       });
   });
-  console.log(result);
   return result;
 };
 
@@ -66,7 +65,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const [scoringData, setScoringData] = useState({});
   useEffect(() => {
     setScoringData(recalculateScoringData(scoresheetState, scoresheetTeams));
-  }, [scoresheetState.cycles]);
+  }, [scoresheetState]);
 
   const onBack = () => {
     const nextState = produce(scoresheetState, (draft) => {
