@@ -1,30 +1,37 @@
 import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
+import times from "lodash/times";
 
 import { CycleStage } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
 
-const scoresheetInitialState = () => ({
-  currentCycle: {
-    number: 1,
-    answers: [],
-    stage: CycleStage.Tossup,
-    bonuses: [],
-  },
-  cycles: [],
+const initialCurrentCycle = (partsPerBonus) => ({
+  number: 1,
+  answers: [],
+  stage: CycleStage.Tossup,
+  bonuses: times(partsPerBonus, () => ({
+    answeringTeamId: null,
+  })),
 });
+
+const scoresheetInitialState = (rules) => {
+  return {
+    currentCycle: initialCurrentCycle(rules.partsPerBonus),
+    cycles: [],
+  };
+};
 
 const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const [scoresheetState, setScoresheetState] = useState(
-    scoresheetInitialState()
+    scoresheetInitialState(rules)
   );
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
     scoresheetStartValues.team2Id,
   ].map((teamId) => teams.find((t) => t.id === teamId));
 
-  const onClickBack = () => {
+  const onBack = () => {
     const nextState = produce(scoresheetState, (draft) => {
       const { stage } = draft.currentCycle;
       // If user clicks "Back" on a bonus, remove the most recent answer and reset to tossup stage
@@ -47,6 +54,27 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       currentCycle: currentCycleNextState,
     });
   };
+
+  const onBonus = (teamId, bonusIndex) => {
+    const nextState = produce(scoresheetState, (draft) => {
+      draft.currentCycle.bonuses[bonusIndex].answeringTeamId =
+        teamId === draft.currentCycle.bonuses[bonusIndex].answeringTeamId
+          ? null
+          : teamId;
+    });
+    setScoresheetState(nextState);
+  };
+
+  const onNextTossup = () => {
+    const nextState = produce(scoresheetState, (draft) => {
+      draft.cycles.push(draft.currentCycle);
+      const nextCycle = initialCurrentCycle(rules.partsPerBonus);
+      nextCycle.number = draft.currentCycle.number + 1;
+      draft.currentCycle = nextCycle;
+    });
+    setScoresheetState(nextState);
+  };
+
   console.log(scoresheetState);
   return (
     <Row>
@@ -57,7 +85,9 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           teams={scoresheetTeams}
           rules={rules}
           onClickAnswer={onClickAnswer}
-          onClickBack={onClickBack}
+          onBack={onBack}
+          onBonus={onBonus}
+          onNextTossup={onNextTossup}
         />
       </Col>
     </Row>
