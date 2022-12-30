@@ -27,32 +27,28 @@ const BonusPanel = ({
             className="mb-3 d-flex justify-content-between"
           >
             <div className="p-2">Part {index + 1}</div>
-            <ButtonGroup>
-              {teams
-                .filter((t) => usesBouncebacks || t.id === answeringTeamId)
-                .map((team) => (
-                  <Button
-                    key={team.id}
-                    type={
-                      team.id === bonus.answeringTeamId
-                        ? "success"
-                        : "outline-secondary"
-                    }
-                    onClick={() => onBonus(team.id, index)}
-                  >
-                    +{bonusPointValue} for {team.name}
-                  </Button>
-                ))}
-            </ButtonGroup>
+            {teams
+              .filter((t) => usesBouncebacks || t.id === answeringTeamId)
+              .map((team) => (
+                <Button
+                  key={team.id}
+                  type={
+                    team.id === bonus.answeringTeamId ? "success" : "secondary"
+                  }
+                  onClick={() => onBonus(team.id, index)}
+                >
+                  +{bonusPointValue} for {team.name}
+                </Button>
+              ))}
           </Col>
         ))}
       </Row>
       <Row>
         <Col lg={12} md={12} sm={12} className="d-flex justify-content-between">
-          <Button type="secondary" onClick={onBack}>
+          <Button type="outline-secondary" onClick={onBack}>
             Back
           </Button>
-          <Button type="primary" onClick={onNextTossup}>
+          <Button type="outline-primary" onClick={onNextTossup}>
             Next Tossup
           </Button>
         </Col>

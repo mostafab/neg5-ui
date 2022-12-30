@@ -7,6 +7,7 @@ import mapValues from "lodash/mapValues";
 
 import { CycleStage } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
+import ScoresheetTable from "./ScoresheetTable";
 
 const initialCurrentCycle = (rules) => ({
   number: 1,
@@ -98,7 +99,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       // Clear out bonuses since this tossup wasn't answered successfully.
       draft.currentCycle.bonuses = [];
       draft.cycles.push(draft.currentCycle);
-      const nextCycle = initialCurrentCycle(rules.partsPerBonus);
+      const nextCycle = initialCurrentCycle(rules);
       nextCycle.number = draft.currentCycle.number + 1;
       draft.currentCycle = nextCycle;
     });
@@ -126,8 +127,15 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   };
   return (
     <Row>
-      <Col lg={6} md={6} sm={12}></Col>
-      <Col lg={6} md={6} sm={12}>
+      <Col lg={7} md={6} sm={12}>
+        <ScoresheetTable
+          currentCycle={scoresheetState.currentCycle}
+          cycles={scoresheetState.cycles}
+          teams={scoresheetTeams}
+          rules={rules}
+        />
+      </Col>
+      <Col lg={5} md={6} sm={12}>
         <CurrentCyclePanel
           currentCycle={scoresheetState.currentCycle}
           teams={scoresheetTeams}
