@@ -18,7 +18,8 @@ const initialValues = (phases) => ({
 const validation = Yup.object({
   round: Yup.number()
     .required("Enter a round.")
-    .positive("Enter a positive number."),
+    .integer("Enter a whole, positive number.")
+    .positive("Enter a whole, positive number."),
   team1Id: Yup.string().required("Choose a team."),
   team2Id: Yup.string().required("Choose a team."),
   room: Yup.string(),

@@ -210,6 +210,10 @@ export const Select = ({
             height: "100%",
             zIndex: "1",
           }),
+          container: (base) => ({
+            ...base,
+            height: "100%",
+          }),
           menu: (base) => ({
             ...base,
             borderRadius: "0",
