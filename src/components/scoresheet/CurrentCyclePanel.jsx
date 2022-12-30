@@ -15,6 +15,7 @@ const CurrentCyclePanel = ({
   onBonus,
   onNextTossup,
   onNoAnswer,
+  scoringData,
 }) => {
   const title = `${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
@@ -29,6 +30,7 @@ const CurrentCyclePanel = ({
           onClickAnswer={onClickAnswer}
           currentCycle={currentCycle}
           onNoAnswer={onNoAnswer}
+          scoringData={scoringData}
         />
       )}
       {currentCycle.stage === CycleStage.Bonus && (
