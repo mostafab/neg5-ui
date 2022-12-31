@@ -37,8 +37,10 @@ const ScoresheetModal = ({ onHide, teams, rules, phases }) => {
                 onSubmit={(values) => setScoresheetStartValues(values)}
               />
             </Card>
-            <div style={{ textAlign: "center" }}>
-              <Button type="secondary">Or load an existing scoresheet</Button>
+            <div style={{ textAlign: "center" }} className="d-flex">
+              <Button className="w-100" type="secondary">
+                Or load an existing scoresheet
+              </Button>
             </div>
           </Col>
           <Col lg={4} md={3} />

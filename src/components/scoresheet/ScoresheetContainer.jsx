@@ -3,9 +3,10 @@ import { Row, Col } from "react-bootstrap";
 import produce from "immer";
 import times from "lodash/times";
 import keyBy from "lodash/keyBy";
+import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
 
-import { CycleStage, AnswerType } from "@libs/enums";
+import { CycleStage, AnswerType, Direction } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
 
@@ -19,10 +20,18 @@ const initialCurrentCycle = (rules) => ({
   })),
 });
 
-const scoresheetInitialState = (rules) => {
+const scoresheetInitialState = (rules, teams) => {
+  const playerOrderings = mapValues(
+    groupBy(
+      teams.flatMap((t) => t.players),
+      "teamId"
+    ),
+    (players) => players.map((p) => p.id)
+  );
   return {
     currentCycle: initialCurrentCycle(rules),
     cycles: [],
+    playerOrderings,
   };
 };
 
@@ -59,13 +68,13 @@ const recalculateScoringData = (scoresheetState, teams) => {
 };
 
 const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
-  const [scoresheetState, setScoresheetState] = useState(
-    scoresheetInitialState(rules)
-  );
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
     scoresheetStartValues.team2Id,
   ].map((teamId) => teams.find((t) => t.id === teamId));
+  const [scoresheetState, setScoresheetState] = useState(
+    scoresheetInitialState(rules, scoresheetTeams)
+  );
   const [scoringData, setScoringData] = useState({});
   useEffect(() => {
     setScoringData(recalculateScoringData(scoresheetState, scoresheetTeams));
@@ -152,6 +161,30 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
     });
     setScoresheetState(nextState);
   };
+
+  const onMovePlayer = ({ teamId, index, direction }) => {
+    const nextState = produce(scoresheetState, (draft) => {
+      const orderings = draft.playerOrderings[teamId];
+      let targetIndex;
+      if (index === 0 && direction === Direction.Up) {
+        targetIndex = orderings.length - 1;
+      } else if (
+        index === orderings.length - 1 &&
+        direction === Direction.Down
+      ) {
+        targetIndex = 0;
+      } else {
+        targetIndex = index + (direction === Direction.Down ? 1 : -1);
+      }
+      const current = orderings[index];
+      orderings[index] = orderings[targetIndex];
+      orderings[targetIndex] = current;
+
+      draft.playerOrderings[teamId] = orderings;
+    });
+    setScoresheetState(nextState);
+  };
+
   return (
     <Row>
       <Col lg={7} md={6} sm={12}>
@@ -160,6 +193,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           cycles={scoresheetState.cycles}
           teams={scoresheetTeams}
           rules={rules}
+          playerOrderings={scoresheetState.playerOrderings}
         />
       </Col>
       <Col lg={5} md={6} sm={12}>
@@ -174,6 +208,8 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           onNoAnswer={onNoAnswer}
           scoringData={scoringData}
           onUndoNeg={onUndoNeg}
+          playerOrderings={scoresheetState.playerOrderings}
+          onMovePlayer={onMovePlayer}
         />
       </Col>
     </Row>

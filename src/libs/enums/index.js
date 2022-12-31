@@ -15,3 +15,8 @@ export const AnswerType = {
   Power: "Power",
   Neg: "Neg",
 };
+
+export const Direction = {
+  Up: "up",
+  Down: "down",
+};
