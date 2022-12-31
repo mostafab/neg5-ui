@@ -187,7 +187,12 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
 
   return (
     <Row>
-      <Col lg={7} md={6} sm={12}>
+      <Col
+        lg={7}
+        md={6}
+        sm={12}
+        className="order-1 order-lg-0 order-md-0 order-xl-0"
+      >
         <ScoresheetTable
           currentCycle={scoresheetState.currentCycle}
           cycles={scoresheetState.cycles}
@@ -196,7 +201,12 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           playerOrderings={scoresheetState.playerOrderings}
         />
       </Col>
-      <Col lg={5} md={6} sm={12}>
+      <Col
+        lg={5}
+        md={6}
+        sm={12}
+        className="order-0 order-lg-1 order-md-1 order-xl-1"
+      >
         <CurrentCyclePanel
           currentCycle={scoresheetState.currentCycle}
           teams={scoresheetTeams}
