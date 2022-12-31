@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap";
 
 import Modal from "@components/common/modal";
 import Card from "@components/common/cards";
+import Button from "@components/common/button";
 
 import ScoresheetStartForm from "./ScoresheetStartForm";
 import ScoresheetContainer from "./ScoresheetContainer";
@@ -28,7 +29,7 @@ const ScoresheetModal = ({ onHide, teams, rules, phases }) => {
           <Col lg={4} md={6}>
             <Card
               title="Fill out a few fields to get started."
-              className="mt-lg-5 mt-md-5"
+              className="mt-lg-5 mt-md-5 mb-3"
             >
               <ScoresheetStartForm
                 teams={teams}
@@ -36,6 +37,9 @@ const ScoresheetModal = ({ onHide, teams, rules, phases }) => {
                 onSubmit={(values) => setScoresheetStartValues(values)}
               />
             </Card>
+            <div style={{ textAlign: "center" }}>
+              <Button type="secondary">Or load an existing scoresheet</Button>
+            </div>
           </Col>
           <Col lg={4} md={3} />
         </Row>

@@ -5,8 +5,9 @@ import times from "lodash/times";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapValues";
 
-import { CycleStage } from "@libs/enums";
+import { CycleStage, AnswerType } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
+import ScoresheetTable from "./ScoresheetTable";
 
 const initialCurrentCycle = (rules) => ({
   number: 1,
@@ -40,7 +41,8 @@ const recalculateScoringData = (scoresheetState, teams) => {
     result.teams[t.id] = {};
     result.teams[t.id].score = 0;
   });
-  scoresheetState.cycles.forEach(({ answers, bonuses }) => {
+
+  const processCycle = ({ answers, bonuses }) => {
     answers.forEach(({ playerId, value }) => {
       const teamId = playerTeamIds[playerId];
       result.teams[teamId].score += value;
@@ -50,7 +52,9 @@ const recalculateScoringData = (scoresheetState, teams) => {
       .forEach(({ answeringTeamId, value }) => {
         result.teams[answeringTeamId].score += value;
       });
-  });
+  };
+  scoresheetState.cycles.forEach(processCycle);
+  processCycle(scoresheetState.currentCycle);
   return result;
 };
 
@@ -82,10 +86,13 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   };
 
   const onClickAnswer = ({ playerId, value }) => {
+    const isNeg =
+      rules.tossupValues.find((tv) => tv.value === value).answerType ===
+      AnswerType.Neg;
     const currentCycleNextState = {
       ...scoresheetState.currentCycle,
       answers: [...scoresheetState.currentCycle.answers, { playerId, value }],
-      stage: CycleStage.Bonus,
+      stage: isNeg ? CycleStage.Tossup : CycleStage.Bonus,
     };
     setScoresheetState({
       ...scoresheetState,
@@ -98,9 +105,30 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       // Clear out bonuses since this tossup wasn't answered successfully.
       draft.currentCycle.bonuses = [];
       draft.cycles.push(draft.currentCycle);
-      const nextCycle = initialCurrentCycle(rules.partsPerBonus);
+      const nextCycle = initialCurrentCycle(rules);
       nextCycle.number = draft.currentCycle.number + 1;
       draft.currentCycle = nextCycle;
+    });
+    setScoresheetState(nextState);
+  };
+
+  const onUndoNeg = (teamId) => {
+    const negValues = new Set(
+      rules.tossupValues
+        .filter((tv) => tv.answerType === AnswerType.Neg)
+        .map((tv) => tv.value)
+    );
+    const playerIds = new Set(
+      scoresheetTeams
+        .flatMap((t) => t.players)
+        .filter((p) => p.teamId === teamId)
+        .map((p) => p.id)
+    );
+    const nextState = produce(scoresheetState, (draft) => {
+      // Remove the neg by this team
+      draft.currentCycle.answers = draft.currentCycle.answers.filter(
+        (a) => !(negValues.has(a.value) && playerIds.has(a.playerId))
+      );
     });
     setScoresheetState(nextState);
   };
@@ -126,8 +154,15 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   };
   return (
     <Row>
-      <Col lg={6} md={6} sm={12}></Col>
-      <Col lg={6} md={6} sm={12}>
+      <Col lg={7} md={6} sm={12}>
+        <ScoresheetTable
+          currentCycle={scoresheetState.currentCycle}
+          cycles={scoresheetState.cycles}
+          teams={scoresheetTeams}
+          rules={rules}
+        />
+      </Col>
+      <Col lg={5} md={6} sm={12}>
         <CurrentCyclePanel
           currentCycle={scoresheetState.currentCycle}
           teams={scoresheetTeams}
@@ -138,6 +173,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           onNextTossup={onNextTossup}
           onNoAnswer={onNoAnswer}
           scoringData={scoringData}
+          onUndoNeg={onUndoNeg}
         />
       </Col>
     </Row>
