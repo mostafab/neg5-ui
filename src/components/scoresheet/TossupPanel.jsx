@@ -2,9 +2,11 @@ import React from "react";
 import { Row, Col, InputGroup } from "react-bootstrap";
 
 import { answerTypeToPillType } from "@libs/tournamentForms";
-import { AnswerType } from "@libs/enums";
+import { AnswerType, Direction } from "@libs/enums";
+import { orderPlayers } from "@libs/scoresheet";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
+import Icon from "@components/common/icon";
 
 const teamIsLockedOut = (currentCycle, team, rules) => {
   if (currentCycle.answers.length === 0) {
@@ -28,6 +30,8 @@ const TeamCard = ({
   score,
   lockedOut,
   onUndoNeg,
+  onMovePlayer,
+  playerOrderings,
 }) => (
   <Card title={`${team.name} (${score})`} shadow={false}>
     {lockedOut && (
@@ -36,10 +40,36 @@ const TeamCard = ({
       </Button>
     )}
     {!lockedOut &&
-      team.players.map((player) => (
+      orderPlayers(team.players, playerOrderings).map((player, index) => (
         <InputGroup className="mb-3" key={player.id}>
-          <InputGroup.Text className="w-100 overflow-auto">
-            {player.name}
+          <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
+            <span className="overflow-auto">{player.name}</span>
+            <span
+              className="position-absolute p-2 text-bg-primary small"
+              style={{ right: "0", zIndex: 2 }}
+            >
+              <Icon
+                name="ArrowUp"
+                className="me-2"
+                onClick={() =>
+                  onMovePlayer({
+                    teamId: team.id,
+                    index,
+                    direction: Direction.Up,
+                  })
+                }
+              />
+              <Icon
+                name="ArrowDown"
+                onClick={() =>
+                  onMovePlayer({
+                    teamId: team.id,
+                    index,
+                    direction: Direction.Down,
+                  })
+                }
+              />
+            </span>
           </InputGroup.Text>
           {rules.tossupValues.map((tv) => (
             <Button
@@ -67,6 +97,8 @@ const TossupPanel = ({
   onNoAnswer,
   scoringData,
   onUndoNeg,
+  playerOrderings,
+  onMovePlayer,
 }) => (
   <>
     <Row className="mb-3">
@@ -79,6 +111,8 @@ const TossupPanel = ({
             onClickAnswer={onClickAnswer}
             lockedOut={teamIsLockedOut(currentCycle, team, rules)}
             onUndoNeg={onUndoNeg}
+            playerOrderings={playerOrderings[team.id]}
+            onMovePlayer={onMovePlayer}
           />
         </Col>
       ))}

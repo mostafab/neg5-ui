@@ -5,11 +5,21 @@ import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapValues";
 
 import { answerTypeToPillType } from "@libs/tournamentForms";
+import { orderPlayers } from "@libs/scoresheet";
+
 import { Info } from "@components/common/alerts";
 import Card from "@components/common/cards";
 
-const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
+const ScoresheetTable = ({
+  cycles,
+  currentCycle,
+  teams,
+  rules,
+  playerOrderings,
+}) => {
   const [firstTeam, secondTeam] = teams;
+  const firstTeamOrdering = playerOrderings[firstTeam.id];
+  const secondTeamOrdering = playerOrderings[secondTeam.id];
 
   const getPlayerDisplay = (player) => player.name.substring(0, 2);
 
@@ -76,7 +86,7 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
         className={cycle === currentCycle ? "table-active" : ""}
         key={cycle.number}
       >
-        {firstTeam.players.map((player) =>
+        {orderPlayers(firstTeam.players, firstTeamOrdering).map((player) =>
           renderPlayerAnswerCell(player, cycle, role)
         )}
         <td role={role}>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
@@ -84,7 +94,7 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
         <td>{cycle.number}</td>
         <td>{getTeamScoreUpToCycle(cycle, secondTeam)}</td>
         <td role={role}>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
-        {secondTeam.players.map((player) =>
+        {orderPlayers(secondTeam.players, secondTeamOrdering).map((player) =>
           renderPlayerAnswerCell(player, cycle, role)
         )}
       </tr>
@@ -115,17 +125,25 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
         </thead>
         <thead>
           <tr>
-            {firstTeam.players.map((player) => (
-              <th key={player.id}>{getPlayerDisplay(player)}</th>
-            ))}
+            {orderPlayers(firstTeam.players, firstTeamOrdering).map(
+              (player) => (
+                <th title={player.name} key={player.id}>
+                  {getPlayerDisplay(player)}
+                </th>
+              )
+            )}
             <th>Bonus</th>
             <th>Total</th>
             <th>TU</th>
             <th>Total</th>
             <th>Bonus</th>
-            {secondTeam.players.map((player) => (
-              <th key={player.id}>{getPlayerDisplay(player)}</th>
-            ))}
+            {orderPlayers(secondTeam.players, secondTeamOrdering).map(
+              (player) => (
+                <th title={player.name} key={player.id}>
+                  {getPlayerDisplay(player)}
+                </th>
+              )
+            )}
           </tr>
         </thead>
         <tbody>

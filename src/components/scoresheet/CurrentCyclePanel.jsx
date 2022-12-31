@@ -17,6 +17,8 @@ const CurrentCyclePanel = ({
   onNoAnswer,
   scoringData,
   onUndoNeg,
+  playerOrderings,
+  onMovePlayer,
 }) => {
   const title = `${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
@@ -33,6 +35,8 @@ const CurrentCyclePanel = ({
           onNoAnswer={onNoAnswer}
           scoringData={scoringData}
           onUndoNeg={onUndoNeg}
+          playerOrderings={playerOrderings}
+          onMovePlayer={onMovePlayer}
         />
       )}
       {currentCycle.stage === CycleStage.Bonus && (
