@@ -45,24 +45,31 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
     return tossupSums + bonusSums;
   };
 
-  const renderScoresheetCycleRow = (cycle) => (
-    <tr
-      className={cycle === currentCycle ? "table-active" : ""}
-      key={cycle.number}
-    >
-      {firstTeam.players.map((player) => (
-        <td key={player.id}>{getPlayerAnswerValueInCycle(cycle, player.id)}</td>
-      ))}
-      <td>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
-      <td>{getTeamScoreUpToCycle(cycle, firstTeam)}</td>
-      <td>{cycle.number}</td>
-      <td>{getTeamScoreUpToCycle(cycle, secondTeam)}</td>
-      <td>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
-      {secondTeam.players.map((player) => (
-        <td key={player.id}>{getPlayerAnswerValueInCycle(cycle, player.id)}</td>
-      ))}
-    </tr>
-  );
+  const renderScoresheetCycleRow = (cycle) => {
+    const role = currentCycle === cycle ? null : "button";
+    return (
+      <tr
+        className={cycle === currentCycle ? "table-active" : ""}
+        key={cycle.number}
+      >
+        {firstTeam.players.map((player) => (
+          <td role={role} key={player.id}>
+            {getPlayerAnswerValueInCycle(cycle, player.id)}
+          </td>
+        ))}
+        <td role={role}>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
+        <td>{getTeamScoreUpToCycle(cycle, firstTeam)}</td>
+        <td>{cycle.number}</td>
+        <td>{getTeamScoreUpToCycle(cycle, secondTeam)}</td>
+        <td role={role}>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
+        {secondTeam.players.map((player) => (
+          <td role={role} key={player.id}>
+            {getPlayerAnswerValueInCycle(cycle, player.id)}
+          </td>
+        ))}
+      </tr>
+    );
+  };
   return (
     <Card>
       {currentCycle.number > 1 && (

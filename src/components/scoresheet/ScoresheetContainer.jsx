@@ -83,10 +83,12 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   };
 
   const onClickAnswer = ({ playerId, value }) => {
+    const isNeg =
+      rules.tossupValues.find((tv) => tv.value === value).answerType === "Neg";
     const currentCycleNextState = {
       ...scoresheetState.currentCycle,
       answers: [...scoresheetState.currentCycle.answers, { playerId, value }],
-      stage: CycleStage.Bonus,
+      stage: isNeg ? CycleStage.Tossup : CycleStage.Bonus,
     };
     setScoresheetState({
       ...scoresheetState,
@@ -102,6 +104,27 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       const nextCycle = initialCurrentCycle(rules);
       nextCycle.number = draft.currentCycle.number + 1;
       draft.currentCycle = nextCycle;
+    });
+    setScoresheetState(nextState);
+  };
+
+  const onUndoNeg = (teamId) => {
+    const negValues = new Set(
+      rules.tossupValues
+        .filter((tv) => tv.answerType === "Neg")
+        .map((tv) => tv.value)
+    );
+    const playerIds = new Set(
+      scoresheetTeams
+        .flatMap((t) => t.players)
+        .filter((p) => p.teamId === teamId)
+        .map((p) => p.id)
+    );
+    const nextState = produce(scoresheetState, (draft) => {
+      // Remove the neg by this team
+      draft.currentCycle.answers = draft.currentCycle.answers.filter(
+        (a) => !(negValues.has(a.value) && playerIds.has(a.playerId))
+      );
     });
     setScoresheetState(nextState);
   };
@@ -146,6 +169,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           onNextTossup={onNextTossup}
           onNoAnswer={onNoAnswer}
           scoringData={scoringData}
+          onUndoNeg={onUndoNeg}
         />
       </Col>
     </Row>
