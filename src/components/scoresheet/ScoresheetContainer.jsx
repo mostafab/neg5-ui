@@ -21,17 +21,21 @@ const initialCurrentCycle = (rules) => ({
 });
 
 const scoresheetInitialState = (rules, teams) => {
-  const playerOrderings = mapValues(
-    groupBy(
-      teams.flatMap((t) => t.players),
-      "teamId"
-    ),
-    (players) => players.map((p) => p.id)
+  const playersByTeamId = groupBy(
+    teams.flatMap((t) => t.players),
+    "teamId"
+  );
+  const playerOrderings = mapValues(playersByTeamId, (players) =>
+    players.map((p) => p.id)
+  );
+  const activePlayersByTeamId = mapValues(playersByTeamId, (players) =>
+    players.slice(0, rules.maxActivePlayersPerTeam).map((p) => p.id)
   );
   return {
     currentCycle: initialCurrentCycle(rules),
     cycles: [],
     playerOrderings,
+    activePlayers: activePlayersByTeamId,
   };
 };
 
@@ -184,7 +188,6 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
     });
     setScoresheetState(nextState);
   };
-
   return (
     <Row>
       <Col
@@ -199,13 +202,14 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           teams={scoresheetTeams}
           rules={rules}
           playerOrderings={scoresheetState.playerOrderings}
+          className="sticky-top"
         />
       </Col>
       <Col
         lg={5}
         md={6}
         sm={12}
-        className="order-0 order-lg-1 order-md-1 order-xl-1"
+        className="order-0 order-lg-1 order-md-1 order-xl-1 mb-sm-3"
       >
         <CurrentCyclePanel
           currentCycle={scoresheetState.currentCycle}
@@ -220,6 +224,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           onUndoNeg={onUndoNeg}
           playerOrderings={scoresheetState.playerOrderings}
           onMovePlayer={onMovePlayer}
+          activePlayers={scoresheetState.activePlayers}
         />
       </Col>
     </Row>

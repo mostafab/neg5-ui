@@ -5,11 +5,11 @@ import * as Yup from "yup";
 import { Form, Text, Number, Select } from "@components/common/forms";
 import { getTeamOptions, getPhaseOptions } from "@libs/tournamentForms";
 
-const initialValues = (phases) => ({
+const initialValues = (phases, currentUser) => ({
   round: "",
   team1Id: "",
   team2Id: "",
-  moderator: "",
+  moderator: currentUser.name || currentUser.username || "",
   room: "",
   packet: "",
   phases: phases.length === 1 ? [phases[0].id] : [],
@@ -28,12 +28,12 @@ const validation = Yup.object({
   phases: Yup.array().required().min(1, "Choose at least one phase."),
 });
 
-const ScoresheetStartForm = ({ teams, phases, onSubmit }) => (
+const ScoresheetStartForm = ({ teams, phases, onSubmit, currentUser }) => (
   <Form
     name="ScoresheetStartForm"
     onSubmit={onSubmit}
     submitButtonText="Start"
-    initialValues={initialValues(phases)}
+    initialValues={initialValues(phases, currentUser)}
     validation={validation}
   >
     <Row>

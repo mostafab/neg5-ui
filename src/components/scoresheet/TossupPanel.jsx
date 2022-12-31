@@ -32,6 +32,7 @@ const TeamCard = ({
   onUndoNeg,
   onMovePlayer,
   playerOrderings,
+  activePlayers,
 }) => (
   <Card title={`${team.name} (${score})`} shadow={false}>
     {lockedOut && (
@@ -71,18 +72,19 @@ const TeamCard = ({
               />
             </span>
           </InputGroup.Text>
-          {rules.tossupValues.map((tv) => (
-            <Button
-              type={answerTypeToPillType[tv.answerType]}
-              key={tv.value}
-              className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
-              onClick={() =>
-                onClickAnswer({ playerId: player.id, value: tv.value })
-              }
-            >
-              {tv.value}
-            </Button>
-          ))}
+          {activePlayers.indexOf(player.id) >= 0 &&
+            rules.tossupValues.map((tv) => (
+              <Button
+                type={answerTypeToPillType[tv.answerType]}
+                key={tv.value}
+                className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
+                onClick={() =>
+                  onClickAnswer({ playerId: player.id, value: tv.value })
+                }
+              >
+                {tv.value}
+              </Button>
+            ))}
         </InputGroup>
       ))}
   </Card>
@@ -99,6 +101,7 @@ const TossupPanel = ({
   onUndoNeg,
   playerOrderings,
   onMovePlayer,
+  activePlayers,
 }) => (
   <>
     <Row className="mb-3">
@@ -113,6 +116,7 @@ const TossupPanel = ({
             onUndoNeg={onUndoNeg}
             playerOrderings={playerOrderings[team.id]}
             onMovePlayer={onMovePlayer}
+            activePlayers={activePlayers[team.id]}
           />
         </Col>
       ))}

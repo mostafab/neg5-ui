@@ -16,6 +16,7 @@ const ScoresheetTable = ({
   teams,
   rules,
   playerOrderings,
+  className = "",
 }) => {
   const [firstTeam, secondTeam] = teams;
   const firstTeamOrdering = playerOrderings[firstTeam.id];
@@ -101,10 +102,9 @@ const ScoresheetTable = ({
     );
   };
   return (
-    <Card>
+    <Card className={className}>
       {currentCycle.number > 1 && (
         <Info>
-          {" "}
           You can change a previous tossup/bonus cycle by clicking into a table
           cell.
         </Info>
