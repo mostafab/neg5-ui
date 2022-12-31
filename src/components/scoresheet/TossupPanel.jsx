@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col, InputGroup } from "react-bootstrap";
 
 import { answerTypeToPillType } from "@libs/tournamentForms";
+import { AnswerType } from "@libs/enums";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
 
@@ -11,7 +12,7 @@ const teamIsLockedOut = (currentCycle, team, rules) => {
   }
   const negValues = new Set(
     rules.tossupValues
-      .filter((tv) => tv.answerType === "Neg")
+      .filter((tv) => tv.answerType === AnswerType.Neg)
       .map((tv) => tv.value)
   );
   return team.players.some((p) => {

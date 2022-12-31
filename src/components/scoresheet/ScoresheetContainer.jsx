@@ -5,7 +5,7 @@ import times from "lodash/times";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapValues";
 
-import { CycleStage } from "@libs/enums";
+import { CycleStage, AnswerType } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
 
@@ -41,7 +41,8 @@ const recalculateScoringData = (scoresheetState, teams) => {
     result.teams[t.id] = {};
     result.teams[t.id].score = 0;
   });
-  scoresheetState.cycles.forEach(({ answers, bonuses }) => {
+
+  const processCycle = ({ answers, bonuses }) => {
     answers.forEach(({ playerId, value }) => {
       const teamId = playerTeamIds[playerId];
       result.teams[teamId].score += value;
@@ -51,7 +52,9 @@ const recalculateScoringData = (scoresheetState, teams) => {
       .forEach(({ answeringTeamId, value }) => {
         result.teams[answeringTeamId].score += value;
       });
-  });
+  };
+  scoresheetState.cycles.forEach(processCycle);
+  processCycle(scoresheetState.currentCycle);
   return result;
 };
 
@@ -84,7 +87,8 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
 
   const onClickAnswer = ({ playerId, value }) => {
     const isNeg =
-      rules.tossupValues.find((tv) => tv.value === value).answerType === "Neg";
+      rules.tossupValues.find((tv) => tv.value === value).answerType ===
+      AnswerType.Neg;
     const currentCycleNextState = {
       ...scoresheetState.currentCycle,
       answers: [...scoresheetState.currentCycle.answers, { playerId, value }],
@@ -111,7 +115,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const onUndoNeg = (teamId) => {
     const negValues = new Set(
       rules.tossupValues
-        .filter((tv) => tv.answerType === "Neg")
+        .filter((tv) => tv.answerType === AnswerType.Neg)
         .map((tv) => tv.value)
     );
     const playerIds = new Set(

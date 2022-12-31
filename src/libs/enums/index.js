@@ -9,3 +9,9 @@ export const CycleStage = {
   Tossup: "tossup",
   Bonus: "bonus",
 };
+
+export const AnswerType = {
+  Base: "Base",
+  Power: "Power",
+  Neg: "Neg",
+};
