@@ -1,7 +1,10 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import sum from "lodash/sum";
+import keyBy from "lodash/keyBy";
+import mapValues from "lodash/mapValues";
 
+import { answerTypeToPillType } from "@libs/tournamentForms";
 import { Info } from "@components/common/alerts";
 import Card from "@components/common/cards";
 
@@ -10,9 +13,21 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
 
   const getPlayerDisplay = (player) => player.name.substring(0, 2);
 
+  const valueToTypeMap = mapValues(
+    keyBy(rules.tossupValues, "value"),
+    (v) => v.answerType
+  );
+
   const getPlayerAnswerValueInCycle = (cycle, playerId) => {
     const answer = cycle.answers.find((a) => a.playerId === playerId);
-    return answer?.value || null;
+    if (!answer) {
+      return null;
+    }
+    const answerType = valueToTypeMap[answer.value];
+    return {
+      value: answer.value,
+      className: `text-bg-${answerTypeToPillType[answerType]}`,
+    };
   };
 
   const getTeamBonusesInCycle = (cycle, teamId) => {
@@ -45,6 +60,15 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
     return tossupSums + bonusSums;
   };
 
+  const renderPlayerAnswerCell = (player, cycle, role) => {
+    const answer = getPlayerAnswerValueInCycle(cycle, player.id);
+    return (
+      <td role={role} key={player.id} className={answer?.className || ""}>
+        {answer?.value || null}
+      </td>
+    );
+  };
+
   const renderScoresheetCycleRow = (cycle) => {
     const role = currentCycle === cycle ? null : "button";
     return (
@@ -52,21 +76,17 @@ const ScoresheetTable = ({ cycles, currentCycle, teams, rules }) => {
         className={cycle === currentCycle ? "table-active" : ""}
         key={cycle.number}
       >
-        {firstTeam.players.map((player) => (
-          <td role={role} key={player.id}>
-            {getPlayerAnswerValueInCycle(cycle, player.id)}
-          </td>
-        ))}
+        {firstTeam.players.map((player) =>
+          renderPlayerAnswerCell(player, cycle, role)
+        )}
         <td role={role}>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
         <td>{getTeamScoreUpToCycle(cycle, firstTeam)}</td>
         <td>{cycle.number}</td>
         <td>{getTeamScoreUpToCycle(cycle, secondTeam)}</td>
         <td role={role}>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
-        {secondTeam.players.map((player) => (
-          <td role={role} key={player.id}>
-            {getPlayerAnswerValueInCycle(cycle, player.id)}
-          </td>
-        ))}
+        {secondTeam.players.map((player) =>
+          renderPlayerAnswerCell(player, cycle, role)
+        )}
       </tr>
     );
   };

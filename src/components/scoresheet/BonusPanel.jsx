@@ -26,7 +26,7 @@ const BonusPanel = ({
             key={index}
             className="mb-3 d-flex justify-content-between"
           >
-            <div className="p-2">Part {index + 1}</div>
+            <div className="p-2 border">Part {index + 1}</div>
             {teams
               .filter((t) => usesBouncebacks || t.id === answeringTeamId)
               .map((team) => (
