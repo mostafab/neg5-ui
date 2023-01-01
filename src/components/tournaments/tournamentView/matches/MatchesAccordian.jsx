@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import groupBy from "lodash/groupBy";
 import orderBy from "lodash/orderBy";
 import keyBy from "lodash/keyBy";
@@ -10,7 +10,6 @@ const MatchesAccordian = ({
   matches,
   teams,
   onSelectMatch,
-  openMultiple = true,
   selectedMatch = null,
   subtitleItems = true,
   shadow = false,
@@ -21,18 +20,35 @@ const MatchesAccordian = ({
     (r) => (r ? Number(r) : -1),
     ["desc"]
   );
+  const [expandedRows, setExpandedRows] = useState(
+    selectedMatch?.round ? [`${selectedMatch.round}`] : []
+  );
+  useEffect(() => {
+    const roundKey = selectedMatch?.round ? `${selectedMatch.round}` : null;
+    if (roundKey && expandedRows.indexOf(roundKey) === -1) {
+      onHeaderClick(roundKey);
+    }
+  }, [selectedMatch]);
   const teamsById = keyBy(teams, "id");
+
+  const onHeaderClick = (rowKey) => {
+    let newRows = [...expandedRows];
+    if (newRows.indexOf(rowKey) == -1) {
+      newRows.push(rowKey);
+    } else {
+      newRows = newRows.filter((r) => r !== rowKey);
+    }
+    setExpandedRows(newRows);
+  };
   return (
     <Accordian
-      defaultActiveKey={
-        selectedMatch?.round ? `${selectedMatch.round}` : undefined
-      }
-      alwaysOpen={openMultiple}
+      activeKey={expandedRows}
+      alwaysOpen={true}
       className={`MatchesAcoordian ${shadow ? "shadow-sm" : ""}`}
     >
       {roundsInOrder.map((round) => (
         <Accordian.Item eventKey={round} key={round}>
-          <Accordian.Header>
+          <Accordian.Header onClick={() => onHeaderClick(round)}>
             <b>
               Round {round} ({matchesByRound[round].length})
             </b>

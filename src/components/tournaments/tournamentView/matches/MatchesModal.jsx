@@ -29,7 +29,6 @@ const MatchesModal = ({
           shadow
           matches={matches}
           teams={teams}
-          openMultiple={false}
           selectedMatch={selectedMatch}
           onSelectMatch={onSelectMatch}
           subtitleItems={false}
