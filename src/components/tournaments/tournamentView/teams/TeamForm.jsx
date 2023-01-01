@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { InputGroup } from "react-bootstrap";
 
 import * as Yup from "yup";
@@ -12,7 +12,15 @@ import {
 } from "@components/common/forms";
 import Button from "@components/common/button";
 import { Info } from "@components/common/alerts";
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
+import { TournamentIdContext } from "@components/tournaments/common/context";
+
+import { createTeam, updateTeam } from "@api/team";
+import { doValidatedApiRequest } from "@api/common";
+import { teamCreatedOrUpdated } from "@features/tournamentView/teamsSlice";
+import { sanitizeFormValuesRecursive } from "@libs/forms";
+import { useAppDispatch } from "@store";
 
 const initialPlayerValue = () => ({
   name: "",
@@ -34,19 +42,74 @@ const initialValues = (team) => ({
 
 const validation = Yup.object({
   name: Yup.string().required("Please provide a team name."),
+  players: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Please enter a name."),
+    })
+  ),
 });
 
-const TeamForm = ({ team, readOnly = false, onCancel = null }) => {
+const TeamForm = ({
+  team,
+  readOnly = false,
+  onCancel = null,
+  onSubmitSuccess,
+}) => {
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
+  // Clear out error when the user switches teams
+  useEffect(() => {
+    setSubmitData({
+      ...submitData,
+      error: null,
+    });
+  }, [team.id, readOnly]);
+  const dispatch = useAppDispatch();
+  const tournamentId = useContext(TournamentIdContext);
+
+  const onSubmit = async (values, { resetForm }) => {
+    setSubmitData({
+      error: null,
+      submitting: true,
+    });
+    const sanitizedValues = sanitizeFormValuesRecursive(values);
+    sanitizedValues.tournamentId = tournamentId;
+    const payload = await doValidatedApiRequest(() =>
+      team.id ? updateTeam(sanitizedValues) : createTeam(sanitizedValues)
+    );
+    if (payload.errors) {
+      setSubmitData({
+        ...submitData,
+        submitting: false,
+        error: payload.errors,
+      });
+    } else {
+      setSubmitData({
+        ...submitData,
+        submitting: false,
+        error: null,
+      });
+      dispatch(teamCreatedOrUpdated(payload));
+      if (!team.id) {
+        resetForm({ values: initialValues(team) });
+      }
+      onSubmitSuccess && onSubmitSuccess(payload);
+    }
+  };
+
   return (
     <Form
       name="TeamForm"
       submitButtonText="Save"
       initialValues={initialValues(team)}
       validation={validation}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={onSubmit}
       readOnly={readOnly}
       cancelButtonText="Cancel"
       onCancel={onCancel}
+      submitting={submitData.submitting}
     >
       <ResetListener
         changeKey={team.id}
@@ -92,6 +155,7 @@ const TeamForm = ({ team, readOnly = false, onCancel = null }) => {
           panel.
         </Info>
       )}
+      {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
   );
 };

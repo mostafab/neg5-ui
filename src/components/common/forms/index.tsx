@@ -37,7 +37,7 @@ export const Form = ({
   return (
     <ReadOnlyContext.Provider value={readOnly}>
       <Formik
-        onSubmit={(values) => onSubmit(values)}
+        onSubmit={(values, actions) => onSubmit(values, actions)}
         initialValues={initialValues}
         validationSchema={validation}
         validateOnChange={false}
@@ -292,7 +292,9 @@ const ContextAwareFormButtons = ({
       )}
       <BootstrapButton variant="primary" type="submit" disabled={submitting}>
         {submitting ? "Submitting" : submitButtonText}
-        {submitting && <Spinner animation="border" size="sm" />}
+        {submitting && (
+          <Spinner animation="border" size="sm" className="ms-2" />
+        )}
       </BootstrapButton>
     </>
   );
