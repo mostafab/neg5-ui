@@ -82,18 +82,20 @@ const ScoresheetTable = ({
 
   const renderScoresheetCycleRow = (cycle) => {
     const role = currentCycle === cycle ? null : "button";
+    const isCurrentCycle = cycle === currentCycle;
     return (
-      <tr
-        className={cycle === currentCycle ? "table-active" : ""}
-        key={cycle.number}
-      >
+      <tr className={isCurrentCycle ? "table-active" : ""} key={cycle.number}>
         {orderPlayers(firstTeam.players, firstTeamOrdering).map((player) =>
           renderPlayerAnswerCell(player, cycle, role)
         )}
         <td role={role}>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
-        <td>{getTeamScoreUpToCycle(cycle, firstTeam)}</td>
+        <td className={isCurrentCycle ? "text-bg-primary" : ""}>
+          {getTeamScoreUpToCycle(cycle, firstTeam)}
+        </td>
         <td>{cycle.number}</td>
-        <td>{getTeamScoreUpToCycle(cycle, secondTeam)}</td>
+        <td className={isCurrentCycle ? "text-bg-primary" : ""}>
+          {getTeamScoreUpToCycle(cycle, secondTeam)}
+        </td>
         <td role={role}>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
         {orderPlayers(secondTeam.players, secondTeamOrdering).map((player) =>
           renderPlayerAnswerCell(player, cycle, role)

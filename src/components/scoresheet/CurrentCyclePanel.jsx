@@ -15,7 +15,6 @@ const CurrentCyclePanel = ({
   onBonus,
   onNextTossup,
   onNoAnswer,
-  scoringData,
   onUndoNeg,
   playerOrderings,
   onMovePlayer,
@@ -34,7 +33,6 @@ const CurrentCyclePanel = ({
           onClickAnswer={onClickAnswer}
           currentCycle={currentCycle}
           onNoAnswer={onNoAnswer}
-          scoringData={scoringData}
           onUndoNeg={onUndoNeg}
           playerOrderings={playerOrderings}
           onMovePlayer={onMovePlayer}

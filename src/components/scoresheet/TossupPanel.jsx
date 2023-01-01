@@ -27,14 +27,13 @@ const TeamCard = ({
   team,
   rules,
   onClickAnswer,
-  score,
   lockedOut,
   onUndoNeg,
   onMovePlayer,
   playerOrderings,
   activePlayers,
 }) => (
-  <Card title={`${team.name} (${score})`} shadow={false}>
+  <Card title={team.name} shadow={false}>
     {lockedOut && (
       <Button onClick={() => onUndoNeg(team.id)} type="danger">
         Undo Neg
@@ -46,7 +45,7 @@ const TeamCard = ({
           <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
             <span className="overflow-auto">{player.name}</span>
             <span
-              className="position-absolute p-2 text-bg-primary small"
+              className="position-absolute p-2 text-bg-secondary small"
               style={{ right: "0", zIndex: 2 }}
             >
               <Icon
@@ -97,7 +96,6 @@ const TossupPanel = ({
   currentCycle,
   onBack,
   onNoAnswer,
-  scoringData,
   onUndoNeg,
   playerOrderings,
   onMovePlayer,
@@ -108,7 +106,6 @@ const TossupPanel = ({
       {teams.map((team) => (
         <Col lg={6} md={6} sm={6} xs={6} key={team.id}>
           <TeamCard
-            score={scoringData.teams?.[team.id]?.score || 0}
             team={team}
             rules={rules}
             onClickAnswer={onClickAnswer}
@@ -129,7 +126,7 @@ const TossupPanel = ({
             Back
           </Button>
         )}
-        <Button type="outline-primary" onClick={onNoAnswer}>
+        <Button type="outline-secondary" onClick={onNoAnswer}>
           Dead Tossup
         </Button>
       </Col>

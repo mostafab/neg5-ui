@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
 import times from "lodash/times";
-import keyBy from "lodash/keyBy";
 import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
 
@@ -10,14 +9,18 @@ import { CycleStage, AnswerType, Direction } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
 
+const initialBonuses = (rules) =>
+  times(rules.partsPerBonus, () => ({
+    answeringTeamId: null,
+    value: rules.bonusPointValue,
+  }));
+
 const initialCurrentCycle = (rules) => ({
   number: 1,
   answers: [],
   stage: CycleStage.Tossup,
-  bonuses: times(rules.partsPerBonus, () => ({
-    answeringTeamId: null,
-    value: rules.bonusPointValue,
-  })),
+  bonuses: initialBonuses(rules),
+  activePlayers: [],
 });
 
 const scoresheetInitialState = (rules, teams) => {
@@ -39,38 +42,6 @@ const scoresheetInitialState = (rules, teams) => {
   };
 };
 
-const recalculateScoringData = (scoresheetState, teams) => {
-  const playerTeamIds = mapValues(
-    keyBy(
-      teams.flatMap((t) => t.players),
-      "id"
-    ),
-    (v) => v.teamId
-  );
-  const result = {
-    teams: {},
-  };
-  teams.forEach((t) => {
-    result.teams[t.id] = {};
-    result.teams[t.id].score = 0;
-  });
-
-  const processCycle = ({ answers, bonuses }) => {
-    answers.forEach(({ playerId, value }) => {
-      const teamId = playerTeamIds[playerId];
-      result.teams[teamId].score += value;
-    });
-    bonuses
-      .filter((b) => b.answeringTeamId)
-      .forEach(({ answeringTeamId, value }) => {
-        result.teams[answeringTeamId].score += value;
-      });
-  };
-  scoresheetState.cycles.forEach(processCycle);
-  processCycle(scoresheetState.currentCycle);
-  return result;
-};
-
 const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
@@ -79,10 +50,6 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const [scoresheetState, setScoresheetState] = useState(
     scoresheetInitialState(rules, scoresheetTeams)
   );
-  const [scoringData, setScoringData] = useState({});
-  useEffect(() => {
-    setScoringData(recalculateScoringData(scoresheetState, scoresheetTeams));
-  }, [scoresheetState]);
 
   const onBack = () => {
     const nextState = produce(scoresheetState, (draft) => {
@@ -116,7 +83,10 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const onNoAnswer = () => {
     const nextState = produce(scoresheetState, (draft) => {
       // Clear out bonuses since this tossup wasn't answered successfully.
-      draft.currentCycle.bonuses = [];
+      draft.currentCycle.bonuses = initialBonuses(rules);
+      draft.currentCycle.activePlayers = Object.values(
+        draft.activePlayers
+      ).flatMap((p) => p);
       draft.cycles.push(draft.currentCycle);
       const nextCycle = initialCurrentCycle(rules);
       nextCycle.number = draft.currentCycle.number + 1;
@@ -158,6 +128,9 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
 
   const onNextTossup = () => {
     const nextState = produce(scoresheetState, (draft) => {
+      draft.currentCycle.activePlayers = Object.values(
+        draft.activePlayers
+      ).flatMap((p) => p);
       draft.cycles.push(draft.currentCycle);
       const nextCycle = initialCurrentCycle(rules);
       nextCycle.number = draft.currentCycle.number + 1;
@@ -220,7 +193,6 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           onBonus={onBonus}
           onNextTossup={onNextTossup}
           onNoAnswer={onNoAnswer}
-          scoringData={scoringData}
           onUndoNeg={onUndoNeg}
           playerOrderings={scoresheetState.playerOrderings}
           onMovePlayer={onMovePlayer}
