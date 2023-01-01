@@ -42,6 +42,7 @@ const MatchesModal = ({
           rules={rules}
           playersById={playersById}
           phases={phases}
+          onSubmitSuccess={(result) => onSelectMatch(result)}
         />
       </Col>
     </Row>

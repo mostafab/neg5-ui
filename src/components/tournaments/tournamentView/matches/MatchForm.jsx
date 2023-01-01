@@ -5,6 +5,9 @@ import orderBy from "lodash/orderBy";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapValues";
 
+import { useAppDispatch } from "@store";
+import { matchCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
+
 import {
   Form,
   Number,
@@ -104,6 +107,7 @@ const MatchForm = ({
   phases,
   readOnly = false,
   onCancel = null,
+  onSubmitSuccess,
 }) => {
   const teamOptions = getTeamOptions(teams);
   const phaseOptions = getPhaseOptions(phases);
@@ -112,7 +116,7 @@ const MatchForm = ({
     keyBy(tossupValues, "value"),
     (v) => v.answerType
   );
-
+  const dispatch = useAppDispatch();
   const [submitData, setSubmitData] = useState({
     submitting: false,
     error: null,
@@ -133,7 +137,6 @@ const MatchForm = ({
     });
     const sanitizedValues = sanitizeFormValuesRecursive(values);
     sanitizedValues.tournamentId = tournamentId;
-    console.log(sanitizedValues);
     const payload = await doValidatedApiRequest(() =>
       match.id ? updateMatch(sanitizedValues) : createMatch(sanitizedValues)
     );
@@ -149,11 +152,13 @@ const MatchForm = ({
         submitting: false,
         error: null,
       });
-      // dispatch(teamCreatedOrUpdated(payload));
-      // if (!team.id) {
-      //   resetForm({ values: initialValues(team) });
-      // }
-      // onSubmitSuccess && onSubmitSuccess(payload);
+      dispatch(
+        matchCreatedOrUpdated({ match: payload, oldId: match.id || null })
+      );
+      if (!match.id) {
+        resetForm({ values: initialValues(match) });
+      }
+      onSubmitSuccess && onSubmitSuccess(payload);
     }
   };
 

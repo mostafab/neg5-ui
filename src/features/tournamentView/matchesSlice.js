@@ -9,7 +9,18 @@ const initialState = {
 const tournamentMatchesSlice = createSlice({
   name: "tournamentMatches",
   initialState,
-  reducers: {},
+  reducers: {
+    matchCreatedOrUpdated: (state, action) => {
+      const { oldId, match } = action.payload;
+      // Replace old match
+      if (oldId) {
+        const matchIndex = state.matches.findIndex((t) => t.id === oldId);
+        state.matches[matchIndex] = match;
+      } else {
+        state.matches.push(match);
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentMatchesAsync.fulfilled, (state, action) => {
       state.matches = action.payload;
@@ -25,3 +36,5 @@ export const loadTournamentMatchesAsync = createAsyncThunk(
 );
 
 export const tournamentMatchesReducer = tournamentMatchesSlice.reducer;
+
+export const { matchCreatedOrUpdated } = tournamentMatchesSlice.actions;

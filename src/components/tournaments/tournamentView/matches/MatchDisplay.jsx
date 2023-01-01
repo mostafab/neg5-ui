@@ -6,7 +6,14 @@ import Card from "@components/common/cards";
 
 import MatchForm from "./MatchForm";
 
-const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
+const MatchDisplay = ({
+  selectedMatch,
+  teams,
+  rules,
+  playersById,
+  phases,
+  onSubmitSuccess,
+}) => {
   const match = selectedMatch;
   const [readOnly, setReadOnly] = useState(true);
   return (
@@ -43,6 +50,10 @@ const MatchDisplay = ({ selectedMatch, teams, rules, playersById, phases }) => {
         phases={phases}
         readOnly={readOnly && match.id}
         onCancel={() => setReadOnly(true)}
+        onSubmitSuccess={(result) => {
+          setReadOnly(true);
+          onSubmitSuccess && onSubmitSuccess(result);
+        }}
       />
     </Card>
   );
