@@ -3,7 +3,8 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 import Icon from "@components/common/icon";
 
-const toggleWrapper = forwardRef(({ children, onClick }, ref) => {
+/* eslint-disable react/display-name */
+const ToggleWrapper = forwardRef(({ children, onClick }, ref) => {
   return (
     <a
       role="button"
@@ -34,7 +35,7 @@ const renderItem = (action) => {
 const DropdownActions = ({ className = "", actions = [] }) => {
   return (
     <Dropdown className={className}>
-      <Dropdown.Toggle size="sm" as={toggleWrapper}>
+      <Dropdown.Toggle size="sm" as={ToggleWrapper}>
         <Icon name="ThreeDots" size="20" />
       </Dropdown.Toggle>
       <Dropdown.Menu className="br-0">

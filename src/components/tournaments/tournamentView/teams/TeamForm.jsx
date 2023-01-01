@@ -151,8 +151,7 @@ const TeamForm = ({
       />
       {!team.id && (
         <Info className="mt-3">
-          After creating a team, you can assign it a pool in the "Team Pools"
-          panel.
+          After creating a team, you can assign it a pool in the Team Pools panel.
         </Info>
       )}
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
