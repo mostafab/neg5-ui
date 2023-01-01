@@ -33,9 +33,16 @@ const TeamCard = ({
   playerOrderings,
   activePlayers,
 }) => (
-  <Card title={team.name} shadow={false}>
+  <Card
+    title={<span className={lockedOut ? "text-dark" : ""}>{team.name}</span>}
+    shadow={false}
+  >
     {lockedOut && (
-      <Button onClick={() => onUndoNeg(team.id)} type="danger">
+      <Button
+        className="d-block w-100"
+        onClick={() => onUndoNeg(team.id)}
+        type="danger"
+      >
         Undo Neg
       </Button>
     )}
@@ -44,32 +51,34 @@ const TeamCard = ({
         <InputGroup className="mb-3" key={player.id}>
           <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
             <span className="overflow-auto">{player.name}</span>
-            <span
-              className="position-absolute p-2 text-bg-secondary small"
-              style={{ right: "0", zIndex: 2 }}
-            >
-              <Icon
-                name="ArrowUp"
-                className="me-2"
-                onClick={() =>
-                  onMovePlayer({
-                    teamId: team.id,
-                    index,
-                    direction: Direction.Up,
-                  })
-                }
-              />
-              <Icon
-                name="ArrowDown"
-                onClick={() =>
-                  onMovePlayer({
-                    teamId: team.id,
-                    index,
-                    direction: Direction.Down,
-                  })
-                }
-              />
-            </span>
+            {team.players.length > 1 && (
+              <span
+                className="position-absolute p-2 text-bg-secondary small"
+                style={{ right: "0", zIndex: 2 }}
+              >
+                <Icon
+                  name="ArrowUp"
+                  className="me-2"
+                  onClick={() =>
+                    onMovePlayer({
+                      teamId: team.id,
+                      index,
+                      direction: Direction.Up,
+                    })
+                  }
+                />
+                <Icon
+                  name="ArrowDown"
+                  onClick={() =>
+                    onMovePlayer({
+                      teamId: team.id,
+                      index,
+                      direction: Direction.Down,
+                    })
+                  }
+                />
+              </span>
+            )}
           </InputGroup.Text>
           {activePlayers.indexOf(player.id) >= 0 &&
             rules.tossupValues.map((tv) => (
