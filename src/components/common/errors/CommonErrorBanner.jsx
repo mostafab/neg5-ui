@@ -9,11 +9,14 @@ export const CommonErrorBanner = ({ errors = [] }) => {
     errors.length === 1 ? (
       errors[0]
     ) : (
-      <ul>
-        {errors.map((e, index) => (
-          <li key={index}>{e}</li>
-        ))}
-      </ul>
+      <>
+        <p>There were errors submitting your request:</p>
+        <ul>
+          {errors.map((e, index) => (
+            <li key={index}>{e}</li>
+          ))}
+        </ul>
+      </>
     );
 
   return <Error>{children}</Error>;

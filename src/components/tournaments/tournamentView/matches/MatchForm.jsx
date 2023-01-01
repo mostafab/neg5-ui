@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col, InputGroup } from "react-bootstrap";
 import * as Yup from "yup";
 import orderBy from "lodash/orderBy";
@@ -15,7 +15,14 @@ import {
   Checkbox,
 } from "@components/common/forms";
 import { X } from "@components/common/icon";
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
+import { TournamentIdContext } from "@components/tournaments/common/context";
+
 import { getTeamOptions, getPhaseOptions } from "@libs/tournamentForms";
+import { sanitizeFormValuesRecursive } from "@libs/forms";
+
+import { doValidatedApiRequest } from "@api/common";
+import { createMatch, updateMatch } from "@api/match";
 
 const mapTeamChangeToNewPlayers = (selectedTeamId, teams, tossupValues) => {
   const matchingTeam = teams.find((t) => t.id === selectedTeamId);
@@ -39,6 +46,7 @@ const initialTeamsValue = () => ({
 });
 
 const initialValues = (match, tossupValues) => ({
+  id: match.id || "",
   round: match.round || "",
   tossupsHeard: match.tossupsHeard || "",
   room: match.room || "",
@@ -104,13 +112,59 @@ const MatchForm = ({
     keyBy(tossupValues, "value"),
     (v) => v.answerType
   );
+
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
+  // Clear out error when the user switches teams
+  useEffect(() => {
+    setSubmitData({
+      ...submitData,
+      error: null,
+    });
+  }, [match.id, readOnly]);
+
+  const tournamentId = useContext(TournamentIdContext);
+  const onSubmit = async (values, { resetForm }) => {
+    setSubmitData({
+      error: null,
+      submitting: true,
+    });
+    const sanitizedValues = sanitizeFormValuesRecursive(values);
+    sanitizedValues.tournamentId = tournamentId;
+    console.log(sanitizedValues);
+    const payload = await doValidatedApiRequest(() =>
+      match.id ? updateMatch(sanitizedValues) : createMatch(sanitizedValues)
+    );
+    if (payload.errors) {
+      setSubmitData({
+        ...submitData,
+        submitting: false,
+        error: payload.errors,
+      });
+    } else {
+      setSubmitData({
+        ...submitData,
+        submitting: false,
+        error: null,
+      });
+      // dispatch(teamCreatedOrUpdated(payload));
+      // if (!team.id) {
+      //   resetForm({ values: initialValues(team) });
+      // }
+      // onSubmitSuccess && onSubmitSuccess(payload);
+    }
+  };
+
   return (
     <Form
       name="MatchForm"
       initialValues={initialValues(match, tossupValues)}
+      submitting={submitData.submitting}
       submitButtonText="Save"
       validation={validation}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={onSubmit}
       readOnly={readOnly}
       onCancel={onCancel}
     >
@@ -262,6 +316,7 @@ const MatchForm = ({
           <Text textarea name="notes" label="Notes" />
         </Col>
       </Row>
+      {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
   );
 };
