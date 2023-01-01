@@ -17,24 +17,59 @@ const TournamentMatchesPanel = ({
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
+  const enoughTeamsToAddMatch = teams.length >= 2;
   return (
     <>
       <Card
         title={
           <div className="d-flex justify-content-between">
             <span>Matches ({matches.length})</span>
-            <span className="d-flex justify-content-between">
-              <Add message="Add Match" onClick={() => setSelectedMatch({})} />
-              <Icon
-                className="ms-2"
-                name="Clipboard"
-                message="Start a Scoresheet"
-                onClick={() => setShowScoresheet(true)}
-              />
-            </span>
+            {enoughTeamsToAddMatch && matches.length > 0 && (
+              <span className="d-flex justify-content-between">
+                <Add message="Add Match" onClick={() => setSelectedMatch({})} />
+                <Icon
+                  className="ms-2"
+                  name="Clipboard"
+                  message="Start a Scoresheet"
+                  onClick={() => setShowScoresheet(true)}
+                />
+              </span>
+            )}
           </div>
         }
       >
+        {!enoughTeamsToAddMatch && (
+          <div className="d-flex p-2 justify-content-center">
+            Add at least two teams to add matches.
+          </div>
+        )}
+        {enoughTeamsToAddMatch && matches.length === 0 && (
+          <div className="d-flex p-2 justify-content-center">
+            <div style={{ textAlign: "center" }}>
+              No matches have been added yet. You can{" "}
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedMatch({});
+                }}
+                href=""
+              >
+                manually record
+              </a>{" "}
+              a match, or use the{" "}
+              <a
+                href=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowScoresheet(true);
+                }}
+              >
+                scoresheet
+              </a>{" "}
+              for future matches.
+            </div>
+          </div>
+        )}
         <MatchesAccordian
           matches={matches}
           teams={teams}

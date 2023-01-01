@@ -19,6 +19,7 @@ const CurrentCyclePanel = ({
   playerOrderings,
   onMovePlayer,
   activePlayers,
+  onToggleActive,
 }) => {
   const title = `${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
@@ -37,6 +38,7 @@ const CurrentCyclePanel = ({
           playerOrderings={playerOrderings}
           onMovePlayer={onMovePlayer}
           activePlayers={activePlayers}
+          onToggleActive={onToggleActive}
         />
       )}
       {currentCycle.stage === CycleStage.Bonus && (

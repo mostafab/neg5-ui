@@ -1,12 +1,10 @@
 import React from "react";
-import { Row, Col, InputGroup } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
-import { answerTypeToPillType } from "@libs/tournamentForms";
-import { AnswerType, Direction } from "@libs/enums";
-import { orderPlayers } from "@libs/scoresheet";
-import Card from "@components/common/cards";
+import { AnswerType } from "@libs/enums";
 import Button from "@components/common/button";
-import Icon from "@components/common/icon";
+
+import TeamCard from "./TeamCard";
 
 const teamIsLockedOut = (currentCycle, team, rules) => {
   if (currentCycle.answers.length === 0) {
@@ -23,72 +21,6 @@ const teamIsLockedOut = (currentCycle, team, rules) => {
   });
 };
 
-const TeamCard = ({
-  team,
-  rules,
-  onClickAnswer,
-  lockedOut,
-  onUndoNeg,
-  onMovePlayer,
-  playerOrderings,
-  activePlayers,
-}) => (
-  <Card title={team.name} shadow={false}>
-    {lockedOut && (
-      <Button onClick={() => onUndoNeg(team.id)} type="danger">
-        Undo Neg
-      </Button>
-    )}
-    {!lockedOut &&
-      orderPlayers(team.players, playerOrderings).map((player, index) => (
-        <InputGroup className="mb-3" key={player.id}>
-          <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
-            <span className="overflow-auto">{player.name}</span>
-            <span
-              className="position-absolute p-2 text-bg-secondary small"
-              style={{ right: "0", zIndex: 2 }}
-            >
-              <Icon
-                name="ArrowUp"
-                className="me-2"
-                onClick={() =>
-                  onMovePlayer({
-                    teamId: team.id,
-                    index,
-                    direction: Direction.Up,
-                  })
-                }
-              />
-              <Icon
-                name="ArrowDown"
-                onClick={() =>
-                  onMovePlayer({
-                    teamId: team.id,
-                    index,
-                    direction: Direction.Down,
-                  })
-                }
-              />
-            </span>
-          </InputGroup.Text>
-          {activePlayers.indexOf(player.id) >= 0 &&
-            rules.tossupValues.map((tv) => (
-              <Button
-                type={answerTypeToPillType[tv.answerType]}
-                key={tv.value}
-                className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
-                onClick={() =>
-                  onClickAnswer({ playerId: player.id, value: tv.value })
-                }
-              >
-                {tv.value}
-              </Button>
-            ))}
-        </InputGroup>
-      ))}
-  </Card>
-);
-
 const TossupPanel = ({
   teams,
   rules,
@@ -100,6 +32,7 @@ const TossupPanel = ({
   playerOrderings,
   onMovePlayer,
   activePlayers,
+  onToggleActive,
 }) => (
   <>
     <Row className="mb-3">
@@ -114,6 +47,7 @@ const TossupPanel = ({
             playerOrderings={playerOrderings[team.id]}
             onMovePlayer={onMovePlayer}
             activePlayers={activePlayers[team.id]}
+            onToggleActive={onToggleActive}
           />
         </Col>
       ))}
