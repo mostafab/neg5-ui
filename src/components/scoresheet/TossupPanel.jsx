@@ -1,12 +1,10 @@
 import React from "react";
-import { Row, Col, InputGroup } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
-import { answerTypeToPillType } from "@libs/tournamentForms";
-import { AnswerType, Direction } from "@libs/enums";
-import { orderPlayers } from "@libs/scoresheet";
-import Card from "@components/common/cards";
+import { AnswerType } from "@libs/enums";
 import Button from "@components/common/button";
-import DropdownActions from "@components/common/DropdownActions";
+
+import TeamCard from "./TeamCard";
 
 const teamIsLockedOut = (currentCycle, team, rules) => {
   if (currentCycle.answers.length === 0) {
@@ -22,91 +20,6 @@ const teamIsLockedOut = (currentCycle, team, rules) => {
     return answers.some((a) => a.playerId === p.id && negValues.has(a.value));
   });
 };
-
-const TeamCard = ({
-  team,
-  rules,
-  onClickAnswer,
-  lockedOut,
-  onUndoNeg,
-  onMovePlayer,
-  playerOrderings,
-  activePlayers,
-  onToggleActive,
-}) => (
-  <Card
-    title={<span className={lockedOut ? "text-muted" : ""}>{team.name}</span>}
-    shadow={false}
-  >
-    {lockedOut && (
-      <Button
-        className="d-block w-100"
-        onClick={() => onUndoNeg(team.id)}
-        type="danger"
-      >
-        Undo Neg
-      </Button>
-    )}
-    {!lockedOut &&
-      orderPlayers(team.players, playerOrderings).map((player, index) => {
-        const isActive = activePlayers.indexOf(player.id) >= 0;
-        const actions = [
-          {
-            label: isActive ? "Mark inactive" : "Mark active",
-            onClick: () => onToggleActive(player),
-          },
-        ];
-        if (team.players.length > 1) {
-          actions.push(
-            {
-              label: "Move up",
-              onClick: () =>
-                onMovePlayer({
-                  teamId: team.id,
-                  index,
-                  direction: Direction.Up,
-                }),
-            },
-            {
-              label: "Move down",
-              onClick: () =>
-                onMovePlayer({
-                  teamId: team.id,
-                  index,
-                  direction: Direction.Down,
-                }),
-            }
-          );
-        }
-        const dropdownActions = <DropdownActions actions={actions} />;
-        return (
-          <InputGroup className="mb-3" key={player.id}>
-            <InputGroup.Text
-              className={`w-100 overflow-auto d-flex justify-content-between ${
-                isActive ? "" : "text-muted"
-              }`}
-            >
-              <span className="overflow-auto">{player.name}</span>
-              {dropdownActions}
-            </InputGroup.Text>
-            {isActive &&
-              rules.tossupValues.map((tv) => (
-                <Button
-                  type={answerTypeToPillType[tv.answerType]}
-                  key={tv.value}
-                  className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
-                  onClick={() =>
-                    onClickAnswer({ playerId: player.id, value: tv.value })
-                  }
-                >
-                  {tv.value}
-                </Button>
-              ))}
-          </InputGroup>
-        );
-      })}
-  </Card>
-);
 
 const TossupPanel = ({
   teams,
