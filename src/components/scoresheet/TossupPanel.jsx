@@ -6,7 +6,7 @@ import { AnswerType, Direction } from "@libs/enums";
 import { orderPlayers } from "@libs/scoresheet";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
-import Icon from "@components/common/icon";
+import DropdownActions from "@components/common/DropdownActions";
 
 const teamIsLockedOut = (currentCycle, team, rules) => {
   if (currentCycle.answers.length === 0) {
@@ -32,6 +32,7 @@ const TeamCard = ({
   onMovePlayer,
   playerOrderings,
   activePlayers,
+  onToggleActive,
 }) => (
   <Card
     title={<span className={lockedOut ? "text-dark" : ""}>{team.name}</span>}
@@ -47,54 +48,59 @@ const TeamCard = ({
       </Button>
     )}
     {!lockedOut &&
-      orderPlayers(team.players, playerOrderings).map((player, index) => (
-        <InputGroup className="mb-3" key={player.id}>
-          <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
-            <span className="overflow-auto">{player.name}</span>
-            {team.players.length > 1 && (
-              <span
-                className="position-absolute p-2 text-bg-secondary small"
-                style={{ right: "0", zIndex: 2 }}
-              >
-                <Icon
-                  name="ArrowUp"
-                  className="me-2"
+      orderPlayers(team.players, playerOrderings).map((player, index) => {
+        const isActive = activePlayers.indexOf(player.id) >= 0;
+        const actions = [
+          {
+            label: isActive ? "Mark inactive" : "Mark active",
+            onClick: () => onToggleActive(player),
+          },
+        ];
+        if (team.players.length > 1) {
+          actions.unshift(
+            {
+              label: "Move up",
+              onClick: () =>
+                onMovePlayer({
+                  teamId: team.id,
+                  index,
+                  direction: Direction.Up,
+                }),
+            },
+            {
+              label: "Move down",
+              onClick: () =>
+                onMovePlayer({
+                  teamId: team.id,
+                  index,
+                  direction: Direction.Down,
+                }),
+            }
+          );
+        }
+        const dropdownActions = <DropdownActions actions={actions} />;
+        return (
+          <InputGroup className="mb-3" key={player.id}>
+            <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
+              <span className="overflow-auto">{player.name}</span>
+              {dropdownActions}
+            </InputGroup.Text>
+            {isActive &&
+              rules.tossupValues.map((tv) => (
+                <Button
+                  type={answerTypeToPillType[tv.answerType]}
+                  key={tv.value}
+                  className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
                   onClick={() =>
-                    onMovePlayer({
-                      teamId: team.id,
-                      index,
-                      direction: Direction.Up,
-                    })
+                    onClickAnswer({ playerId: player.id, value: tv.value })
                   }
-                />
-                <Icon
-                  name="ArrowDown"
-                  onClick={() =>
-                    onMovePlayer({
-                      teamId: team.id,
-                      index,
-                      direction: Direction.Down,
-                    })
-                  }
-                />
-              </span>
-            )}
-          </InputGroup.Text>
-          {activePlayers.indexOf(player.id) >= 0 &&
-            rules.tossupValues.map((tv) => (
-              <Button
-                type={answerTypeToPillType[tv.answerType]}
-                key={tv.value}
-                className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
-                onClick={() =>
-                  onClickAnswer({ playerId: player.id, value: tv.value })
-                }
-              >
-                {tv.value}
-              </Button>
-            ))}
-        </InputGroup>
-      ))}
+                >
+                  {tv.value}
+                </Button>
+              ))}
+          </InputGroup>
+        );
+      })}
   </Card>
 );
 
@@ -109,6 +115,7 @@ const TossupPanel = ({
   playerOrderings,
   onMovePlayer,
   activePlayers,
+  onToggleActive,
 }) => (
   <>
     <Row className="mb-3">
@@ -123,6 +130,7 @@ const TossupPanel = ({
             playerOrderings={playerOrderings[team.id]}
             onMovePlayer={onMovePlayer}
             activePlayers={activePlayers[team.id]}
+            onToggleActive={onToggleActive}
           />
         </Col>
       ))}

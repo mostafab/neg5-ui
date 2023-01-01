@@ -161,6 +161,23 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
     });
     setScoresheetState(nextState);
   };
+
+  const onToggleActive = ({ id, teamId }) => {
+    const nextState = produce(scoresheetState, (draft) => {
+      const index = draft.activePlayers[teamId].findIndex(
+        (playerId) => playerId === id
+      );
+      if (index === -1) {
+        draft.activePlayers[teamId].push(id);
+      } else {
+        draft.activePlayers[teamId] = draft.activePlayers[teamId].filter(
+          (playerId) => playerId !== id
+        );
+      }
+    });
+    setScoresheetState(nextState);
+  };
+
   return (
     <Row>
       <Col
@@ -197,6 +214,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
           playerOrderings={scoresheetState.playerOrderings}
           onMovePlayer={onMovePlayer}
           activePlayers={scoresheetState.activePlayers}
+          onToggleActive={onToggleActive}
         />
       </Col>
     </Row>
