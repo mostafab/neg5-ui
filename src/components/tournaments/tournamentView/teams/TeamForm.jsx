@@ -18,7 +18,7 @@ import { TournamentIdContext } from "@components/tournaments/common/context";
 
 import { createTeam, updateTeam } from "@api/team";
 import { doValidatedApiRequest } from "@api/common";
-import { teamCreatedOrUpdated } from "features/tournamentView/teamsSlice";
+import { teamCreatedOrUpdated } from "@features/tournamentView/teamsSlice";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 import { useAppDispatch } from "@store";
 
@@ -94,9 +94,8 @@ const TeamForm = ({
       dispatch(teamCreatedOrUpdated(payload));
       if (!team.id) {
         resetForm({ values: initialValues(team) });
-      } else {
-        onSubmitSuccess && onSubmitSuccess();
       }
+      onSubmitSuccess && onSubmitSuccess(payload);
     }
   };
 

@@ -7,7 +7,7 @@ import DropdownActions from "@components/common/DropdownActions";
 import TeamForm from "./TeamForm";
 import TeamMatches from "./TeamMatches";
 
-const TeamDisplay = ({ team, matches, teams }) => {
+const TeamDisplay = ({ team, matches, teams, onSubmitSuccess }) => {
   const [readOnly, setReadOnly] = useState(true);
   return (
     <Card>
@@ -33,7 +33,14 @@ const TeamDisplay = ({ team, matches, teams }) => {
             team={team}
             readOnly={readOnly && team.id}
             onCancel={team.id ? () => setReadOnly(true) : null}
-            onSubmitSuccess={team.id ? () => setReadOnly(true) : null}
+            onSubmitSuccess={
+              team.id
+                ? (result) => {
+                    setReadOnly(true);
+                    onSubmitSuccess(result);
+                  }
+                : null
+            }
           />
         </Col>
         {team.id && (

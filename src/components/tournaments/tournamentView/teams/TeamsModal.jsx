@@ -28,7 +28,12 @@ const TeamsModal = ({ matches, teams, selectedTeam, onHide, onSelectTeam }) => (
         />
       </Col>
       <Col lg={9} md={8} sm={12}>
-        <TeamDisplay team={selectedTeam} matches={matches} teams={teams} />
+        <TeamDisplay
+          team={selectedTeam}
+          matches={matches}
+          teams={teams}
+          onSubmitSuccess={onSelectTeam}
+        />
       </Col>
     </Row>
   </Modal>
