@@ -10,9 +10,9 @@ export const CommonErrorBanner = ({ errors = [] }) => {
       errors[0]
     ) : (
       <ul>
-        {errors.map((e, index) => {
-          <li key={index}>{e}</li>;
-        })}
+        {errors.map((e, index) => (
+          <li key={index}>{e}</li>
+        ))}
       </ul>
     );
 
