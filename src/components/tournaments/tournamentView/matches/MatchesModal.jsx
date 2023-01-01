@@ -29,7 +29,6 @@ const MatchesModal = ({
           shadow
           matches={matches}
           teams={teams}
-          openMultiple={false}
           selectedMatch={selectedMatch}
           onSelectMatch={onSelectMatch}
           subtitleItems={false}
@@ -42,6 +41,7 @@ const MatchesModal = ({
           rules={rules}
           playersById={playersById}
           phases={phases}
+          onSubmitSuccess={(result) => onSelectMatch(result)}
         />
       </Col>
     </Row>

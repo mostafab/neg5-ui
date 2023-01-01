@@ -19,30 +19,28 @@ const TournamentMatchesPanel = ({
   const [showScoresheet, setShowScoresheet] = useState(false);
   return (
     <>
-      {
-        <Card
-          title={
-            <div className="d-flex justify-content-between">
-              <span>Matches ({matches.length})</span>
-              <span className="d-flex justify-content-between">
-                <Add message="Add Match" onClick={() => setSelectedMatch({})} />
-                <Icon
-                  className="ms-2"
-                  name="Clipboard"
-                  message="Start a Scoresheet"
-                  onClick={() => setShowScoresheet(true)}
-                />
-              </span>
-            </div>
-          }
-        >
-          <MatchesAccordian
-            matches={matches}
-            teams={teams}
-            onSelectMatch={(match) => setSelectedMatch(match)}
-          />
-        </Card>
-      }
+      <Card
+        title={
+          <div className="d-flex justify-content-between">
+            <span>Matches ({matches.length})</span>
+            <span className="d-flex justify-content-between">
+              <Add message="Add Match" onClick={() => setSelectedMatch({})} />
+              <Icon
+                className="ms-2"
+                name="Clipboard"
+                message="Start a Scoresheet"
+                onClick={() => setShowScoresheet(true)}
+              />
+            </span>
+          </div>
+        }
+      >
+        <MatchesAccordian
+          matches={matches}
+          teams={teams}
+          onSelectMatch={(match) => setSelectedMatch(match)}
+        />
+      </Card>
       {selectedMatch && (
         <MatchesModal
           matches={matches}
