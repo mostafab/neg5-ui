@@ -35,7 +35,7 @@ const TeamCard = ({
   onToggleActive,
 }) => (
   <Card
-    title={<span className={lockedOut ? "text-dark" : ""}>{team.name}</span>}
+    title={<span className={lockedOut ? "text-muted" : ""}>{team.name}</span>}
     shadow={false}
   >
     {lockedOut && (
@@ -57,7 +57,7 @@ const TeamCard = ({
           },
         ];
         if (team.players.length > 1) {
-          actions.unshift(
+          actions.push(
             {
               label: "Move up",
               onClick: () =>
@@ -81,7 +81,11 @@ const TeamCard = ({
         const dropdownActions = <DropdownActions actions={actions} />;
         return (
           <InputGroup className="mb-3" key={player.id}>
-            <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
+            <InputGroup.Text
+              className={`w-100 overflow-auto d-flex justify-content-between ${
+                isActive ? "" : "text-muted"
+              }`}
+            >
               <span className="overflow-auto">{player.name}</span>
               {dropdownActions}
             </InputGroup.Text>
