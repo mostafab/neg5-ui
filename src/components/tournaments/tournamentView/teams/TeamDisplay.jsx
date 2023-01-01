@@ -33,6 +33,7 @@ const TeamDisplay = ({ team, matches, teams }) => {
             team={team}
             readOnly={readOnly && team.id}
             onCancel={team.id ? () => setReadOnly(true) : null}
+            onSubmitSuccess={team.id ? () => setReadOnly(true) : null}
           />
         </Col>
         {team.id && (

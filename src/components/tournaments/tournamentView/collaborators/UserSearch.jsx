@@ -56,7 +56,6 @@ const UserSearch = ({
   };
 
   const onClickUser = (user) => {
-    console.log(user);
     setShowResults(false);
   };
 

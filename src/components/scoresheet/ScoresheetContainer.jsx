@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
 import times from "lodash/times";
