@@ -65,7 +65,7 @@ const TeamForm = ({
       ...submitData,
       error: null,
     });
-  }, [team.id]);
+  }, [team.id, readOnly]);
   const dispatch = useAppDispatch();
   const tournamentId = useContext(TournamentIdContext);
 
