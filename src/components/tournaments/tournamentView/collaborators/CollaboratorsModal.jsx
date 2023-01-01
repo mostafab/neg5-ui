@@ -6,6 +6,7 @@ import { Info } from "@components/common/alerts";
 import UserSearch from "./UserSearch";
 import CollaboratorsList from "./CollaboratorsList";
 
+/* eslint-disable react/no-unescaped-entities */
 const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => (
   <Modal size="md" title="Update Collaborators" onHide={onHide}>
     <UserSearch

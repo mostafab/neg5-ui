@@ -151,7 +151,7 @@ const TeamForm = ({
       />
       {!team.id && (
         <Info className="mt-3">
-          After creating a team, you can assign it a pool in the "Team Pools"
+          After creating a team, you can assign it a pool in the Team Pools
           panel.
         </Info>
       )}

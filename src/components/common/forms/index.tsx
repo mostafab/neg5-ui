@@ -313,7 +313,8 @@ const CommonFormElementWrapper = ({
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
-  const readOnly = isDisplay || useReadOnlyContext();
+  const inReadOnlyContext = useReadOnlyContext();
+  const readOnly = isDisplay || inReadOnlyContext;
   const internalOnChange = (e) => {
     field.onChange(e);
     onChange && onChange(e.target.value);

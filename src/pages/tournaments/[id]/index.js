@@ -7,7 +7,7 @@ const TournamentPage = () => (
     <TournamentRootView />
   </WithTournamentAccess>
 );
-
+/* eslint-disable react/display-name */
 TournamentPage.getLayout = (page) => (
   <AuthenticatedLayout>{page}</AuthenticatedLayout>
 );

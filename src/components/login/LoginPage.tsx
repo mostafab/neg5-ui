@@ -43,7 +43,7 @@ const LoginPage = ({
       />
       <div className="mt-3">
         <p className="mb-0 text-center">
-          Don't have an account?{" "}
+          {"Don't have an account? "}
           <a
             role="button"
             className="text-primary"
