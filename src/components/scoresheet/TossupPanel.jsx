@@ -27,13 +27,13 @@ const TeamCard = ({
   team,
   rules,
   onClickAnswer,
-  score,
   lockedOut,
   onUndoNeg,
   onMovePlayer,
   playerOrderings,
+  activePlayers,
 }) => (
-  <Card title={`${team.name} (${score})`} shadow={false}>
+  <Card title={team.name} shadow={false}>
     {lockedOut && (
       <Button onClick={() => onUndoNeg(team.id)} type="danger">
         Undo Neg
@@ -45,7 +45,7 @@ const TeamCard = ({
           <InputGroup.Text className="w-100 overflow-auto d-flex justify-content-between">
             <span className="overflow-auto">{player.name}</span>
             <span
-              className="position-absolute p-2 text-bg-primary small"
+              className="position-absolute p-2 text-bg-secondary small"
               style={{ right: "0", zIndex: 2 }}
             >
               <Icon
@@ -71,18 +71,19 @@ const TeamCard = ({
               />
             </span>
           </InputGroup.Text>
-          {rules.tossupValues.map((tv) => (
-            <Button
-              type={answerTypeToPillType[tv.answerType]}
-              key={tv.value}
-              className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
-              onClick={() =>
-                onClickAnswer({ playerId: player.id, value: tv.value })
-              }
-            >
-              {tv.value}
-            </Button>
-          ))}
+          {activePlayers.indexOf(player.id) >= 0 &&
+            rules.tossupValues.map((tv) => (
+              <Button
+                type={answerTypeToPillType[tv.answerType]}
+                key={tv.value}
+                className={rules.tossupValues.length >= 3 ? "btn-sm" : ""}
+                onClick={() =>
+                  onClickAnswer({ playerId: player.id, value: tv.value })
+                }
+              >
+                {tv.value}
+              </Button>
+            ))}
         </InputGroup>
       ))}
   </Card>
@@ -95,17 +96,16 @@ const TossupPanel = ({
   currentCycle,
   onBack,
   onNoAnswer,
-  scoringData,
   onUndoNeg,
   playerOrderings,
   onMovePlayer,
+  activePlayers,
 }) => (
   <>
     <Row className="mb-3">
       {teams.map((team) => (
         <Col lg={6} md={6} sm={6} xs={6} key={team.id}>
           <TeamCard
-            score={scoringData.teams?.[team.id]?.score || 0}
             team={team}
             rules={rules}
             onClickAnswer={onClickAnswer}
@@ -113,6 +113,7 @@ const TossupPanel = ({
             onUndoNeg={onUndoNeg}
             playerOrderings={playerOrderings[team.id]}
             onMovePlayer={onMovePlayer}
+            activePlayers={activePlayers[team.id]}
           />
         </Col>
       ))}
@@ -125,7 +126,7 @@ const TossupPanel = ({
             Back
           </Button>
         )}
-        <Button type="outline-primary" onClick={onNoAnswer}>
+        <Button type="outline-secondary" onClick={onNoAnswer}>
           Dead Tossup
         </Button>
       </Col>

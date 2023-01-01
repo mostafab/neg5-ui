@@ -26,7 +26,12 @@ const BonusPanel = ({
             key={index}
             className="mb-3 d-flex justify-content-between"
           >
-            <div className="p-2 border">Part {index + 1}</div>
+            <div
+              className={`p-2 border ${usesBouncebacks ? "" : "w-25"}`}
+              style={{ textAlign: "center" }}
+            >
+              Part {index + 1}
+            </div>
             {teams
               .filter((t) => usesBouncebacks || t.id === answeringTeamId)
               .map((team) => (
@@ -36,6 +41,7 @@ const BonusPanel = ({
                     team.id === bonus.answeringTeamId ? "success" : "secondary"
                   }
                   onClick={() => onBonus(team.id, index)}
+                  className={usesBouncebacks ? "" : "w-75"}
                 >
                   +{bonusPointValue} for {team.name}
                 </Button>

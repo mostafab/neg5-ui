@@ -13,6 +13,7 @@ const TournamentMatchesPanel = ({
   rules,
   playersById,
   phases,
+  currentUser,
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
@@ -60,6 +61,7 @@ const TournamentMatchesPanel = ({
           teams={teams}
           rules={rules}
           phases={phases}
+          currentUser={currentUser}
         />
       )}
     </>

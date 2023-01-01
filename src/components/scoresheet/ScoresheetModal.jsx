@@ -8,7 +8,7 @@ import Button from "@components/common/button";
 import ScoresheetStartForm from "./ScoresheetStartForm";
 import ScoresheetContainer from "./ScoresheetContainer";
 
-const ScoresheetModal = ({ onHide, teams, rules, phases }) => {
+const ScoresheetModal = ({ onHide, teams, rules, phases, currentUser }) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
 
   const getTitle = () => {
@@ -35,6 +35,7 @@ const ScoresheetModal = ({ onHide, teams, rules, phases }) => {
                 teams={teams}
                 phases={phases}
                 onSubmit={(values) => setScoresheetStartValues(values)}
+                currentUser={currentUser}
               />
             </Card>
             <div style={{ textAlign: "center" }} className="d-flex">

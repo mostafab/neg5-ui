@@ -15,10 +15,10 @@ const CurrentCyclePanel = ({
   onBonus,
   onNextTossup,
   onNoAnswer,
-  scoringData,
   onUndoNeg,
   playerOrderings,
   onMovePlayer,
+  activePlayers,
 }) => {
   const title = `${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
@@ -33,10 +33,10 @@ const CurrentCyclePanel = ({
           onClickAnswer={onClickAnswer}
           currentCycle={currentCycle}
           onNoAnswer={onNoAnswer}
-          scoringData={scoringData}
           onUndoNeg={onUndoNeg}
           playerOrderings={playerOrderings}
           onMovePlayer={onMovePlayer}
+          activePlayers={activePlayers}
         />
       )}
       {currentCycle.stage === CycleStage.Bonus && (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Card from "@components/common/cards";
-import { Expand } from "@components/common/icon";
+import Icon from "@components/common/icon";
 import CollaboratorsModal from "./CollaboratorsModal";
 
 const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
@@ -9,7 +9,11 @@ const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
   const renderTitle = () => (
     <span>
       Collaborators
-      <Expand className="float-end" onClick={() => setShowModal(true)} />
+      <Icon
+        name="PersonAdd"
+        className="float-end"
+        onClick={() => setShowModal(true)}
+      />
     </span>
   );
 

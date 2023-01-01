@@ -17,7 +17,7 @@ export const Error = ({ children, className = "" }) => (
 
 export const Info = ({ children, className }) => (
   <Alert className={className} level="info">
-    <Icon name="InfoCircleFill" className="mb-1" />
+    <Icon name="InfoCircleFill" className="mb-1 me-2" />
     {children}
   </Alert>
 );
