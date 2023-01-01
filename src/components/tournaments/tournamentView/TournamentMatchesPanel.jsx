@@ -17,13 +17,14 @@ const TournamentMatchesPanel = ({
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
+  const enoughTeamsToAddMatch = teams.length >= 2;
   return (
     <>
       <Card
         title={
           <div className="d-flex justify-content-between">
             <span>Matches ({matches.length})</span>
-            <span className="d-flex justify-content-between">
+            {enoughTeamsToAddMatch && <span className="d-flex justify-content-between">
               <Add message="Add Match" onClick={() => setSelectedMatch({})} />
               <Icon
                 className="ms-2"
@@ -31,10 +32,13 @@ const TournamentMatchesPanel = ({
                 message="Start a Scoresheet"
                 onClick={() => setShowScoresheet(true)}
               />
-            </span>
+            </span>}
           </div>
         }
       >
+        { !enoughTeamsToAddMatch && (
+          <div className="d-flex p-2 justify-content-center">Add at least two teams to add matches.</div>
+        )}
         <MatchesAccordian
           matches={matches}
           teams={teams}
