@@ -6,8 +6,10 @@ import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
 
 import { CycleStage, AnswerType, Direction } from "@libs/enums";
+
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
+import ScoresheetSummary from "./ScoresheetSummary";
 
 const initialBonuses = (rules) =>
   times(rules.partsPerBonus, () => ({
@@ -186,20 +188,30 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
         sm={12}
         className="order-1 order-lg-0 order-md-0 order-xl-0"
       >
-        <ScoresheetTable
-          currentCycle={scoresheetState.currentCycle}
-          cycles={scoresheetState.cycles}
-          teams={scoresheetTeams}
-          rules={rules}
-          playerOrderings={scoresheetState.playerOrderings}
-          className="sticky-top"
-        />
+        <Row>
+          <Col lg={12} md={12} sm={12} className="mb-3">
+            <ScoresheetTable
+              currentCycle={scoresheetState.currentCycle}
+              cycles={scoresheetState.cycles}
+              teams={scoresheetTeams}
+              rules={rules}
+              playerOrderings={scoresheetState.playerOrderings}
+              className="sticky-top"
+            />
+          </Col>
+          <Col lg={12} md={12} sm={12}>
+            <ScoresheetSummary
+              cycles={scoresheetState.cycles}
+              teams={scoresheetTeams}
+            />
+          </Col>
+        </Row>
       </Col>
       <Col
         lg={5}
         md={6}
         sm={12}
-        className="order-0 order-lg-1 order-md-1 order-xl-1 mb-sm-3"
+        className="order-0 order-lg-1 order-md-1 order-xl-1 mb-3"
       >
         <CurrentCyclePanel
           currentCycle={scoresheetState.currentCycle}
