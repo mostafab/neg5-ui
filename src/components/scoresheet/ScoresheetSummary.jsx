@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 
 import Card from "@components/common/cards";
+import { buildPlayersSummary } from "@libs/scoresheet";
 
 import TeamAnswersTable from "./TeamAnswersTable";
 
@@ -12,6 +13,11 @@ const ScoresheetSummary = ({
   rules,
   playerOrderings,
 }) => {
+  const playersSummary = buildPlayersSummary(
+    teams,
+    [...cycles, currentCycle],
+    rules
+  );
   return (
     <Card title="Summary">
       <Row>
@@ -23,6 +29,7 @@ const ScoresheetSummary = ({
               currentCycle={currentCycle}
               rules={rules}
               playerOrder={playerOrderings[team.id]}
+              playersSummary={playersSummary}
             />
           </Col>
         ))}
