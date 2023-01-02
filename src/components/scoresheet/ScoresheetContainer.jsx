@@ -205,6 +205,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
               teams={scoresheetTeams}
               currentCycle={scoresheetState.currentCycle}
               rules={rules}
+              playerOrderings={scoresheetState.playerOrderings}
             />
           </Col>
         </Row>

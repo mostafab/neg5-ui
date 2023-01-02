@@ -5,7 +5,13 @@ import Card from "@components/common/cards";
 
 import TeamAnswersTable from "./TeamAnswersTable";
 
-const ScoresheetSummary = ({ cycles, currentCycle, teams, rules }) => {
+const ScoresheetSummary = ({
+  cycles,
+  currentCycle,
+  teams,
+  rules,
+  playerOrderings,
+}) => {
   return (
     <Card title="Summary">
       <Row>
@@ -16,6 +22,7 @@ const ScoresheetSummary = ({ cycles, currentCycle, teams, rules }) => {
               cycles={cycles}
               currentCycle={currentCycle}
               rules={rules}
+              playerOrder={playerOrderings[team.id]}
             />
           </Col>
         ))}
