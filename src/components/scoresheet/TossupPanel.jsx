@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap";
 
 import { AnswerType } from "@libs/enums";
 import Button from "@components/common/button";
+import { Info } from "@components/common/alerts";
 
 import TeamCard from "./TeamCard";
 
@@ -36,6 +37,11 @@ const TossupPanel = ({
 }) => (
   <>
     <Row className="mb-3">
+      {currentCycle.number === 1 && (
+        <Col lg={12} md={12} sm={12}>
+          <Info>Remember to set the players participating in this match.</Info>
+        </Col>
+      )}
       {teams.map((team) => (
         <Col lg={6} md={6} sm={6} xs={6} key={team.id}>
           <TeamCard

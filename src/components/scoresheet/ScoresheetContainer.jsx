@@ -62,6 +62,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
         draft.currentCycle.answers.pop();
       } else {
         draft.currentCycle = draft.cycles.pop();
+        draft.currentCycle.activePlayers = [];
       }
     });
     setScoresheetState(nextState);
