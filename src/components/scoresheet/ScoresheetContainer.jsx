@@ -60,6 +60,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
       if (stage === CycleStage.Bonus) {
         draft.currentCycle.stage = CycleStage.Tossup;
         draft.currentCycle.answers.pop();
+        draft.currentCycle.bonuses = initialBonuses(rules);
       } else {
         draft.currentCycle = draft.cycles.pop();
         draft.currentCycle.activePlayers = [];
