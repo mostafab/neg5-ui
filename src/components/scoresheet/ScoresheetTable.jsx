@@ -149,8 +149,8 @@ const ScoresheetTable = ({
           </tr>
         </thead>
         <tbody>
-          {cycles.map((cycle) => renderScoresheetCycleRow(cycle))}
           {renderScoresheetCycleRow(currentCycle)}
+          {cycles.map((cycle) => renderScoresheetCycleRow(cycle)).reverse()}
         </tbody>
       </Table>
     </Card>

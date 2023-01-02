@@ -7,6 +7,7 @@ import { orderPlayers } from "@libs/scoresheet";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
 import DropdownActions from "@components/common/DropdownActions";
+import { Warning } from "@components/common/alerts";
 
 const TeamCard = ({
   team,
@@ -23,6 +24,12 @@ const TeamCard = ({
     title={<span className={lockedOut ? "text-muted" : ""}>{team.name}</span>}
     shadow={false}
   >
+    {!lockedOut && activePlayers.length > rules.maxActivePlayersPerTeam && (
+      <Warning>
+        You should have up to {rules.maxActivePlayersPerTeam} active players at
+        a time.
+      </Warning>
+    )}
     {lockedOut && (
       <Button
         className="d-block w-100"

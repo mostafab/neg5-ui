@@ -22,4 +22,11 @@ export const Info = ({ children, className }) => (
   </Alert>
 );
 
+export const Warning = ({ children, className }) => (
+  <Alert className={className} level="warning">
+    <Icon name="ExclamationCircle" className="mb-1 me-2" />
+    {children}
+  </Alert>
+);
+
 export default Alert;
