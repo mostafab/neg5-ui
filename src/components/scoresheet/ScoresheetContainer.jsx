@@ -203,6 +203,8 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
             <ScoresheetSummary
               cycles={scoresheetState.cycles}
               teams={scoresheetTeams}
+              currentCycle={scoresheetState.currentCycle}
+              rules={rules}
             />
           </Col>
         </Row>
