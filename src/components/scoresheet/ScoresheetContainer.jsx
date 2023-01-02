@@ -62,6 +62,7 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
         draft.currentCycle.answers.pop();
       } else {
         draft.currentCycle = draft.cycles.pop();
+        draft.currentCycle.activePlayers = [];
       }
     });
     setScoresheetState(nextState);
@@ -203,6 +204,9 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
             <ScoresheetSummary
               cycles={scoresheetState.cycles}
               teams={scoresheetTeams}
+              currentCycle={scoresheetState.currentCycle}
+              rules={rules}
+              playerOrderings={scoresheetState.playerOrderings}
             />
           </Col>
         </Row>
