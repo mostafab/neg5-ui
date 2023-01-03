@@ -9,6 +9,7 @@ import Modal from "@components/common/modal";
 
 import TeamsInPool from "./TeamsInPool";
 import PoolForm from "./PoolForm";
+import PhaseForm from "./PhaseForm";
 
 const AssignTeamPoolsModal = ({
   phases,
@@ -72,7 +73,15 @@ const AssignTeamPoolsModal = ({
                 {renderPools(p.id)}
               </Tab>
             ))}
-            <Tab eventKey="new" key="new" title={<Icon name="Plus" />} />
+            <Tab eventKey="new" key="new" title={<Icon name="Plus" />}>
+              <Row className="mt-3">
+                <Col lg={4} md={2} sm={12} />
+                <Col lg={4} md={8} sm={12}>
+                  <PhaseForm phase={null} />
+                </Col>
+                <Col lg={4} md={2} sm={12} />
+              </Row>
+            </Tab>
           </Tabs>
         )}
       </Card>
