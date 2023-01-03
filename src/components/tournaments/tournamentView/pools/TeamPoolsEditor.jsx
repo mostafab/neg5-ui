@@ -20,7 +20,6 @@ const TeamPoolsEditor = ({
   onAssignTeam,
   poolAssignments,
 }) => {
-
   const internalOnAssignTeam = (team, oldPoolId, newPoolId) => {
     onAssignTeam(phaseId, team, oldPoolId, newPoolId);
   };
@@ -57,4 +56,3 @@ const TeamPoolsEditor = ({
 };
 
 export default TeamPoolsEditor;
-

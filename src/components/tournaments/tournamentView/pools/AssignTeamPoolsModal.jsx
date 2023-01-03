@@ -30,15 +30,18 @@ const AssignTeamPoolsModal = ({
     phases.length === 0 ? "new" : phases[0].id
   );
 
-  const [poolAssignments, setPoolAssignments] = useState(
-    () => {
-      const result = {};
-      phases.forEach(phase => {
-        result[phase.id] = buildInitialState(phase, poolTeams, teamsNotAssignedPools);
-      })
-      return result;
-    }
-  );
+  const [poolAssignments, setPoolAssignments] = useState(() => {
+    console.log("Re-calculating state...");
+    const result = {};
+    phases.forEach((phase) => {
+      result[phase.id] = buildInitialState(
+        phase,
+        poolTeams,
+        teamsNotAssignedPools
+      );
+    });
+    return result;
+  });
   console.log(poolAssignments);
 
   const onAssignTeam = (phaseId, team, oldPoolId, newPoolId) => {
@@ -54,9 +57,13 @@ const AssignTeamPoolsModal = ({
         draft[phaseId].poolTeams[oldPoolId] = [];
       }
       if (oldPoolId) {
-        draft[phaseId].poolTeams[oldPoolId] = draft[phaseId].poolTeams[oldPoolId].filter(t => t.id !== team.id);
+        draft[phaseId].poolTeams[oldPoolId] = draft[phaseId].poolTeams[
+          oldPoolId
+        ].filter((t) => t.id !== team.id);
       } else {
-        draft[phaseId].teamsNotAssignedPools = draft[phaseId].teamsNotAssignedPools.filter(t => t.id !== team.id);
+        draft[phaseId].teamsNotAssignedPools = draft[
+          phaseId
+        ].teamsNotAssignedPools.filter((t) => t.id !== team.id);
       }
       if (newPoolId) {
         draft[phaseId].poolTeams[newPoolId].push(team);
