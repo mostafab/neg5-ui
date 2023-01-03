@@ -54,7 +54,7 @@ const NewPoolForm = ({ className = "", phaseId, pool }) => {
   return (
     <div className={className}>
       <Form
-        name="NewPoolForm"
+        name={`NewPoolForm-${phaseId}`}
         initialValues={initialValues(phaseId, pool)}
         validation={validation}
         onSubmit={onSubmit}

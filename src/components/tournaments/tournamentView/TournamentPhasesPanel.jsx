@@ -17,8 +17,8 @@ const TournamentPhasesPanel = ({
         className="TournamentPhasesPanel"
         shadow
         title={
-          <h5>
-            Team Pools
+          <h5 className="d-flex justify-content-between">
+            Phases & Team Pools
             {
               <Expand
                 className="float-end"

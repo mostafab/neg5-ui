@@ -81,7 +81,12 @@ const AssignTeamPoolsModal = ({
                 {renderPools(p.id)}
               </Tab>
             ))}
-            <Tab eventKey="new" key="new" title={<Icon name="Plus" />}>
+            <Tab eventKey="new" key="new" title={
+              <>
+                New Phase
+                <Icon name="Plus" className="ms-2"/>
+              </>
+            }>
               <Row className="mt-3 p-3">
                 <Col lg={4} md={2} sm={12} />
                 <Col lg={4} md={8} sm={12}>
