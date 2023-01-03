@@ -74,7 +74,7 @@ const AssignTeamPoolsModal = ({
               </Tab>
             ))}
             <Tab eventKey="new" key="new" title={<Icon name="Plus" />}>
-              <Row className="mt-3">
+              <Row className="mt-3 p-3">
                 <Col lg={4} md={2} sm={12} />
                 <Col lg={4} md={8} sm={12}>
                   <PhaseForm phase={null} />
