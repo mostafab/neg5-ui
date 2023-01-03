@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 import Icon, { Warning } from "@components/common/icon";
 import Card from "@components/common/cards";
@@ -49,59 +47,57 @@ const AssignTeamPoolsModal = ({
       title="Team Pools"
       size="xl"
     >
-      <DndProvider backend={HTML5Backend}>
-        <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
-          {phases.length > 0 && (
-            <Tabs
-              mountOnEnter={false}
-              transition={false}
-              activeKey={selectedTab}
-              onSelect={(key) => setSelectedTab(key)}
-            >
-              {phases.map((p) => (
-                <Tab
-                  key={p.id}
-                  eventKey={p.id}
-                  title={
-                    <>
-                      <span className="m-1">{p.name}</span>
-                      {(teamsNotAssignedPools[p.id] || []).length > 0 && (
-                        <Warning
-                          className="float-end"
-                          message="Some teams aren't assigned to a pool."
-                        />
-                      )}
-                    </>
-                  }
-                >
-                  {renderPools(p.id)}
-                </Tab>
-              ))}
+      <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
+        {phases.length > 0 && (
+          <Tabs
+            mountOnEnter={false}
+            transition={false}
+            activeKey={selectedTab}
+            onSelect={(key) => setSelectedTab(key)}
+          >
+            {phases.map((p) => (
               <Tab
-                eventKey="new"
-                key="new"
+                key={p.id}
+                eventKey={p.id}
                 title={
                   <>
-                    New Phase
-                    <Icon name="Plus" className="ms-2" />
+                    <span className="m-1">{p.name}</span>
+                    {(teamsNotAssignedPools[p.id] || []).length > 0 && (
+                      <Warning
+                        className="float-end"
+                        message="Some teams aren't assigned to a pool."
+                      />
+                    )}
                   </>
                 }
               >
-                <Row className="mt-3 p-3">
-                  <Col lg={4} md={2} sm={12} />
-                  <Col lg={4} md={8} sm={12}>
-                    <PhaseForm
-                      phase={null}
-                      onSubmitSuccess={(phase) => setSelectedTab(phase.id)}
-                    />
-                  </Col>
-                  <Col lg={4} md={2} sm={12} />
-                </Row>
+                {renderPools(p.id)}
               </Tab>
-            </Tabs>
-          )}
-        </Card>
-      </DndProvider>
+            ))}
+            <Tab
+              eventKey="new"
+              key="new"
+              title={
+                <>
+                  New Phase
+                  <Icon name="Plus" className="ms-2" />
+                </>
+              }
+            >
+              <Row className="mt-3 p-3">
+                <Col lg={4} md={2} sm={12} />
+                <Col lg={4} md={8} sm={12}>
+                  <PhaseForm
+                    phase={null}
+                    onSubmitSuccess={(phase) => setSelectedTab(phase.id)}
+                  />
+                </Col>
+                <Col lg={4} md={2} sm={12} />
+              </Row>
+            </Tab>
+          </Tabs>
+        )}
+      </Card>
     </Modal>
   );
 };

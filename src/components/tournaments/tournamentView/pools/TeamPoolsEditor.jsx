@@ -7,8 +7,8 @@ import Button from "@components/common/button";
 import TeamsInPool from "./TeamsInPool";
 
 const buildInitialState = (poolTeams, teamsNotAssignedPools) => ({
-  poolTeams: poolTeams,
-  teamsNotAssignedPools: teamsNotAssignedPools,
+  poolTeams: { ...poolTeams },
+  teamsNotAssignedPools: [...teamsNotAssignedPools],
 });
 
 const unassignedPool = { name: "No Assigned Pool", id: null };
@@ -19,10 +19,9 @@ const TeamPoolsEditor = ({
   poolTeams,
   teamsNotAssignedPools = [],
 }) => {
-  const [poolAssignments, setPoolAssignments] = useState(
-    () => buildInitialState(poolTeams, teamsNotAssignedPools)
-  );
-  console.log(poolAssignments);
+  const [poolAssignments, setPoolAssignments] = useState(() => {
+    return buildInitialState(poolTeams, teamsNotAssignedPools);
+  });
 
   const onAssignTeam = (team, oldPoolId, newPoolId) => {
     /*
@@ -37,14 +36,18 @@ const TeamPoolsEditor = ({
         draft.poolTeams[oldPoolId] = [];
       }
       if (oldPoolId) {
-        draft.poolTeams[oldPoolId] = draft.poolTeams[oldPoolId].filter(t => t.id !== team.id);
+        draft.poolTeams[oldPoolId] = draft.poolTeams[oldPoolId].filter(
+          (t) => t.id !== team.id
+        );
       } else {
-        draft.teamsNotAssignedPools = draft.teamsNotAssignedPools.filter(t => t.id !== team.id);
+        draft.teamsNotAssignedPools = draft.teamsNotAssignedPools.filter(
+          (t) => t.id !== team.id
+        );
       }
       if (newPoolId) {
-        draft.poolTeams[newPoolId].push(team);
+        draft.poolTeams[newPoolId] = [...draft.poolTeams[newPoolId], team];
       } else {
-        draft.teamsNotAssignedPools.push(team);
+        draft.teamsNotAssignedPools = [...draft.teamsNotAssignedPools, team];
       }
     });
     setPoolAssignments(nextAssignmentsState);
@@ -53,7 +56,7 @@ const TeamPoolsEditor = ({
   const onReset = () => {
     setPoolAssignments(buildInitialState(poolTeams, teamsNotAssignedPools));
   };
-
+  const allPools = [unassignedPool, ...pools];
   return (
     <Row>
       <Col lg={4} md={6} sm={6} xs={6} key="unassigned">
@@ -61,6 +64,7 @@ const TeamPoolsEditor = ({
           pool={unassignedPool}
           teams={poolAssignments.teamsNotAssignedPools}
           onAssignTeam={onAssignTeam}
+          pools={allPools}
         />
       </Col>
       {pools.map((p) => (
@@ -69,6 +73,7 @@ const TeamPoolsEditor = ({
             pool={p}
             teams={poolAssignments.poolTeams[p.id] || []}
             onAssignTeam={onAssignTeam}
+            pools={allPools}
           />
         </Col>
       ))}
@@ -86,4 +91,3 @@ const TeamPoolsEditor = ({
 };
 
 export default TeamPoolsEditor;
-
