@@ -57,7 +57,11 @@ const AssignTeamPoolsModal = ({
     >
       <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
         {phases.length > 0 && (
-          <Tabs activeKey={selectedTab} onSelect={(key) => setSelectedTab(key)}>
+          <Tabs
+            transition={false}
+            activeKey={selectedTab}
+            onSelect={(key) => setSelectedTab(key)}
+          >
             {phases.map((p) => (
               <Tab
                 key={p.id}
