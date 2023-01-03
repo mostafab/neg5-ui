@@ -8,7 +8,7 @@ import Card from "@components/common/cards";
 import Modal from "@components/common/modal";
 
 import TeamsInPool from "./TeamsInPool";
-import NewPoolForm from "./NewPoolForm";
+import PoolForm from "./PoolForm";
 
 const AssignTeamPoolsModal = ({
   phases,
@@ -24,7 +24,7 @@ const AssignTeamPoolsModal = ({
       <>
         <Row>
           <Col lg={4} md={6} sm={12}>
-            <NewPoolForm className="mt-4" phaseId={phaseId} />
+            <PoolForm className="mt-4" phaseId={phaseId} pool={null} />
           </Col>
         </Row>
         <Row>

@@ -13,16 +13,16 @@ import { poolCreated } from "@features/tournamentView/phasesSlice";
 
 import { sanitizeFormValues } from "@libs/forms";
 
-const initialValues = (phaseId) => ({
-  name: "",
-  phaseId,
+const initialValues = (phaseId, pool) => ({
+  name: pool?.name || "",
+  phaseId: pool?.phaseId || phaseId,
 });
 
 const validation = Yup.object({
   name: Yup.string().required("Please enter a name."),
 });
 
-const NewPoolForm = ({ className = "", phaseId }) => {
+const NewPoolForm = ({ className = "", phaseId, pool }) => {
   const [submitData, setSubmitData] = useState({
     submitting: false,
     error: null,
@@ -47,7 +47,7 @@ const NewPoolForm = ({ className = "", phaseId }) => {
         submitting: false,
       });
       dispatch(poolCreated(payload));
-      resetForm({ values: initialValues(phaseId) });
+      resetForm({ values: initialValues(phaseId, pool) });
     }
   };
 
@@ -55,7 +55,7 @@ const NewPoolForm = ({ className = "", phaseId }) => {
     <div className={className}>
       <Form
         name="NewPoolForm"
-        initialValues={initialValues(phaseId)}
+        initialValues={initialValues(phaseId, pool)}
         validation={validation}
         onSubmit={onSubmit}
         customCtaButtons
