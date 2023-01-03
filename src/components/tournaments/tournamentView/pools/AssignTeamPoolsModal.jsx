@@ -6,7 +6,10 @@ import Tabs from "react-bootstrap/Tabs";
 import Icon, { Warning } from "@components/common/icon";
 import Card from "@components/common/cards";
 import Modal from "@components/common/modal";
-import TeamsInPool from "@components/tournaments/tournamentView/pools/TeamsInPool";
+
+import TeamsInPool from "./TeamsInPool";
+import PoolForm from "./PoolForm";
+import PhaseForm from "./PhaseForm";
 
 const AssignTeamPoolsModal = ({
   phases,
@@ -19,19 +22,26 @@ const AssignTeamPoolsModal = ({
     const unassignedPool = { name: "No Assigned Pool", id: null };
     const matching = pools.filter((p) => p.phaseId === phaseId);
     return (
-      <Row>
-        <Col lg={4} md={6} sm={12} key="unassigned">
-          <TeamsInPool
-            pool={unassignedPool}
-            teams={teamsNotAssignedPools[phaseId] || []}
-          />
-        </Col>
-        {matching.map((p) => (
-          <Col lg={4} md={6} sm={12} key={p.id}>
-            <TeamsInPool pool={p} teams={poolTeams[p.id] || []} />
+      <>
+        <Row>
+          <Col lg={4} md={6} sm={12}>
+            <PoolForm className="mt-4" phaseId={phaseId} pool={null} />
           </Col>
-        ))}
-      </Row>
+        </Row>
+        <Row>
+          <Col lg={4} md={6} sm={12} key="unassigned">
+            <TeamsInPool
+              pool={unassignedPool}
+              teams={teamsNotAssignedPools[phaseId] || []}
+            />
+          </Col>
+          {matching.map((p) => (
+            <Col lg={4} md={6} sm={12} key={p.id}>
+              <TeamsInPool pool={p} teams={poolTeams[p.id] || []} />
+            </Col>
+          ))}
+        </Row>
+      </>
     );
   };
   return (
@@ -63,7 +73,15 @@ const AssignTeamPoolsModal = ({
                 {renderPools(p.id)}
               </Tab>
             ))}
-            <Tab eventKey="new" key="new" title={<Icon name="Plus" />} />
+            <Tab eventKey="new" key="new" title={<Icon name="Plus" />}>
+              <Row className="mt-3 p-3">
+                <Col lg={4} md={2} sm={12} />
+                <Col lg={4} md={8} sm={12}>
+                  <PhaseForm phase={null} />
+                </Col>
+                <Col lg={4} md={2} sm={12} />
+              </Row>
+            </Tab>
           </Tabs>
         )}
       </Card>

@@ -11,7 +11,11 @@ const initialState = {
 const tournamentPhasesSlice = createSlice({
   name: "tournamentPhases",
   initialState,
-  reducers: {},
+  reducers: {
+    poolCreated: (state, action) => {
+      state.pools.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
       state.phases = orderBy(
@@ -25,3 +29,5 @@ const tournamentPhasesSlice = createSlice({
 });
 
 export const tournamentPhasesReducer = tournamentPhasesSlice.reducer;
+
+export const { poolCreated } = tournamentPhasesSlice.actions;
