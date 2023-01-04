@@ -11,14 +11,14 @@ const TournamentPhasesPanel = ({
   teamsNotAssignedPools,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  if (!showModal) {
-    return (
+  return (
+    <>
       <Card
         className="TournamentPhasesPanel"
         shadow
         title={
-          <h5>
-            Team Pools
+          <h5 className="d-flex justify-content-between">
+            Phases & Team Pools
             {
               <Expand
                 className="float-end"
@@ -28,16 +28,16 @@ const TournamentPhasesPanel = ({
           </h5>
         }
       ></Card>
-    );
-  }
-  return (
-    <AssignTeamPoolsModal
-      phases={phases}
-      pools={pools}
-      poolTeams={poolTeams}
-      teamsNotAssignedPools={teamsNotAssignedPools}
-      onHide={() => setShowModal(false)}
-    />
+      {showModal && (
+        <AssignTeamPoolsModal
+          phases={phases}
+          pools={pools}
+          poolTeams={poolTeams}
+          teamsNotAssignedPools={teamsNotAssignedPools}
+          onHide={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 };
 

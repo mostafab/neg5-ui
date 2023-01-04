@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -7,9 +7,9 @@ import Icon, { Warning } from "@components/common/icon";
 import Card from "@components/common/cards";
 import Modal from "@components/common/modal";
 
-import TeamsInPool from "./TeamsInPool";
 import PoolForm from "./PoolForm";
 import PhaseForm from "./PhaseForm";
+import TeamPoolsEditor from "./TeamPoolsEditor";
 
 const AssignTeamPoolsModal = ({
   phases,
@@ -18,8 +18,11 @@ const AssignTeamPoolsModal = ({
   teamsNotAssignedPools,
   onHide,
 }) => {
+  const [selectedTab, setSelectedTab] = useState(
+    phases.length === 0 ? "new" : phases[0].id
+  );
+
   const renderPools = (phaseId) => {
-    const unassignedPool = { name: "No Assigned Pool", id: null };
     const matching = pools.filter((p) => p.phaseId === phaseId);
     return (
       <>
@@ -28,19 +31,12 @@ const AssignTeamPoolsModal = ({
             <PoolForm className="mt-4" phaseId={phaseId} pool={null} />
           </Col>
         </Row>
-        <Row>
-          <Col lg={4} md={6} sm={12} key="unassigned">
-            <TeamsInPool
-              pool={unassignedPool}
-              teams={teamsNotAssignedPools[phaseId] || []}
-            />
-          </Col>
-          {matching.map((p) => (
-            <Col lg={4} md={6} sm={12} key={p.id}>
-              <TeamsInPool pool={p} teams={poolTeams[p.id] || []} />
-            </Col>
-          ))}
-        </Row>
+        <TeamPoolsEditor
+          teamsNotAssignedPools={teamsNotAssignedPools[phaseId]}
+          phaseId={phaseId}
+          pools={matching}
+          poolTeams={poolTeams}
+        />
       </>
     );
   };
@@ -49,11 +45,16 @@ const AssignTeamPoolsModal = ({
       className="TournamentPhasesModal"
       onHide={onHide}
       title="Team Pools"
-      size="xl"
+      fullscreen
     >
       <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
         {phases.length > 0 && (
-          <Tabs defaultActiveKey={phases[0].id}>
+          <Tabs
+            mountOnEnter={false}
+            transition={false}
+            activeKey={selectedTab}
+            onSelect={(key) => setSelectedTab(key)}
+          >
             {phases.map((p) => (
               <Tab
                 key={p.id}
@@ -73,11 +74,23 @@ const AssignTeamPoolsModal = ({
                 {renderPools(p.id)}
               </Tab>
             ))}
-            <Tab eventKey="new" key="new" title={<Icon name="Plus" />}>
+            <Tab
+              eventKey="new"
+              key="new"
+              title={
+                <>
+                  New Phase
+                  <Icon name="Plus" className="ms-2" />
+                </>
+              }
+            >
               <Row className="mt-3 p-3">
                 <Col lg={4} md={2} sm={12} />
                 <Col lg={4} md={8} sm={12}>
-                  <PhaseForm phase={null} />
+                  <PhaseForm
+                    phase={null}
+                    onSubmitSuccess={(phase) => setSelectedTab(phase.id)}
+                  />
                 </Col>
                 <Col lg={4} md={2} sm={12} />
               </Row>
