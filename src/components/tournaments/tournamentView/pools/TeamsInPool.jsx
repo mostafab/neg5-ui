@@ -5,17 +5,16 @@ import DropdownActions from "@components/common/DropdownActions";
 import Card from "@components/common/cards";
 
 const TeamRow = ({ team, poolId, pools, onAssign }) => {
-  const actions = pools
-    .filter((p) => p.id !== poolId)
-    .map((p) => ({
-      label: p.id ? `Move to ${p.name}` : "Unassign",
-      onClick: () => onAssign(team, poolId, p.id || null),
-    }));
+  const targetPools = pools.filter((p) => p.id !== poolId);
+  const actions = targetPools.map((p) => ({
+    label: p.id ? `Move to ${p.name}` : "Unassign",
+    onClick: () => onAssign(team, poolId, p.id || null),
+  }));
   return (
     <div>
       <ListGroup.Item className="d-flex justify-content-between">
         {team.name}
-        <DropdownActions actions={actions} />
+        {actions.length > 0 && <DropdownActions actions={actions} />}
       </ListGroup.Item>
     </div>
   );

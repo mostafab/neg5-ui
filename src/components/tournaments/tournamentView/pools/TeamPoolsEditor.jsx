@@ -178,7 +178,7 @@ const TeamPoolsEditor = ({
         </Row>
       </Col>
       {originalAssignments.dirty && (
-        <Col lg={12} md={5} sm={12} className="mt-3">
+        <Col lg={12} md={12} sm={12} className="mt-3">
           <hr />
           {submitData.error && <CommonErrorBanner errors={submitData.error} />}
           <div className="float-end">

@@ -26,7 +26,7 @@ const Button = ({
   >
     {children}
     {!submitting && icon && <Icon name={icon} />}
-    {submitting && <Spinner animation="border" size="sm" className="ms-2"/>}
+    {submitting && <Spinner animation="border" size="sm" className="ms-2" />}
   </BootstrapButton>
 );
 
