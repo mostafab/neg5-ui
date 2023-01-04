@@ -1,4 +1,4 @@
-const fallBackError = "An error occurred processing your request.";
+const fallBackError = "Oops! An error occurred processing your request.";
 
 export const doValidatedApiRequest = async (callback) => {
   try {

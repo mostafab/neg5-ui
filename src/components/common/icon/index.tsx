@@ -47,4 +47,8 @@ export const Add = (props) => <Icon name="PlusLg" {...props} />;
 
 export const X = (props) => <Icon className="x" name="X" {...props} />;
 
+export const Edit = (props) => (
+  <Icon className="edit" name="PencilSquare" {...props} />
+);
+
 export default Icon;
