@@ -45,7 +45,7 @@ const AssignTeamPoolsModal = ({
       className="TournamentPhasesModal"
       onHide={onHide}
       title="Team Pools"
-      size="xl"
+      fullscreen
     >
       <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
         {phases.length > 0 && (

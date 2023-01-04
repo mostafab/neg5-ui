@@ -59,7 +59,7 @@ const TeamPoolsEditor = ({
   const allPools = [unassignedPool, ...pools];
   return (
     <Row>
-      <Col lg={4} md={6} sm={6} xs={6} key="unassigned">
+      <Col lg={4} md={5} sm={12}>
         <TeamsInPool
           pool={unassignedPool}
           teams={poolAssignments.teamsNotAssignedPools}
@@ -67,17 +67,21 @@ const TeamPoolsEditor = ({
           pools={allPools}
         />
       </Col>
-      {pools.map((p) => (
-        <Col lg={4} md={6} sm={6} xs={6} key={p.id}>
-          <TeamsInPool
-            pool={p}
-            teams={poolAssignments.poolTeams[p.id] || []}
-            onAssignTeam={onAssignTeam}
-            pools={allPools}
-          />
-        </Col>
-      ))}
-      <Col lg={12} className="mt-3">
+      <Col lg={8} md={7} sm={12}>
+        <Row>
+          {pools.map((p) => (
+            <Col lg={6} md={6} sm={6} xs={12} key={p.id}>
+              <TeamsInPool
+                pool={p}
+                teams={poolAssignments.poolTeams[p.id] || []}
+                onAssignTeam={onAssignTeam}
+                pools={allPools}
+              />
+            </Col>
+          ))}
+        </Row>
+      </Col>
+      <Col lg={12} md={5} sm={12} className="mt-3">
         <hr />
         <div className="float-end">
           <Button className="me-3" type="secondary" onClick={() => onReset()}>
