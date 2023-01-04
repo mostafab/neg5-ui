@@ -1,4 +1,5 @@
 import BootstrapButton from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 
 import Icon from "@components/common/icon";
 
@@ -24,7 +25,8 @@ const Button = ({
     disabled={disabled || submitting}
   >
     {children}
-    {icon && <Icon name={icon} />}
+    {!submitting && icon && <Icon name={icon} />}
+    {submitting && <Spinner animation="border" size="sm" className="ms-2"/>}
   </BootstrapButton>
 );
 
