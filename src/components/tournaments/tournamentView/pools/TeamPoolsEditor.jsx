@@ -5,6 +5,12 @@ import pickBy from "lodash/pickBy";
 import isEqual from "lodash/isEqual";
 
 import Button from "@components/common/button";
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
+
+import { useAppDispatch } from "@store";
+import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
+import { doValidatedApiRequest } from "@api/common";
+import { batchUpdateTeamPools } from "@api/team";
 
 import TeamsInPool from "./TeamsInPool";
 
@@ -49,6 +55,11 @@ const TeamPoolsEditor = ({
     poolAssignments,
     dirty: false,
   });
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setOriginalAssignments({
@@ -95,6 +106,52 @@ const TeamPoolsEditor = ({
       buildInitialState(pools, poolTeams, teamsNotAssignedPools)
     );
   };
+
+  const onSubmit = async () => {
+    const teamToPoolAssignments = buildTeamToPoolMap(poolAssignments);
+    const assignments = Object.entries(teamToPoolAssignments).map(
+      ([teamId, poolId]) => ({
+        teamId,
+        assignments: [
+          {
+            poolId: poolId || null,
+            phaseId,
+          },
+        ],
+      })
+    );
+    const payload = {
+      assignments,
+    };
+    setSubmitData({
+      error: null,
+      submitting: true,
+    });
+    const response = await doValidatedApiRequest(async () => {
+      return batchUpdateTeamPools(payload);
+    });
+    if (response.errors) {
+      setSubmitData({
+        error: response.errors,
+        submitting: false,
+      });
+    } else {
+      setSubmitData({
+        submitting: false,
+      });
+      setOriginalAssignments({
+        poolAssignments: { ...poolAssignments },
+        dirty: false,
+      });
+      dispatch(
+        teamsPoolsUpdated({
+          assignments: response,
+          phaseId,
+        })
+      );
+    }
+  };
+
   const allPools = [unassignedPool, ...pools];
   return (
     <Row>
@@ -123,11 +180,23 @@ const TeamPoolsEditor = ({
       {originalAssignments.dirty && (
         <Col lg={12} md={5} sm={12} className="mt-3">
           <hr />
+          {submitData.error && <CommonErrorBanner errors={submitData.error} />}
           <div className="float-end">
-            <Button className="me-3" type="secondary" onClick={() => onReset()}>
+            <Button
+              className="me-3"
+              type="secondary"
+              onClick={onReset}
+              disabled={submitData.submitting}
+            >
               Reset
             </Button>
-            <Button type="primary">Save Changes</Button>
+            <Button
+              type="primary"
+              onClick={onSubmit}
+              submitting={submitData.submitting}
+            >
+              {submitData.saving ? "Saving" : "Save Changes"}
+            </Button>
           </div>
         </Col>
       )}

@@ -12,6 +12,7 @@ const Button = ({
   size = null,
   submit = false,
   disabled = false,
+  submitting = false,
 }) => (
   <BootstrapButton
     className={className}
@@ -20,7 +21,7 @@ const Button = ({
     variant={type}
     size={size}
     type={submit ? "submit" : "button"}
-    disabled={disabled}
+    disabled={disabled || submitting}
   >
     {children}
     {icon && <Icon name={icon} />}

@@ -9,3 +9,8 @@ export const updateTeam = async (body) => {
   const response = await client.put(`/neg5-api/teams/${body.id}`, body);
   return await response.data;
 };
+
+export const batchUpdateTeamPools = async (body) => {
+  const response = await client.post("/neg5-api/team-pools/batch", body);
+  return await response.data;
+};
