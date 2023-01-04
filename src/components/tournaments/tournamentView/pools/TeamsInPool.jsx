@@ -28,7 +28,7 @@ const PoolCard = ({ pool, teams, onAssignTeam, pools }) => {
         title={
           <h6>
             <b>
-              {pool.name} ({teams.length})
+              {pool.name} {teams.length > 0 && `(${teams.length})`}
             </b>
           </h6>
         }
