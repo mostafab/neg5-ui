@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Card from "@components/common/cards";
-import Icon from "@components/common/icon";
+import { Edit } from "@components/common/icon";
 import CollaboratorsModal from "./CollaboratorsModal";
 
 const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
@@ -22,13 +22,7 @@ const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
         title="Collaborators"
         actions={[
           {
-            component: (
-              <Icon
-                name="PersonAdd"
-                className="float-end"
-                onClick={() => setShowModal(true)}
-              />
-            ),
+            component: <Edit onClick={() => setShowModal(true)} />,
           },
         ]}
       >
