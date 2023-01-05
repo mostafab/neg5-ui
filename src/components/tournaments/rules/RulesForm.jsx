@@ -18,7 +18,7 @@ import { sanitizeFormValuesRecursive } from "@libs/forms";
 const initialValues = (rules) => rules;
 const formValidation = yupObject(validation());
 
-const RulesForm = ({ rules, onSubmitSuccess = null, readOnly = false }) => {
+const RulesForm = ({ rules, onSubmitSuccess = null }) => {
   const [submitData, setSubmitData] = useState({
     error: null,
     submitting: false,
@@ -55,7 +55,6 @@ const RulesForm = ({ rules, onSubmitSuccess = null, readOnly = false }) => {
       validation={formValidation}
       onSubmit={onSubmit}
       submitting={submitData.submitting}
-      readOnly={readOnly}
     >
       <ScoringRulesField />
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}

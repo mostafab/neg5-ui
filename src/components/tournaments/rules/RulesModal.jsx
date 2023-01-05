@@ -12,7 +12,7 @@ const RulesModal = ({ onHide, rules }) => (
       Rules can't be changed once a match is added, so double-check this
       information is correct!
     </Info>
-    <RulesForm rules={rules} onSubmitSuccess={onHide} readOnly={false} />
+    <RulesForm rules={rules} onSubmitSuccess={onHide} />
   </Modal>
 );
 
