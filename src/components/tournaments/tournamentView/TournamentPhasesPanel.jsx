@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Expand } from "@components/common/icon";
+import { Edit } from "@components/common/icon";
 import Card from "@components/common/cards";
 import AssignTeamPoolsModal from "@components/tournaments/tournamentView/pools/AssignTeamPoolsModal";
 
@@ -19,7 +19,7 @@ const TournamentPhasesPanel = ({
         title="Phases & Team Pools"
         actions={[
           {
-            component: <Expand onClick={() => setShowModal(true)} />,
+            component: <Edit onClick={() => setShowModal(true)} />,
           },
         ]}
       />
