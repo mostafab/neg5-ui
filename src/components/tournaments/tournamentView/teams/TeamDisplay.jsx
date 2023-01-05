@@ -65,8 +65,14 @@ const TeamDisplay = ({
               <ActionConfirmationAlert
                 className="mb-0"
                 message={`Are you sure you want to delete ${team.name}? This action is unrecoverable.`}
-                level="warning"
-                onCancel={() => setIsDeleting(false)}
+                level="danger"
+                onCancel={() => {
+                  setIsDeleting(false);
+                  setSubmitData({
+                    error: null,
+                    submitting: false,
+                  });
+                }}
                 onConfirm={onConfirmDelete}
                 submitting={submitData.submitting}
               />

@@ -20,6 +20,10 @@ const tournamentMatchesSlice = createSlice({
         state.matches.push(match);
       }
     },
+    matchDeleted(state, action) {
+      const matchId = action.payload.matchId;
+      state.matches = state.matches.filter((m) => m.id !== matchId);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentMatchesAsync.fulfilled, (state, action) => {
@@ -37,4 +41,5 @@ export const loadTournamentMatchesAsync = createAsyncThunk(
 
 export const tournamentMatchesReducer = tournamentMatchesSlice.reducer;
 
-export const { matchCreatedOrUpdated } = tournamentMatchesSlice.actions;
+export const { matchCreatedOrUpdated, matchDeleted } =
+  tournamentMatchesSlice.actions;

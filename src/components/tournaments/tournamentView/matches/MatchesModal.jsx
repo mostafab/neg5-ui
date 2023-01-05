@@ -42,6 +42,7 @@ const MatchesModal = ({
           playersById={playersById}
           phases={phases}
           onSubmitSuccess={(result) => onSelectMatch(result)}
+          onDeleteSuccess={() => onSelectMatch({})}
         />
       </Col>
     </Row>
