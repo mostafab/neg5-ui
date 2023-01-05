@@ -5,13 +5,18 @@ import orderBy from "lodash/orderBy";
 import Pill from "@components/common/pill";
 import DropdownActions from "@components/common/DropdownActions";
 
-const CollaboratorsList = ({ collaborators, styles = {} }) => (
+const CollaboratorsList = ({ collaborators, styles = {}, onUpdateUser }) => (
   <>
     <h5>People with Access</h5>
     <ListGroup style={styles}>
       {orderBy(collaborators, ["userId"], ["asc"]).map((c) => {
         const firstAction = {
           label: c.isAdmin ? "Remove Admin Access" : "Grant Admin Access",
+          onClick: () =>
+            onUpdateUser({
+              userId: c.userId,
+              isAdmin: c.isAdmin ? false : true,
+            }),
         };
         return (
           <ListGroup.Item

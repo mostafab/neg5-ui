@@ -58,6 +58,9 @@ const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => {
       {collaborators.length > 0 && (
         <CollaboratorsList
           collaborators={collaborators}
+          onUpdateUser={({ userId, isAdmin }) =>
+            addOrUpdateUser(userId, isAdmin)
+          }
           styles={{
             maxHeight: "30vh",
             minHeight: "20vh",

@@ -11,7 +11,14 @@ const slice = createSlice({
   initialState,
   reducers: {
     collaboratorAddedOrUpdated(state, action) {
-      state.collaborators.push(action.payload);
+      const index = state.collaborators.findIndex(
+        (c) => c.userId === action.payload.userId
+      );
+      if (index >= 0) {
+        state.collaborators[index] = action.payload;
+      } else {
+        state.collaborators.push(action.payload);
+      }
     },
   },
   extraReducers: (builder) => {
