@@ -6,7 +6,7 @@ import { informationUpdated } from "@features/tournamentView/tournamentInfoSlice
 import { updateBasicInformation } from "@api/tournaments";
 import { doValidatedApiRequest } from "@api/common";
 
-import { Form } from "@components/common/forms";
+import { Form, Checkbox } from "@components/common/forms";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import TournamentInfoFields, {
   validation,
@@ -56,6 +56,7 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
       onSubmit={onSubmit}
       submitting={submitData.submitting}
     >
+      <Checkbox name="hidden" label="Hidden" />
       <TournamentInfoFields />
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>

@@ -12,6 +12,7 @@ const initialState = {
   location: null,
   questionSet: null,
   comments: null,
+  hidden: null,
 };
 
 const tournamentInfoSlice = createSlice({
