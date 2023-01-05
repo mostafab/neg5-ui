@@ -37,7 +37,7 @@ const TournamentMatchesPanel = ({
                   component: (
                     <Icon
                       className="ms-2"
-                      name="Clipboard"
+                      name="ClipboardPlus"
                       message="Start a Scoresheet"
                       onClick={() => setShowScoresheet(true)}
                     />

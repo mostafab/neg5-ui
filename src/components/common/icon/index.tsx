@@ -43,7 +43,7 @@ export const Expand = (props) => (
   <Icon className="expand" name="ArrowsAngleExpand" {...props} />
 );
 
-export const Add = (props) => <Icon name="PlusLg" {...props} />;
+export const Add = (props) => <Icon name="PlusSquare" {...props} />;
 
 export const X = (props) => <Icon className="x" name="X" {...props} />;
 
