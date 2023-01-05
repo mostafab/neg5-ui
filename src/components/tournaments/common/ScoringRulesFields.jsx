@@ -38,7 +38,7 @@ const ScoringRulesFields = ({ className = "" }) => (
           buttonText: "Add a Tossup Value",
           newObject: newTossupValue,
         }}
-        render={(_tv, { index }, { remove }) => {
+        render={(_tv, { index, readOnly }, { remove }) => {
           return (
             <div key={index}>
               <Row>
@@ -49,12 +49,14 @@ const ScoringRulesFields = ({ className = "" }) => (
                     label="Type"
                     options={answerTypeOptions}
                   />
-                  <Button
-                    type="outline-primary"
-                    className="mb-3"
-                    icon="X"
-                    onClick={() => remove(index)}
-                  />
+                  {!readOnly && (
+                    <Button
+                      type="outline-primary"
+                      className="mb-3"
+                      icon="X"
+                      onClick={() => remove(index)}
+                    />
+                  )}
                 </InputGroup>
               </Row>
             </div>
