@@ -12,12 +12,14 @@ const TournamentRulesPanel = ({ rules }) => {
   return (
     <>
       <Card
-        title={
-          <span className="d-flex justify-content-between">
-            Rules
-            <Edit onClick={() => setShowForm(true)} />
-          </span>
-        }
+        title="Rules"
+        actions={[
+          {
+            component: <Edit onClick={() => setShowForm(true)} />,
+            icon: "PencilSquare",
+            onClick: () => setShowForm(true),
+          },
+        ]}
       >
         {labelWithValue("Bonus Point Value", rules.bonusPointValue)}
         {labelWithValue("Parts Per Bonus", rules.partsPerBonus)}

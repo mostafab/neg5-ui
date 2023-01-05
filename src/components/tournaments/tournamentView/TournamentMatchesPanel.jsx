@@ -21,21 +21,24 @@ const TournamentMatchesPanel = ({
   return (
     <>
       <Card
-        title={
-          <div className="d-flex justify-content-between">
-            <span>Matches ({matches.length})</span>
-            {enoughTeamsToAddMatch && matches.length > 0 && (
-              <span className="d-flex justify-content-between">
-                <Add message="Add Match" onClick={() => setSelectedMatch({})} />
-                <Icon
-                  className="ms-2"
-                  name="Clipboard"
-                  message="Start a Scoresheet"
-                  onClick={() => setShowScoresheet(true)}
-                />
-              </span>
-            )}
-          </div>
+        title={<span>Matches ({matches.length})</span>}
+        actions={
+          enoughTeamsToAddMatch && matches.length > 0
+            ? [
+                {
+                  component: (
+                    <Add
+                      message="Add Match"
+                      onClick={() => setSelectedMatch({})}
+                    />
+                  ),
+                },
+                {
+                  icon: "Clipboard",
+                  onClick: () => setShowScoresheet(true),
+                },
+              ]
+            : []
         }
       >
         {!enoughTeamsToAddMatch && (

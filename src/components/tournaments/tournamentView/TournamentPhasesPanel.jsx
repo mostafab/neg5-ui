@@ -16,18 +16,13 @@ const TournamentPhasesPanel = ({
       <Card
         className="TournamentPhasesPanel"
         shadow
-        title={
-          <h5 className="d-flex justify-content-between">
-            Phases & Team Pools
-            {
-              <Expand
-                className="float-end"
-                onClick={() => setShowModal(true)}
-              />
-            }
-          </h5>
-        }
-      ></Card>
+        title="Phases & Team Pools"
+        actions={[
+          {
+            component: <Expand onClick={() => setShowModal(true)} />,
+          },
+        ]}
+      />
       {showModal && (
         <AssignTeamPoolsModal
           phases={phases}

@@ -15,17 +15,21 @@ const TournamentTeamsPanel = ({ teams, matches }) => {
   return (
     <>
       <Card
-        title={
-          <>
-            <span>Teams ({teams.length})</span>
-            {teams.length > 0 && (
-              <Add
-                message="Add a Team"
-                className="float-end"
-                onClick={() => setSelectedTeam({})}
-              />
-            )}
-          </>
+        title={teams.length > 0 ? `Teams (${teams.length})` : "Teams"}
+        actions={
+          teams.length === 0
+            ? []
+            : [
+                {
+                  component: (
+                    <Add
+                      message="Add a Team"
+                      className="float-end"
+                      onClick={() => setSelectedTeam({})}
+                    />
+                  ),
+                },
+              ]
         }
       >
         {teams.length === 0 && (
