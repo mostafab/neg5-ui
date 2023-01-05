@@ -33,6 +33,7 @@ const TeamsModal = ({ matches, teams, selectedTeam, onHide, onSelectTeam }) => (
           matches={matches}
           teams={teams}
           onSubmitSuccess={onSelectTeam}
+          onDeleteSuccess={() => onSelectTeam({})}
         />
       </Col>
     </Row>

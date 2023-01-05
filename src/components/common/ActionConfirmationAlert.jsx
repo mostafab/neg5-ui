@@ -20,7 +20,7 @@ const ActionConfirmationAlert = ({
             type="secondary"
             className="me-3 shadow-sm"
             onClick={onCancel}
-            submitting={submitting}
+            disabled={submitting}
           >
             Cancel
           </Button>

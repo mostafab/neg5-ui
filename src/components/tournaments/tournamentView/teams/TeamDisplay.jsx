@@ -1,19 +1,61 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 
+import { useAppDispatch } from "@store";
+import { teamDeleted } from "@features/tournamentView/teamsSlice";
+import { deleteTeam } from "@api/team";
+import { doValidatedApiRequest } from "@api/common";
+
 import Card from "@components/common/cards";
 import DropdownActions from "@components/common/DropdownActions";
 import ActionConfirmationAlert from "@components/common/ActionConfirmationAlert";
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 
 import TeamForm from "./TeamForm";
 import TeamMatches from "./TeamMatches";
 
-const TeamDisplay = ({ team, matches, teams, onSubmitSuccess }) => {
+const TeamDisplay = ({
+  team,
+  matches,
+  teams,
+  onSubmitSuccess,
+  onDeleteSuccess,
+}) => {
   const [readOnly, setReadOnly] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
   useEffect(() => {
     setIsDeleting(false);
+    setSubmitData({
+      error: null,
+      submitting: false,
+    });
   }, [team.id]);
+  const dispatch = useAppDispatch();
+
+  const onConfirmDelete = async () => {
+    setSubmitData({
+      error: null,
+      submitting: true,
+    });
+    const response = await doValidatedApiRequest(() => deleteTeam(team.id));
+    if (response.errors) {
+      setSubmitData({
+        error: response.errors,
+        submitting: false,
+      });
+    } else {
+      setSubmitData({
+        submitting: false,
+      });
+      dispatch(teamDeleted({ teamId: team.id }));
+      onDeleteSuccess({ id: team.id });
+    }
+  };
+
   return (
     <Card>
       {isDeleting && (
@@ -23,9 +65,14 @@ const TeamDisplay = ({ team, matches, teams, onSubmitSuccess }) => {
               <ActionConfirmationAlert
                 className="mb-0"
                 message={`Are you sure you want to delete ${team.name}? This action is unrecoverable.`}
-                level="danger"
+                level="warning"
                 onCancel={() => setIsDeleting(false)}
+                onConfirm={onConfirmDelete}
+                submitting={submitData.submitting}
               />
+              {submitData.error && (
+                <CommonErrorBanner className="mt-3" errors={submitData.error} />
+              )}
             </div>
           </Col>
         </Row>
