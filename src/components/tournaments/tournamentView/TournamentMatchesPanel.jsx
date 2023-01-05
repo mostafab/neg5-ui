@@ -34,8 +34,14 @@ const TournamentMatchesPanel = ({
                   ),
                 },
                 {
-                  icon: "Clipboard",
-                  onClick: () => setShowScoresheet(true),
+                  component: (
+                    <Icon
+                      className="ms-2"
+                      name="Clipboard"
+                      message="Start a Scoresheet"
+                      onClick={() => setShowScoresheet(true)}
+                    />
+                  ),
                 },
               ]
             : []

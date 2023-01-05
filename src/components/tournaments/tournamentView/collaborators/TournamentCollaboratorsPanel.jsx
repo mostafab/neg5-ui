@@ -6,17 +6,6 @@ import CollaboratorsModal from "./CollaboratorsModal";
 
 const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
   const [showModal, setShowModal] = useState(false);
-  const renderTitle = () => (
-    <span>
-      Collaborators
-      <Icon
-        name="PersonAdd"
-        className="float-end"
-        onClick={() => setShowModal(true)}
-      />
-    </span>
-  );
-
   const renderCardBody = () => {
     return (
       <span>
@@ -29,7 +18,20 @@ const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
 
   return (
     <>
-      <Card title={renderTitle()}>
+      <Card
+        title="Collaborators"
+        actions={[
+          {
+            component: (
+              <Icon
+                name="PersonAdd"
+                className="float-end"
+                onClick={() => setShowModal(true)}
+              />
+            ),
+          },
+        ]}
+      >
         {renderCardBody()}
         {showModal && (
           <CollaboratorsModal
