@@ -8,7 +8,7 @@ import DropdownActions from "@components/common/DropdownActions";
 const CollaboratorsList = ({ collaborators, styles = {} }) => (
   <>
     <h5>People with Access</h5>
-    <ListGroup className="shadow-sm" style={styles}>
+    <ListGroup style={styles}>
       {orderBy(collaborators, ["userId"], ["asc"]).map((c) => {
         const firstAction = {
           label: c.isAdmin ? "Remove Admin Access" : "Grant Admin Access",

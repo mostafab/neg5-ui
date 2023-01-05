@@ -14,6 +14,7 @@ const initialValues = {
 const UserSearch = ({
   filterFunction = null,
   placeholder = "Search for users",
+  onSelect,
 }) => {
   const [queryResults, setQueryResults] = useState({
     loading: false,
@@ -57,6 +58,7 @@ const UserSearch = ({
 
   const onClickUser = (user) => {
     setShowResults(false);
+    onSelect(user);
   };
 
   const renderResults = () => {
@@ -77,15 +79,19 @@ const UserSearch = ({
       >
         {queryResults.results
           .filter((r) => !filterFunction || filterFunction(r))
-          .map((res) => (
-            <ListGroup.Item
-              action
-              key={res.id}
-              onClick={() => onClickUser(res)}
-            >
-              {res.id} {res.name && `(${res.name})`}
-            </ListGroup.Item>
-          ))}
+          .map((res) => {
+            return (
+              <ListGroup.Item
+                action
+                key={res.id}
+                onMouseDown={() => {
+                  onClickUser(res);
+                }}
+              >
+                {res.id} {res.name && `(${res.name})`}
+              </ListGroup.Item>
+            );
+          })}
       </ListGroup>
     );
   };
@@ -107,7 +113,10 @@ const UserSearch = ({
             )
           }
           onChange={onChange}
-          onBlur={() => setShowResults(false)}
+          onBlur={(e) => {
+            e.preventDefault();
+            setShowResults(false);
+          }}
           onFocus={() => setShowResults(true)}
         />
       </Form>

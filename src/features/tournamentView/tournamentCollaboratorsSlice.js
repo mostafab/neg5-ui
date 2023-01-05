@@ -9,7 +9,11 @@ const initialState = {
 const slice = createSlice({
   name: "tournamentCollaborators",
   initialState,
-  reducers: {},
+  reducers: {
+    collaboratorAddedOrUpdated(state, action) {
+      state.collaborators.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadCollaboratorsDataAsync.fulfilled, (state, action) => {
       state.collaborators = action.payload;
@@ -25,3 +29,5 @@ export const loadCollaboratorsDataAsync = createAsyncThunk(
 );
 
 export const tournamentCollaboratorsReducer = slice.reducer;
+
+export const { collaboratorAddedOrUpdated } = slice.actions;
