@@ -17,7 +17,11 @@ const initialState = {
 const tournamentInfoSlice = createSlice({
   name: "tournamentInfo",
   initialState,
-  reducers: {},
+  reducers: {
+    informationUpdated(state, action) {
+      Object.assign(state, action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
       Object.assign(state, action.payload);
@@ -37,3 +41,5 @@ export const loadTournamentDataAsync = createAsyncThunk(
 );
 
 export const tournamentInfoReducer = tournamentInfoSlice.reducer;
+
+export const { informationUpdated } = tournamentInfoSlice.actions;
