@@ -24,6 +24,7 @@ const TeamDisplay = ({ team, matches, teams, onSubmitSuccess }) => {
                 className="mb-0"
                 message={`Are you sure you want to delete ${team.name}? This action is unrecoverable.`}
                 level="danger"
+                onCancel={() => setIsDeleting(false)}
               />
             </div>
           </Col>
