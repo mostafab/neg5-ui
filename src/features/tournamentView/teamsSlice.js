@@ -19,6 +19,10 @@ const tournamentTeamsSlice = createSlice({
         state.teams[matchIndex] = team;
       }
     },
+    teamDeleted(state, action) {
+      const teamId = action.payload.teamId;
+      state.teams = state.teams.filter((t) => t.id !== teamId);
+    },
     teamsPoolsUpdated(state, action) {
       const { phaseId, assignments } = action.payload;
       assignments.forEach(({ teamId, pools }) => {
@@ -60,5 +64,5 @@ export const loadTournamentTeamsAsync = createAsyncThunk(
 
 export const tournamentTeamsReducer = tournamentTeamsSlice.reducer;
 
-export const { teamCreatedOrUpdated, teamsPoolsUpdated } =
+export const { teamCreatedOrUpdated, teamsPoolsUpdated, teamDeleted } =
   tournamentTeamsSlice.actions;

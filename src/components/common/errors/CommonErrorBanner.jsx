@@ -1,7 +1,7 @@
 import React from "react";
 import { Error } from "@components/common/alerts";
 
-export const CommonErrorBanner = ({ errors = [] }) => {
+export const CommonErrorBanner = ({ errors = [], className = "" }) => {
   if (!errors || errors.length === 0) {
     return null;
   }
@@ -19,7 +19,7 @@ export const CommonErrorBanner = ({ errors = [] }) => {
       </>
     );
 
-  return <Error>{children}</Error>;
+  return <Error className={className}>{children}</Error>;
 };
 
 export default CommonErrorBanner;
