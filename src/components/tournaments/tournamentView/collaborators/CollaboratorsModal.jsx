@@ -1,8 +1,11 @@
 import React, { useState, useContext } from "react";
 
 import { useAppDispatch } from "@store";
-import { collaboratorAddedOrUpdated } from "@features/tournamentView/tournamentCollaboratorsSlice";
-import { addOrUpdateCollaborator } from "@api/collaborator";
+import {
+  collaboratorAddedOrUpdated,
+  collaboratorDeleted,
+} from "@features/tournamentView/tournamentCollaboratorsSlice";
+import { addOrUpdateCollaborator, deleteCollaborator } from "@api/collaborator";
 import { doValidatedApiRequest } from "@api/common";
 
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
@@ -39,6 +42,24 @@ const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => {
       dispatch(collaboratorAddedOrUpdated(response));
     }
   };
+  const deleteUser = async (userId) => {
+    const payload = {
+      userId,
+      tournamentId,
+    };
+    setSubmitData({
+      error: null,
+    });
+    const response = await doValidatedApiRequest(() =>
+      deleteCollaborator(payload)
+    );
+    setSubmitData({
+      error: response.errors || null,
+    });
+    if (!response.errors) {
+      dispatch(collaboratorDeleted({ userId }));
+    }
+  };
   return (
     <Modal size="md" title="Update Collaborators" onHide={onHide}>
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
@@ -58,9 +79,8 @@ const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => {
       {collaborators.length > 0 && (
         <CollaboratorsList
           collaborators={collaborators}
-          onUpdateUser={({ userId, isAdmin }) =>
-            addOrUpdateUser(userId, isAdmin)
-          }
+          onDelete={({ userId }) => deleteUser(userId)}
+          onUpdate={({ userId, isAdmin }) => addOrUpdateUser(userId, isAdmin)}
           styles={{
             maxHeight: "30vh",
             minHeight: "20vh",

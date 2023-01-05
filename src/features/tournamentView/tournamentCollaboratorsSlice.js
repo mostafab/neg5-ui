@@ -20,6 +20,12 @@ const slice = createSlice({
         state.collaborators.push(action.payload);
       }
     },
+    collaboratorDeleted(state, action) {
+      const userId = action.payload.userId;
+      state.collaborators = state.collaborators.filter(
+        (c) => c.userId !== userId
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadCollaboratorsDataAsync.fulfilled, (state, action) => {
@@ -37,4 +43,5 @@ export const loadCollaboratorsDataAsync = createAsyncThunk(
 
 export const tournamentCollaboratorsReducer = slice.reducer;
 
-export const { collaboratorAddedOrUpdated } = slice.actions;
+export const { collaboratorAddedOrUpdated, collaboratorDeleted } =
+  slice.actions;

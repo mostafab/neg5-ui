@@ -5,7 +5,12 @@ import orderBy from "lodash/orderBy";
 import Pill from "@components/common/pill";
 import DropdownActions from "@components/common/DropdownActions";
 
-const CollaboratorsList = ({ collaborators, styles = {}, onUpdateUser }) => (
+const CollaboratorsList = ({
+  collaborators,
+  styles = {},
+  onUpdate,
+  onDelete,
+}) => (
   <>
     <h5>People with Access</h5>
     <ListGroup style={styles}>
@@ -13,7 +18,7 @@ const CollaboratorsList = ({ collaborators, styles = {}, onUpdateUser }) => (
         const firstAction = {
           label: c.isAdmin ? "Remove Admin Access" : "Grant Admin Access",
           onClick: () =>
-            onUpdateUser({
+            onUpdate({
               userId: c.userId,
               isAdmin: c.isAdmin ? false : true,
             }),
@@ -31,6 +36,7 @@ const CollaboratorsList = ({ collaborators, styles = {}, onUpdateUser }) => (
                 firstAction,
                 {
                   label: <span className="text-danger">Remove</span>,
+                  onClick: () => onDelete(c),
                 },
               ]}
             />
