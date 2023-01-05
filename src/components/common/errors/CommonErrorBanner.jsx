@@ -2,7 +2,7 @@ import React from "react";
 import { Error } from "@components/common/alerts";
 
 export const CommonErrorBanner = ({ errors = [] }) => {
-  if (errors.length === 0) {
+  if (!errors || errors.length === 0) {
     return null;
   }
   const children =

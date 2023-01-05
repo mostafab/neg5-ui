@@ -1,13 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
+import pickBy from "lodash/pickBy";
+import isEqual from "lodash/isEqual";
 
 import Button from "@components/common/button";
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
+
+import { useAppDispatch } from "@store";
+import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
+import { doValidatedApiRequest } from "@api/common";
+import { batchUpdateTeamPools } from "@api/team";
 
 import TeamsInPool from "./TeamsInPool";
 
-const buildInitialState = (poolTeams, teamsNotAssignedPools) => ({
-  poolTeams: { ...poolTeams },
+const buildTeamToPoolMap = ({ teamsNotAssignedPools, poolTeams }) => {
+  const map = {};
+  teamsNotAssignedPools.forEach((team) => {
+    map[team.id] = null;
+  });
+  Object.entries(poolTeams).forEach(([poolId, teams]) => {
+    teams.forEach((team) => {
+      map[team.id] = poolId;
+    });
+  });
+  return map;
+};
+
+const editorIsDirty = (originalAssignments, currentAssignments) => {
+  const originalMappings = buildTeamToPoolMap(originalAssignments);
+  const newMappings = buildTeamToPoolMap(currentAssignments);
+  return !isEqual(originalMappings, newMappings);
+};
+
+const buildInitialState = (pools, poolTeams, teamsNotAssignedPools) => ({
+  poolTeams: pickBy({ ...poolTeams }, (_val, key) =>
+    pools.some((p) => p.id === key)
+  ),
   teamsNotAssignedPools: [...teamsNotAssignedPools],
 });
 
@@ -20,8 +49,27 @@ const TeamPoolsEditor = ({
   teamsNotAssignedPools = [],
 }) => {
   const [poolAssignments, setPoolAssignments] = useState(() => {
-    return buildInitialState(poolTeams, teamsNotAssignedPools);
+    return buildInitialState(pools, poolTeams, teamsNotAssignedPools);
   });
+  const [originalAssignments, setOriginalAssignments] = useState({
+    poolAssignments,
+    dirty: false,
+  });
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setOriginalAssignments({
+      ...originalAssignments,
+      dirty: editorIsDirty(
+        originalAssignments.poolAssignments,
+        poolAssignments
+      ),
+    });
+  }, [poolAssignments]);
 
   const onAssignTeam = (team, oldPoolId, newPoolId) => {
     /*
@@ -54,8 +102,56 @@ const TeamPoolsEditor = ({
   };
 
   const onReset = () => {
-    setPoolAssignments(buildInitialState(poolTeams, teamsNotAssignedPools));
+    setPoolAssignments(
+      buildInitialState(pools, poolTeams, teamsNotAssignedPools)
+    );
   };
+
+  const onSubmit = async () => {
+    const teamToPoolAssignments = buildTeamToPoolMap(poolAssignments);
+    const assignments = Object.entries(teamToPoolAssignments).map(
+      ([teamId, poolId]) => ({
+        teamId,
+        assignments: [
+          {
+            poolId: poolId || null,
+            phaseId,
+          },
+        ],
+      })
+    );
+    const payload = {
+      assignments,
+    };
+    setSubmitData({
+      error: null,
+      submitting: true,
+    });
+    const response = await doValidatedApiRequest(async () => {
+      return batchUpdateTeamPools(payload);
+    });
+    if (response.errors) {
+      setSubmitData({
+        error: response.errors,
+        submitting: false,
+      });
+    } else {
+      setSubmitData({
+        submitting: false,
+      });
+      setOriginalAssignments({
+        poolAssignments: { ...poolAssignments },
+        dirty: false,
+      });
+      dispatch(
+        teamsPoolsUpdated({
+          assignments: response,
+          phaseId,
+        })
+      );
+    }
+  };
+
   const allPools = [unassignedPool, ...pools];
   return (
     <Row>
@@ -81,15 +177,29 @@ const TeamPoolsEditor = ({
           ))}
         </Row>
       </Col>
-      <Col lg={12} md={5} sm={12} className="mt-3">
-        <hr />
-        <div className="float-end">
-          <Button className="me-3" type="secondary" onClick={() => onReset()}>
-            Reset
-          </Button>
-          <Button type="primary">Save Changes</Button>
-        </div>
-      </Col>
+      {originalAssignments.dirty && (
+        <Col lg={12} md={12} sm={12} className="mt-3">
+          <hr />
+          {submitData.error && <CommonErrorBanner errors={submitData.error} />}
+          <div className="float-end">
+            <Button
+              className="me-3"
+              type="secondary"
+              onClick={onReset}
+              disabled={submitData.submitting}
+            >
+              Reset
+            </Button>
+            <Button
+              type="primary"
+              onClick={onSubmit}
+              submitting={submitData.submitting}
+            >
+              {submitData.saving ? "Saving" : "Save Changes"}
+            </Button>
+          </div>
+        </Col>
+      )}
     </Row>
   );
 };

@@ -6,9 +6,6 @@ import TournamentInfoPanel from "@components/tournaments/tournamentView/Tourname
 const mapStateToProps = ({ tournamentInfoReducer }) => ({
   tournamentInfo: {
     ...tournamentInfoReducer,
-    tournamentDate: tournamentInfoReducer.tournamentDate
-      ? dayjs(tournamentInfoReducer.tournamentDate).format("MMMM D, YYYY")
-      : null,
   },
 });
 

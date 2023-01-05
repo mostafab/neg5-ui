@@ -34,3 +34,11 @@ export const loadCollaborators = async (tournamentId) =>
   await (
     await client.get(`/neg5-api/tournaments/${tournamentId}/collaborators`)
   ).data;
+
+export const updateBasicInformation = async (tournamentId, body) => {
+  const response = await client.put(
+    `/neg5-api/tournaments/${tournamentId}`,
+    body
+  );
+  return await response.data;
+};

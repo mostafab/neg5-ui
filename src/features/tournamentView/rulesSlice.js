@@ -18,7 +18,16 @@ const keys = Object.keys(initialState);
 const tournamentRulesSlice = createSlice({
   name: "tournamentInfo",
   initialState,
-  reducers: {},
+  reducers: {
+    rulesUpdated(state, action) {
+      copyKeys(keys, state, action.payload);
+      state.tossupValues = orderBy(
+        action.payload.tossupValues,
+        ["value"],
+        ["desc"]
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
       copyKeys(keys, state, action.payload);
@@ -32,3 +41,5 @@ const tournamentRulesSlice = createSlice({
 });
 
 export const tournamentRulesReducer = tournamentRulesSlice.reducer;
+
+export const { rulesUpdated } = tournamentRulesSlice.actions;

@@ -65,7 +65,7 @@ const NewPoolForm = ({ className = "", phaseId, pool }) => {
           <Button
             className="mb-3"
             type="primary"
-            disabled={submitData.submitting}
+            submitting={submitData.submitting}
             submit
           >
             {submitData.submitting ? "Saving" : "Save"}

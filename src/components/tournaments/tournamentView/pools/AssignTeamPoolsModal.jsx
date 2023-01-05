@@ -61,7 +61,7 @@ const AssignTeamPoolsModal = ({
                 eventKey={p.id}
                 title={
                   <>
-                    <span className="m-1">{p.name}</span>
+                    <span className="me-2">{p.name}</span>
                     {(teamsNotAssignedPools[p.id] || []).length > 0 && (
                       <Warning
                         className="float-end"
