@@ -164,9 +164,13 @@ export const Number = ({
   />
 );
 
-export const Checkbox = ({ name, label }) => {
+export const Checkbox = ({ name, label, onChange = null }) => {
   const [field] = useField(name);
   const readOnly = useReadOnlyContext();
+  const internalOnChange = (e) => {
+    field.onChange(e);
+    onChange && onChange(e.target.checked);
+  };
   return (
     <FormComponent.Group controlId={name} className="mb-3">
       <FormComponent.Check
@@ -176,6 +180,7 @@ export const Checkbox = ({ name, label }) => {
         label={label}
         {...field}
         checked={field.value}
+        onChange={internalOnChange}
       />
     </FormComponent.Group>
   );

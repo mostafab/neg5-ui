@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useContext, useState } from "react";
 import { object as yupObject } from "yup";
 
@@ -6,6 +7,7 @@ import { informationUpdated } from "@features/tournamentView/tournamentInfoSlice
 import { updateBasicInformation } from "@api/tournaments";
 import { doValidatedApiRequest } from "@api/common";
 
+import { Info } from "@components/common/alerts";
 import { Form, Checkbox } from "@components/common/forms";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import TournamentInfoFields, {
@@ -23,6 +25,9 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
     error: null,
     submitting: false,
   });
+  const [hiddenChecked, setHiddenChcked] = useState(
+    tournamentInfo.hidden || false
+  );
   const dispatch = useAppDispatch();
   const tournamentId = useContext(TournamentIdContext);
   const onSubmit = async (values) => {
@@ -56,7 +61,14 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
       onSubmit={onSubmit}
       submitting={submitData.submitting}
     >
-      <Checkbox name="hidden" label="Hidden" />
+      <Checkbox
+        name="hidden"
+        label="Hidden"
+        onChange={(checked) => setHiddenChcked(checked)}
+      />
+      {hiddenChecked && (
+        <Info>Hidden tournaments won't show up in stat searches.</Info>
+      )}
       <TournamentInfoFields />
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
