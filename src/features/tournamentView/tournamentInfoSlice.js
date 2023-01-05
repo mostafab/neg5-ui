@@ -34,11 +34,9 @@ export const loadTournamentDataAsync = createAsyncThunk(
   "tournamentInfoSlice/loadTournament",
   async (tournamentId, { dispatch }) => {
     const data = await loadInformation(tournamentId);
-    await Promise.all([
-      await dispatch(loadTournamentMatchesAsync(tournamentId)),
-      await dispatch(loadTournamentTeamsAsync(tournamentId)),
-      await dispatch(loadCollaboratorsDataAsync(tournamentId)),
-    ]);
+    dispatch(loadTournamentMatchesAsync(tournamentId));
+    dispatch(loadTournamentTeamsAsync(tournamentId));
+    dispatch(loadCollaboratorsDataAsync(tournamentId));
     return data;
   }
 );
