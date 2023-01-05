@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 
 import Card from "@components/common/cards";
 import { Edit } from "@components/common/icon";
+import Pill from "@components/common/pill";
 
 import TournamentInfoModal from "@components/tournaments/info/TournamentInfoModal";
 import { labelWithValue } from "./utilities";
@@ -22,6 +23,11 @@ const TournamentInfoPanel = ({ tournamentInfo }) => {
           },
         ]}
       >
+        {tournamentInfo.hidden && (
+          <Pill className="mb-2" type="secondary">
+            Hidden
+          </Pill>
+        )}
         {labelWithValue("Owner", tournamentInfo.directorId)}
         {labelWithValue("Date", dateValue)}
         {labelWithValue("Location", tournamentInfo.location)}

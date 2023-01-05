@@ -67,7 +67,17 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
         onChange={(checked) => setHiddenChcked(checked)}
       />
       {hiddenChecked && (
-        <Info>Hidden tournaments won't show up in stat searches.</Info>
+        <Info>
+          Hidden tournaments won't show up in searches on{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://stats.neg5.org"
+          >
+            stats.neg5.org
+          </a>
+          .
+        </Info>
       )}
       <TournamentInfoFields />
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
