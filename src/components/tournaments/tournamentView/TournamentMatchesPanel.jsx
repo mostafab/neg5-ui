@@ -22,7 +22,9 @@ const TournamentMatchesPanel = ({
   return (
     <>
       <Card
-        title={<span>Matches ({matches.length})</span>}
+        title={
+          <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
+        }
         actions={
           enoughTeamsToAddMatch && matches.length > 0
             ? [
@@ -76,7 +78,8 @@ const TournamentMatchesPanel = ({
               >
                 scoresheet
               </a>{" "}
-              for future matches.
+              for future matches. Matches you or any collaborators add will show
+              up here.
             </div>
           </div>
         )}
