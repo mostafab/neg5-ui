@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Edit } from "@components/common/icon";
 import Card from "@components/common/cards";
-import AssignTeamPoolsModal from "@components/tournaments/tournamentView/pools/AssignTeamPoolsModal";
+import PoolsModal from "@components/tournaments/tournamentView/pools/PoolsModal";
 
 const TournamentPhasesPanel = ({
   phases,
@@ -16,7 +16,7 @@ const TournamentPhasesPanel = ({
       <Card
         className="TournamentPhasesPanel"
         shadow
-        title="Phases & Team Pools"
+        title="Team Pools"
         actions={[
           {
             component: <Edit onClick={() => setShowModal(true)} />,
@@ -24,7 +24,7 @@ const TournamentPhasesPanel = ({
         ]}
       />
       {showModal && (
-        <AssignTeamPoolsModal
+        <PoolsModal
           phases={phases}
           pools={pools}
           poolTeams={poolTeams}

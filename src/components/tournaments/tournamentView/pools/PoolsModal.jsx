@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
-import Icon, { Warning } from "@components/common/icon";
+import { Warning, Add } from "@components/common/icon";
 import Card from "@components/common/cards";
 import Modal from "@components/common/modal";
 
@@ -11,7 +11,7 @@ import PoolForm from "./PoolForm";
 import PhaseForm from "./PhaseForm";
 import TeamPoolsEditor from "./TeamPoolsEditor";
 
-const AssignTeamPoolsModal = ({
+const PoolsModal = ({
   phases,
   pools,
   poolTeams,
@@ -22,7 +22,7 @@ const AssignTeamPoolsModal = ({
     phases.length === 0 ? "new" : phases[0].id
   );
 
-  const renderPools = (phaseId) => {
+  const renderPhaseTabContent = (phaseId) => {
     const matching = pools.filter((p) => p.phaseId === phaseId);
     return (
       <>
@@ -47,10 +47,9 @@ const AssignTeamPoolsModal = ({
       title="Team Pools"
       fullscreen
     >
-      <Card className="TournamentPhasesPanel mt-3" shadow title={null}>
+      <Card className="TournamentPhasesPanel mt-3" shadow title={"Pools"}>
         {phases.length > 0 && (
           <Tabs
-            mountOnEnter={false}
             transition={false}
             activeKey={selectedTab}
             onSelect={(key) => setSelectedTab(key)}
@@ -71,19 +70,10 @@ const AssignTeamPoolsModal = ({
                   </>
                 }
               >
-                {renderPools(p.id)}
+                {renderPhaseTabContent(p.id)}
               </Tab>
             ))}
-            <Tab
-              eventKey="new"
-              key="new"
-              title={
-                <>
-                  New Phase
-                  <Icon name="Plus" className="ms-2" />
-                </>
-              }
-            >
+            <Tab eventKey="new" key="new" title={<Add className="ms-2 mb-1" />}>
               <Row className="mt-3 p-3">
                 <Col lg={4} md={2} sm={12} />
                 <Col lg={4} md={8} sm={12}>
@@ -102,4 +92,4 @@ const AssignTeamPoolsModal = ({
   );
 };
 
-export default AssignTeamPoolsModal;
+export default PoolsModal;

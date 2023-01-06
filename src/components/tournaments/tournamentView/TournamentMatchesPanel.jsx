@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
 
 import Card from "@components/common/cards";
@@ -55,7 +56,7 @@ const TournamentMatchesPanel = ({
         {enoughTeamsToAddMatch && matches.length === 0 && (
           <div className="d-flex p-2 justify-content-center">
             <div style={{ textAlign: "center" }}>
-              No matches have been added yet. You can{" "}
+              When you're ready, you can{" "}
               <a
                 onClick={(e) => {
                   e.preventDefault();
