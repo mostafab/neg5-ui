@@ -5,6 +5,7 @@ import pickBy from "lodash/pickBy";
 import isEqual from "lodash/isEqual";
 
 import Button from "@components/common/button";
+import { X } from "@components/common/icon";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 
 import { useAppDispatch } from "@store";
@@ -12,7 +13,7 @@ import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
 import { doValidatedApiRequest } from "@api/common";
 import { batchUpdateTeamPools } from "@api/team";
 
-import TeamsInPool from "./TeamsInPool";
+import PoolCard from "./PoolCard";
 
 const buildTeamToPoolMap = ({ teamsNotAssignedPools, poolTeams }) => {
   const map = {};
@@ -30,7 +31,13 @@ const buildTeamToPoolMap = ({ teamsNotAssignedPools, poolTeams }) => {
 const editorIsDirty = (originalAssignments, currentAssignments) => {
   const originalMappings = buildTeamToPoolMap(originalAssignments);
   const newMappings = buildTeamToPoolMap(currentAssignments);
-  return !isEqual(originalMappings, newMappings);
+  return (
+    !isEqual(originalMappings, newMappings) ||
+    !isEqual(
+      originalAssignments.poolsToRemove,
+      currentAssignments.poolsToRemove
+    )
+  );
 };
 
 const buildInitialState = (pools, poolTeams, teamsNotAssignedPools) => ({
@@ -38,6 +45,7 @@ const buildInitialState = (pools, poolTeams, teamsNotAssignedPools) => ({
     pools.some((p) => p.id === key)
   ),
   teamsNotAssignedPools: [...teamsNotAssignedPools],
+  poolsToRemove: [],
 });
 
 const unassignedPool = { name: "No Assigned Pool", id: null };
@@ -71,7 +79,14 @@ const TeamPoolsEditor = ({
     });
   }, [poolAssignments]);
 
-  const onAssignTeam = (team, oldPoolId, newPoolId) => {
+  const onAssignTeam = (
+    team,
+    oldPoolId,
+    newPoolId,
+    removeOldPoolId = false
+  ) => {
+    const teams = Array.isArray(team) ? team : [team];
+    const teamIds = new Set(teams.map((t) => t.id));
     /*
     On a pool re-assignment, add the team to the new pool and
     remove them from the old pool in this phase
@@ -85,17 +100,24 @@ const TeamPoolsEditor = ({
       }
       if (oldPoolId) {
         draft.poolTeams[oldPoolId] = draft.poolTeams[oldPoolId].filter(
-          (t) => t.id !== team.id
+          (t) => !teamIds.has(t.id)
         );
       } else {
         draft.teamsNotAssignedPools = draft.teamsNotAssignedPools.filter(
-          (t) => t.id !== team.id
+          (t) => !teamIds.has(t.id)
         );
       }
       if (newPoolId) {
-        draft.poolTeams[newPoolId] = [...draft.poolTeams[newPoolId], team];
+        draft.poolTeams[newPoolId] = [...draft.poolTeams[newPoolId], ...teams];
       } else {
-        draft.teamsNotAssignedPools = [...draft.teamsNotAssignedPools, team];
+        draft.teamsNotAssignedPools = [
+          ...draft.teamsNotAssignedPools,
+          ...teams,
+        ];
+      }
+
+      if (removeOldPoolId && draft.poolsToRemove.indexOf(oldPoolId) === -1) {
+        draft.poolsToRemove.push(oldPoolId);
       }
     });
     setPoolAssignments(nextAssignmentsState);
@@ -105,6 +127,11 @@ const TeamPoolsEditor = ({
     setPoolAssignments(
       buildInitialState(pools, poolTeams, teamsNotAssignedPools)
     );
+  };
+
+  const onRemovePool = (poolId) => {
+    const teamsToReassign = poolAssignments.poolTeams[poolId] || [];
+    onAssignTeam(teamsToReassign, poolId, null, true);
   };
 
   const onSubmit = async () => {
@@ -156,7 +183,7 @@ const TeamPoolsEditor = ({
   return (
     <Row>
       <Col lg={4} md={5} sm={12}>
-        <TeamsInPool
+        <PoolCard
           pool={unassignedPool}
           teams={poolAssignments.teamsNotAssignedPools}
           onAssignTeam={onAssignTeam}
@@ -165,16 +192,23 @@ const TeamPoolsEditor = ({
       </Col>
       <Col lg={8} md={7} sm={12}>
         <Row>
-          {pools.map((p) => (
-            <Col lg={6} md={6} sm={6} xs={12} key={p.id}>
-              <TeamsInPool
-                pool={p}
-                teams={poolAssignments.poolTeams[p.id] || []}
-                onAssignTeam={onAssignTeam}
-                pools={allPools}
-              />
-            </Col>
-          ))}
+          {pools
+            .filter((p) => poolAssignments.poolsToRemove.indexOf(p.id) === -1)
+            .map((p) => (
+              <Col lg={6} md={6} sm={6} xs={12} key={p.id}>
+                <PoolCard
+                  pool={p}
+                  teams={poolAssignments.poolTeams[p.id] || []}
+                  onAssignTeam={onAssignTeam}
+                  pools={allPools}
+                  actions={[
+                    {
+                      component: <X onClick={() => onRemovePool(p.id)} />,
+                    },
+                  ]}
+                />
+              </Col>
+            ))}
         </Row>
       </Col>
       {originalAssignments.dirty && (
