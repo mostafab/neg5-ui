@@ -52,6 +52,7 @@ const ScoresheetModal = ({ onHide, teams, rules, phases, currentUser }) => {
           scoresheetStartValues={scoresheetStartValues}
           teams={teams}
           rules={rules}
+          phases={phases}
         />
       )}
     </Modal>

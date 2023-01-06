@@ -16,9 +16,14 @@ import {
 
 import Button from "@components/common/button";
 
-const ReadOnlyContext = createContext(false);
+const ReadOnlyContext = createContext({ readOnly: false, editableFields: [] });
 
 export const useReadOnlyContext = () => useContext(ReadOnlyContext);
+
+const fieldIsReadOnly = (name, context) => {
+  const { readOnly, editableFields } = context;
+  return readOnly && !(editableFields.indexOf(name) >= 0);
+};
 
 export const Form = ({
   name,
@@ -32,10 +37,11 @@ export const Form = ({
   submitting = false,
   dirtySubmitOnly = false,
   readOnly = false,
+  editableFields = [],
   customCtaButtons = false,
 }) => {
   return (
-    <ReadOnlyContext.Provider value={readOnly}>
+    <ReadOnlyContext.Provider value={{ readOnly, editableFields }}>
       <Formik
         onSubmit={(values, actions) => onSubmit(values, actions)}
         initialValues={initialValues}
@@ -65,7 +71,7 @@ export const Form = ({
 
 export const RepeatField = ({ name, render, addObjectProps = null }) => {
   const [field] = useField(name);
-  const readOnly = useReadOnlyContext();
+  const readOnly = fieldIsReadOnly(name, useReadOnlyContext());
   return (
     <FieldArray
       name={name}
@@ -166,7 +172,7 @@ export const Number = ({
 
 export const Checkbox = ({ name, label, onChange = null }) => {
   const [field] = useField(name);
-  const readOnly = useReadOnlyContext();
+  const readOnly = fieldIsReadOnly(name, useReadOnlyContext());
   const internalOnChange = (e) => {
     field.onChange(e);
     onChange && onChange(e.target.checked);
@@ -196,7 +202,7 @@ export const Select = ({
 }) => {
   const [field, meta] = useField(name);
   const formContext = useFormContext();
-  const isReadOnly = useReadOnlyContext();
+  const isReadOnly = fieldIsReadOnly(name, useReadOnlyContext());
   const internalOnChange = (opts) => {
     const value = multiple ? opts.map((o) => o.value) : opts.value;
     formContext.getFieldHelpers(name).setValue(value);
@@ -275,8 +281,10 @@ const ContextAwareFormButtons = ({
   initialValues,
 }) => {
   const { dirty, resetForm } = useFormContext();
-  const readOnly = useReadOnlyContext();
-  if (readOnly || (dirtySubmitOnly && !dirty)) {
+  const readOnlyContext = useReadOnlyContext();
+  const isReadOnly =
+    readOnlyContext.readOnly && !(readOnlyContext.editableFields.length > 0);
+  if (isReadOnly || (dirtySubmitOnly && !dirty)) {
     return null;
   }
   return (
@@ -318,7 +326,7 @@ const CommonFormElementWrapper = ({
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
-  const inReadOnlyContext = useReadOnlyContext();
+  const inReadOnlyContext = fieldIsReadOnly(name, useReadOnlyContext());
   const readOnly = isDisplay || inReadOnlyContext;
   const internalOnChange = (e) => {
     field.onChange(e);

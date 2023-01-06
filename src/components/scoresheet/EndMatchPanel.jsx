@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from "react";
+import keyBy from "lodash/keyBy";
 
 import { doValidatedApiRequest } from "@api/common";
 import { convertScoresheet } from "@api/scoresheet";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 
 import Card from "@components/common/cards";
+import Button from "@components/common/button";
 import { Info } from "@components/common/alerts";
 import { X, Spinner } from "@components/common/icon";
 
-const EndMatchPanel = ({ startValues, scoresheetState, onCancel }) => {
+import MatchForm from "@components/tournaments/tournamentView/matches/MatchForm";
+
+const EndMatchPanel = ({
+  startValues,
+  scoresheetState,
+  onCancel,
+  onSubmit,
+  teams,
+  rules,
+  phases,
+}) => {
   const [conversionData, setConversionData] = useState({
     data: null,
     loading: false,
@@ -25,7 +37,6 @@ const EndMatchPanel = ({ startValues, scoresheetState, onCancel }) => {
     const response = await doValidatedApiRequest(() =>
       convertScoresheet(payload)
     );
-    console.log(response);
     setConversionData({
       data: response,
       loading: false,
@@ -36,6 +47,10 @@ const EndMatchPanel = ({ startValues, scoresheetState, onCancel }) => {
   }, []);
 
   const { loading, data } = conversionData;
+  const playersById = keyBy(
+    teams.flatMap((t) => t.players),
+    "id"
+  );
   return (
     <Card
       title="Submit Scoresheet"
@@ -52,11 +67,32 @@ const EndMatchPanel = ({ startValues, scoresheetState, onCancel }) => {
         </div>
       )}
       {!loading && data && (
-        <Info>
-          Please take a moment to validate this information. If everything looks
-          good, go ahead and submit! Otherwise, please go back and fix any
-          issues before submitting.
-        </Info>
+        <>
+          <Info>
+            Please take a moment to verify this information is correct. If
+            everything looks good, go ahead and submit! Otherwise, please go
+            back and fix any issues before submitting.
+          </Info>
+          <MatchForm
+            stacked
+            readOnly
+            match={data}
+            teams={teams}
+            rules={rules}
+            phases={phases}
+            playersById={playersById}
+            onSubmit={onSubmit}
+            editableFields={[
+              "round",
+              "moderator",
+              "room",
+              "packet",
+              "serialId",
+              "phases",
+              "notes",
+            ]}
+          />
+        </>
       )}
     </Card>
   );

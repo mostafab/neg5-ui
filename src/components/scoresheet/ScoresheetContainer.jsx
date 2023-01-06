@@ -45,7 +45,12 @@ const scoresheetInitialState = (rules, teams) => {
   };
 };
 
-const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
+const ScoresheetContainer = ({
+  scoresheetStartValues,
+  teams,
+  rules,
+  phases,
+}) => {
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
     scoresheetStartValues.team2Id,
@@ -188,6 +193,10 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
     setScoresheetState(nextState);
   };
 
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+
   return (
     <Row>
       <Col
@@ -247,6 +256,10 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
             scoresheetState={scoresheetState}
             startValues={scoresheetStartValues}
             onCancel={() => setEndingMatch(false)}
+            teams={scoresheetTeams}
+            rules={rules}
+            phases={phases}
+            onSubmit={onSubmit}
           />
         )}
       </Col>
