@@ -10,6 +10,7 @@ import { CycleStage, AnswerType, Direction } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
 import ScoresheetSummary from "./ScoresheetSummary";
+import EndMatchPanel from "./EndMatchPanel";
 
 const initialBonuses = (rules) =>
   times(rules.partsPerBonus, () => ({
@@ -52,6 +53,11 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
   const [scoresheetState, setScoresheetState] = useState(
     scoresheetInitialState(rules, scoresheetTeams)
   );
+  const [endingMatch, setEndingMatch] = useState(false);
+
+  const onEndMatch = () => {
+    setEndingMatch(true);
+  };
 
   const onBack = () => {
     const nextState = produce(scoresheetState, (draft) => {
@@ -218,21 +224,31 @@ const ScoresheetContainer = ({ scoresheetStartValues, teams, rules }) => {
         sm={12}
         className="order-0 order-lg-1 order-md-1 order-xl-1 mb-3"
       >
-        <CurrentCyclePanel
-          currentCycle={scoresheetState.currentCycle}
-          teams={scoresheetTeams}
-          rules={rules}
-          onClickAnswer={onClickAnswer}
-          onBack={onBack}
-          onBonus={onBonus}
-          onNextTossup={onNextTossup}
-          onNoAnswer={onNoAnswer}
-          onUndoNeg={onUndoNeg}
-          playerOrderings={scoresheetState.playerOrderings}
-          onMovePlayer={onMovePlayer}
-          activePlayers={scoresheetState.activePlayers}
-          onToggleActive={onToggleActive}
-        />
+        {!endingMatch && (
+          <CurrentCyclePanel
+            currentCycle={scoresheetState.currentCycle}
+            teams={scoresheetTeams}
+            rules={rules}
+            onClickAnswer={onClickAnswer}
+            onBack={onBack}
+            onBonus={onBonus}
+            onNextTossup={onNextTossup}
+            onNoAnswer={onNoAnswer}
+            onUndoNeg={onUndoNeg}
+            playerOrderings={scoresheetState.playerOrderings}
+            onMovePlayer={onMovePlayer}
+            activePlayers={scoresheetState.activePlayers}
+            onToggleActive={onToggleActive}
+            onEndMatch={onEndMatch}
+          />
+        )}
+        {endingMatch && (
+          <EndMatchPanel
+            scoresheetState={scoresheetState}
+            startValues={scoresheetStartValues}
+            onCancel={() => setEndingMatch(false)}
+          />
+        )}
       </Col>
     </Row>
   );
