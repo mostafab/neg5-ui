@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { doValidatedApiRequest } from "@api/common";
 import { convertScoresheet } from "@api/scoresheet";
+import { sanitizeFormValuesRecursive } from "@libs/forms";
 
 import Card from "@components/common/cards";
 import { Info } from "@components/common/alerts";
@@ -18,7 +19,7 @@ const EndMatchPanel = ({ startValues, scoresheetState, onCancel }) => {
       loading: true,
     });
     const payload = {
-      ...startValues,
+      ...sanitizeFormValuesRecursive(startValues),
       ...scoresheetState,
     };
     const response = await doValidatedApiRequest(() =>
