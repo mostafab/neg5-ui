@@ -2,13 +2,14 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import * as Yup from "yup";
 
-import { Form, Text, Number, Select } from "@components/common/forms";
+import { Form, Text, Number, Select, Checkbox } from "@components/common/forms";
 import { getTeamOptions, getPhaseOptions } from "@libs/tournamentForms";
 
 const initialValues = (phases, currentUser) => ({
   round: "",
   team1Id: "",
   team2Id: "",
+  isTiebreaker: false,
   moderator: currentUser.name || currentUser.username || "",
   room: "",
   packet: "",
@@ -68,6 +69,9 @@ const ScoresheetStartForm = ({ teams, phases, onSubmit, currentUser }) => (
           </Col>
           <Col lg={6} md={6}>
             <Text name="packet" label="Packet" />
+          </Col>
+          <Col lg={12} md={12} sm={12}>
+            <Checkbox name="isTiebreaker" label="Tiebreaker" />
           </Col>
         </Row>
       </Col>

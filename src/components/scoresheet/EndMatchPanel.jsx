@@ -6,11 +6,21 @@ import { convertScoresheet } from "@api/scoresheet";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 
 import Card from "@components/common/cards";
-import Button from "@components/common/button";
 import { Info } from "@components/common/alerts";
 import { X, Spinner } from "@components/common/icon";
 
 import MatchForm from "@components/tournaments/tournamentView/matches/MatchForm";
+
+const editableMatchFormFields = [
+  "round",
+  "moderator",
+  "room",
+  "packet",
+  "serialId",
+  "phases",
+  "notes",
+  "isTiebreaker",
+];
 
 const EndMatchPanel = ({
   startValues,
@@ -82,15 +92,7 @@ const EndMatchPanel = ({
             phases={phases}
             playersById={playersById}
             onSubmit={onSubmit}
-            editableFields={[
-              "round",
-              "moderator",
-              "room",
-              "packet",
-              "serialId",
-              "phases",
-              "notes",
-            ]}
+            editableFields={editableMatchFormFields}
           />
         </>
       )}
