@@ -20,7 +20,7 @@ const TeamRow = ({ team, poolId, pools, onAssign }) => {
   );
 };
 
-const PoolCard = ({ pool, teams, onAssignTeam, pools }) => {
+const PoolCard = ({ pool, teams, onAssignTeam, pools, actions = null }) => {
   return (
     <div>
       <Card
@@ -33,6 +33,7 @@ const PoolCard = ({ pool, teams, onAssignTeam, pools }) => {
         }
         shadow={false}
         className="mt-4"
+        actions={actions}
       >
         <hr />
         <ListGroup>
