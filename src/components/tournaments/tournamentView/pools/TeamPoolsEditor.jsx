@@ -10,6 +10,7 @@ import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 
 import { useAppDispatch } from "@store";
 import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
+import { poolsDeleted } from "@features/tournamentView/phasesSlice";
 import { doValidatedApiRequest } from "@api/common";
 import { batchUpdateTeamPools } from "@api/team";
 
@@ -149,6 +150,7 @@ const TeamPoolsEditor = ({
     );
     const payload = {
       assignments,
+      poolsToRemove: poolAssignments.poolsToRemove,
     };
     setSubmitData({
       error: null,
@@ -174,6 +176,11 @@ const TeamPoolsEditor = ({
         teamsPoolsUpdated({
           assignments: response,
           phaseId,
+        })
+      );
+      dispatch(
+        poolsDeleted({
+          poolIds: payload.poolsToRemove,
         })
       );
     }

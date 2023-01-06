@@ -18,6 +18,10 @@ const tournamentPhasesSlice = createSlice({
     phaseCreated: (state, action) => {
       state.phases.push(action.payload);
     },
+    poolsDeleted: (state, action) => {
+      const poolIds = action.payload.poolIds;
+      state.pools = state.pools.filter((p) => poolIds.indexOf(p.id) === -1);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentDataAsync.fulfilled, (state, action) => {
@@ -33,4 +37,5 @@ const tournamentPhasesSlice = createSlice({
 
 export const tournamentPhasesReducer = tournamentPhasesSlice.reducer;
 
-export const { poolCreated, phaseCreated } = tournamentPhasesSlice.actions;
+export const { poolCreated, phaseCreated, poolsDeleted } =
+  tournamentPhasesSlice.actions;
