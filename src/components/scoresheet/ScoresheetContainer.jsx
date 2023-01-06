@@ -193,10 +193,6 @@ const ScoresheetContainer = ({
     setScoresheetState(nextState);
   };
 
-  const onSubmit = (values) => {
-    console.log(values);
-  };
-
   return (
     <Row>
       <Col
@@ -259,7 +255,6 @@ const ScoresheetContainer = ({
             teams={scoresheetTeams}
             rules={rules}
             phases={phases}
-            onSubmit={onSubmit}
           />
         )}
       </Col>

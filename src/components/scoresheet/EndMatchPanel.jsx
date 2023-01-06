@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import keyBy from "lodash/keyBy";
+import pick from "lodash/pick";
 
 import { doValidatedApiRequest } from "@api/common";
 import { convertScoresheet } from "@api/scoresheet";
@@ -26,7 +27,6 @@ const EndMatchPanel = ({
   startValues,
   scoresheetState,
   onCancel,
-  onSubmit,
   teams,
   rules,
   phases,
@@ -35,6 +35,9 @@ const EndMatchPanel = ({
     data: null,
     loading: false,
   });
+  useEffect(() => {
+    loadConversionData();
+  }, []);
 
   const loadConversionData = async () => {
     setConversionData({
@@ -52,9 +55,16 @@ const EndMatchPanel = ({
       loading: false,
     });
   };
-  useEffect(() => {
-    loadConversionData();
-  }, []);
+
+  const onSubmit = (matchFormValues) => {
+    const editableFields = pick(matchFormValues, editableMatchFormFields);
+    const payload = {
+      ...startValues,
+      ...editableFields,
+      ...scoresheetState,
+    };
+    console.log(payload);
+  };
 
   const { loading, data } = conversionData;
   const playersById = keyBy(
