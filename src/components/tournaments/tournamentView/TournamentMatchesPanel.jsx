@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
 
 import Card from "@components/common/cards";
@@ -21,7 +22,9 @@ const TournamentMatchesPanel = ({
   return (
     <>
       <Card
-        title={<span>Matches ({matches.length})</span>}
+        title={
+          <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
+        }
         actions={
           enoughTeamsToAddMatch && matches.length > 0
             ? [
@@ -55,7 +58,7 @@ const TournamentMatchesPanel = ({
         {enoughTeamsToAddMatch && matches.length === 0 && (
           <div className="d-flex p-2 justify-content-center">
             <div style={{ textAlign: "center" }}>
-              No matches have been added yet. You can{" "}
+              When you're ready, you can{" "}
               <a
                 onClick={(e) => {
                   e.preventDefault();
@@ -75,7 +78,8 @@ const TournamentMatchesPanel = ({
               >
                 scoresheet
               </a>{" "}
-              for future matches.
+              for future matches. Matches you or any collaborators add will show
+              up here.
             </div>
           </div>
         )}
@@ -104,6 +108,10 @@ const TournamentMatchesPanel = ({
           rules={rules}
           phases={phases}
           currentUser={currentUser}
+          onViewCreatedMatch={(matchId) => {
+            setShowScoresheet(false);
+            setSelectedMatch(matches.find((m) => m.id === matchId));
+          }}
         />
       )}
     </>

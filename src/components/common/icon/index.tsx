@@ -1,4 +1,5 @@
 import React from "react";
+import BootstrapSpinner from "react-bootstrap/Spinner";
 import * as icons from "react-bootstrap-icons";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -49,6 +50,10 @@ export const X = (props) => <Icon className="x" name="X" {...props} />;
 
 export const Edit = (props) => (
   <Icon className="edit" name="PencilSquare" {...props} />
+);
+
+export const Spinner = (props) => (
+  <BootstrapSpinner size="sm" animation="border" {...props} />
 );
 
 export default Icon;

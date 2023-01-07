@@ -63,13 +63,13 @@ const initialValues = (match, tossupValues) => ({
     match.teams || [initialTeamsValue(), initialTeamsValue()],
     "teamId"
   ).map((team) => ({
-    teamId: team.teamId,
+    teamId: team.teamId || "",
     score: team.score,
     overtimeTossupsGotten: team.overtimeTossupsGotten,
     bouncebackPoints: team.bouncebackPoints,
     forfeit: team.forfeit || false,
     players: (team.players || []).map((player) => ({
-      playerId: player.playerId,
+      playerId: player.playerId || "",
       tossupsHeard: player.tossupsHeard || null,
       answers: orderBy(tossupValues, "value", "desc").map(({ value }) => {
         const numberGotten =
@@ -105,9 +105,12 @@ const MatchForm = ({
   rules,
   playersById,
   phases,
-  readOnly = false,
   onCancel = null,
+  onSubmit = null,
   onSubmitSuccess,
+  stacked = false,
+  readOnly = false,
+  editableFields = [],
 }) => {
   const teamOptions = getTeamOptions(teams);
   const phaseOptions = getPhaseOptions(phases);
@@ -130,7 +133,11 @@ const MatchForm = ({
   }, [match.id, readOnly]);
 
   const tournamentId = useContext(TournamentIdContext);
-  const onSubmit = async (values, { resetForm }) => {
+  const internalOnSubmit = async (values, actions) => {
+    if (onSubmit) {
+      onSubmit(values, actions, setSubmitData);
+      return;
+    }
     setSubmitData({
       error: null,
       submitting: true,
@@ -156,7 +163,7 @@ const MatchForm = ({
         matchCreatedOrUpdated({ match: payload, oldId: match.id || null })
       );
       if (!match.id) {
-        resetForm({ values: initialValues(match) });
+        actions.resetForm({ values: initialValues(match) });
       }
       onSubmitSuccess && onSubmitSuccess(payload);
     }
@@ -169,8 +176,9 @@ const MatchForm = ({
       submitting={submitData.submitting}
       submitButtonText="Save"
       validation={validation}
-      onSubmit={onSubmit}
+      onSubmit={internalOnSubmit}
       readOnly={readOnly}
+      editableFields={editableFields}
       onCancel={onCancel}
     >
       <ResetListener
@@ -188,7 +196,7 @@ const MatchForm = ({
           render={(_val, { index }) => {
             const teamLabelPrefix = `Team ${index + 1} `;
             return (
-              <Col lg={6} md={12} key={index}>
+              <Col lg={stacked ? 12 : 6} md={12} key={index}>
                 <Row>
                   <Col lg={6} sm={12} md={12} className="mb-3">
                     <Checkbox
@@ -301,16 +309,16 @@ const MatchForm = ({
       </Row>
       <hr />
       <Row>
-        <Col lg={3} md={6}>
+        <Col lg={stacked ? 6 : 3} md={6}>
           <Text name="moderator" label="Moderator" />
           <Text name="room" label="Room" />
           <Text name="serialId" label="Serial Id" />
         </Col>
-        <Col lg={3} md={6}>
+        <Col lg={stacked ? 6 : 3} md={6}>
           <Number name="tossupsHeard" label="Tossups Heard" />
           <Text name="packet" label="Packet" />
         </Col>
-        <Col lg={6} md={12}>
+        <Col lg={stacked ? 12 : 6} md={12}>
           <Checkbox name="isTiebreaker" label="Tiebreaker" />
           <Select
             name="phases"

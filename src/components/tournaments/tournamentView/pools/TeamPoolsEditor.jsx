@@ -186,7 +186,9 @@ const TeamPoolsEditor = ({
     }
   };
 
-  const allPools = [unassignedPool, ...pools];
+  const allPools = [unassignedPool, ...pools].filter(
+    (p) => poolAssignments.poolsToRemove.indexOf(p.id) === -1
+  );
   return (
     <Row>
       <Col lg={4} md={5} sm={12}>

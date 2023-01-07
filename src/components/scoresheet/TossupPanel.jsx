@@ -34,6 +34,7 @@ const TossupPanel = ({
   onMovePlayer,
   activePlayers,
   onToggleActive,
+  onEndMatch,
 }) => (
   <>
     <Row className="mb-3">
@@ -74,7 +75,9 @@ const TossupPanel = ({
     {currentCycle.number > 1 && (
       <Row>
         <Col lg={12}>
-          <Button className="float-end">End Match</Button>
+          <Button className="float-end" onClick={onEndMatch}>
+            End Match
+          </Button>
         </Col>
       </Row>
     )}

@@ -9,9 +9,9 @@ const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
   const renderCardBody = () => {
     return (
       <span>
-        {collaborators.length === 0
-          ? "No collaborators have been added yet."
-          : `${collaborators.length} collaborators have been added.`}
+        {`${collaborators.length} collaborator${
+          collaborators.length === 1 ? " has" : "s have"
+        } been added.`}
       </span>
     );
   };
