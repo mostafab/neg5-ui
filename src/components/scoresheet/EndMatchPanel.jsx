@@ -78,7 +78,7 @@ const EndMatchPanel = ({
       error: response.errors,
     });
     if (!response.errors) {
-      dispatch(matchCreatedOrUpdated(response));
+      dispatch(matchCreatedOrUpdated({ match: response }));
     }
   };
 
