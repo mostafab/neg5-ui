@@ -135,7 +135,7 @@ const MatchForm = ({
   const tournamentId = useContext(TournamentIdContext);
   const internalOnSubmit = async (values, actions) => {
     if (onSubmit) {
-      onSubmit(values, actions);
+      onSubmit(values, actions, setSubmitData);
       return;
     }
     setSubmitData({

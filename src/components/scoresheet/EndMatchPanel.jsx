@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import keyBy from "lodash/keyBy";
 import pick from "lodash/pick";
 
+import { useAppDispatch } from "@store";
+import { matchCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
 import { doValidatedApiRequest } from "@api/common";
-import { convertScoresheet } from "@api/scoresheet";
+import { convertScoresheet, submitScoresheet } from "@api/scoresheet";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 
 import Card from "@components/common/cards";
@@ -38,6 +40,7 @@ const EndMatchPanel = ({
   useEffect(() => {
     loadConversionData();
   }, []);
+  const dispatch = useAppDispatch();
 
   const loadConversionData = async () => {
     setConversionData({
@@ -56,14 +59,27 @@ const EndMatchPanel = ({
     });
   };
 
-  const onSubmit = (matchFormValues) => {
+  const onSubmit = async (matchFormValues, _actions, setFormSubmitData) => {
     const editableFields = pick(matchFormValues, editableMatchFormFields);
-    const payload = {
-      ...startValues,
-      ...editableFields,
+    const scoresheetPayload = {
+      ...sanitizeFormValuesRecursive(startValues),
+      ...sanitizeFormValuesRecursive(editableFields),
       ...scoresheetState,
     };
-    console.log(payload);
+    setFormSubmitData({
+      submitting: true,
+      error: null,
+    });
+    const response = await doValidatedApiRequest(() =>
+      submitScoresheet(scoresheetPayload)
+    );
+    setFormSubmitData({
+      submitting: false,
+      error: response.errors,
+    });
+    if (!response.errors) {
+      dispatch(matchCreatedOrUpdated(response));
+    }
   };
 
   const { loading, data } = conversionData;
