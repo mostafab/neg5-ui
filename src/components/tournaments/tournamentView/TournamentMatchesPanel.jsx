@@ -108,6 +108,10 @@ const TournamentMatchesPanel = ({
           rules={rules}
           phases={phases}
           currentUser={currentUser}
+          onViewCreatedMatch={(matchId) => {
+            setShowScoresheet(false);
+            setSelectedMatch(matches.find((m) => m.id === matchId));
+          }}
         />
       )}
     </>

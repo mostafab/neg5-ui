@@ -50,6 +50,7 @@ const ScoresheetContainer = ({
   teams,
   rules,
   phases,
+  onViewCreatedMatch,
 }) => {
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
@@ -255,6 +256,7 @@ const ScoresheetContainer = ({
             teams={scoresheetTeams}
             rules={rules}
             phases={phases}
+            onViewCreatedMatch={onViewCreatedMatch}
           />
         )}
       </Col>

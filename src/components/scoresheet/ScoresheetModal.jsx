@@ -8,7 +8,14 @@ import Button from "@components/common/button";
 import ScoresheetStartForm from "./ScoresheetStartForm";
 import ScoresheetContainer from "./ScoresheetContainer";
 
-const ScoresheetModal = ({ onHide, teams, rules, phases, currentUser }) => {
+const ScoresheetModal = ({
+  onHide,
+  teams,
+  rules,
+  phases,
+  currentUser,
+  onViewCreatedMatch,
+}) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
 
   const getTitle = () => {
@@ -53,6 +60,7 @@ const ScoresheetModal = ({ onHide, teams, rules, phases, currentUser }) => {
           teams={teams}
           rules={rules}
           phases={phases}
+          onViewCreatedMatch={onViewCreatedMatch}
         />
       )}
     </Modal>

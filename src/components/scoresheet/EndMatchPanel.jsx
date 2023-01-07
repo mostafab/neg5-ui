@@ -11,8 +11,9 @@ import { sanitizeFormValuesRecursive } from "@libs/forms";
 import Card from "@components/common/cards";
 import { Info } from "@components/common/alerts";
 import { X, Spinner } from "@components/common/icon";
-
 import MatchForm from "@components/tournaments/tournamentView/matches/MatchForm";
+
+import ScoresheetSubmittedCard from "./ScoresheetSubmittedCard";
 
 const editableMatchFormFields = [
   "round",
@@ -32,11 +33,13 @@ const EndMatchPanel = ({
   teams,
   rules,
   phases,
+  onViewCreatedMatch,
 }) => {
   const [conversionData, setConversionData] = useState({
     data: null,
     loading: false,
   });
+  const [createdData, setCreatedData] = useState(null);
   useEffect(() => {
     loadConversionData();
   }, []);
@@ -79,6 +82,7 @@ const EndMatchPanel = ({
     });
     if (!response.errors) {
       dispatch(matchCreatedOrUpdated({ match: response }));
+      setCreatedData(response);
     }
   };
 
@@ -87,6 +91,13 @@ const EndMatchPanel = ({
     teams.flatMap((t) => t.players),
     "id"
   );
+  if (createdData) {
+    return (
+      <ScoresheetSubmittedCard
+        onView={() => onViewCreatedMatch(createdData.id)}
+      />
+    );
+  }
   return (
     <Card
       title="Submit Scoresheet"
@@ -105,7 +116,7 @@ const EndMatchPanel = ({
       {!loading && data && (
         <>
           <Info>
-            Please take a moment to verify this information is correct. If
+            Please take a moment to verify the below information is correct. If
             everything looks good, go ahead and submit! Otherwise, please go
             back and fix any issues before submitting.
           </Info>
