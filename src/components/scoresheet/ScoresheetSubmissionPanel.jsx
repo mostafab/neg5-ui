@@ -26,7 +26,7 @@ const editableMatchFormFields = [
   "isTiebreaker",
 ];
 
-const EndMatchPanel = ({
+const ScoresheetSubmissionPanel = ({
   startValues,
   scoresheetState,
   onCancel,
@@ -49,12 +49,11 @@ const EndMatchPanel = ({
     setConversionData({
       loading: true,
     });
-    const payload = {
-      ...sanitizeFormValuesRecursive(startValues),
-      ...scoresheetState,
-    };
     const response = await doValidatedApiRequest(() =>
-      convertScoresheet(payload)
+      convertScoresheet({
+        ...sanitizeFormValuesRecursive(startValues),
+        ...scoresheetState,
+      })
     );
     setConversionData({
       data: response,
@@ -137,4 +136,4 @@ const EndMatchPanel = ({
   );
 };
 
-export default EndMatchPanel;
+export default ScoresheetSubmissionPanel;

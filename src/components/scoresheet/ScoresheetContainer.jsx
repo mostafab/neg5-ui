@@ -10,7 +10,7 @@ import { CycleStage, AnswerType, Direction } from "@libs/enums";
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
 import ScoresheetSummary from "./ScoresheetSummary";
-import EndMatchPanel from "./EndMatchPanel";
+import ScoresheetSubmissionPanel from "./ScoresheetSubmissionPanel";
 
 const initialBonuses = (rules) =>
   times(rules.partsPerBonus, () => ({
@@ -249,7 +249,7 @@ const ScoresheetContainer = ({
           />
         )}
         {endingMatch && (
-          <EndMatchPanel
+          <ScoresheetSubmissionPanel
             scoresheetState={scoresheetState}
             startValues={scoresheetStartValues}
             onCancel={() => setEndingMatch(false)}
