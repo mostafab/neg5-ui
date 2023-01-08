@@ -94,7 +94,10 @@ const ScoresheetContainer = ({
     const answerNumber = scoresheetState.currentCycle.answers.length + 1;
     const currentCycleNextState = {
       ...scoresheetState.currentCycle,
-      answers: [...scoresheetState.currentCycle.answers, { playerId, value, number: answerNumber }],
+      answers: [
+        ...scoresheetState.currentCycle.answers,
+        { playerId, value, number: answerNumber },
+      ],
       stage: isNeg ? CycleStage.Tossup : CycleStage.Bonus,
     };
     setScoresheetState({
@@ -139,12 +142,10 @@ const ScoresheetContainer = ({
     setScoresheetState(nextState);
   };
 
-  const onBonus = (teamId, bonusIndex) => {
+  const onBonus = (teamId, number) => {
     const nextState = produce(scoresheetState, (draft) => {
-      draft.currentCycle.bonuses[bonusIndex].answeringTeamId =
-        teamId === draft.currentCycle.bonuses[bonusIndex].answeringTeamId
-          ? null
-          : teamId;
+      const match = draft.currentCycle.bonuses.find((b) => b.number === number);
+      match.answeringTeamId = teamId === match.answeringTeamId ? null : teamId;
     });
     setScoresheetState(nextState);
   };

@@ -20,17 +20,17 @@ const BonusPanel = ({
   return (
     <>
       <Row className="mb-3">
-        {currentCycle.bonuses.map((bonus, index) => (
+        {currentCycle.bonuses.map((bonus) => (
           <Col
             lg={12}
-            key={index}
+            key={bonus.number}
             className="mb-3 d-flex justify-content-between"
           >
             <div
               className={`p-2 border ${usesBouncebacks ? "" : "w-25"}`}
               style={{ textAlign: "center" }}
             >
-              Part {index + 1}
+              Part {bonus.number}
             </div>
             {teams
               .filter((t) => usesBouncebacks || t.id === answeringTeamId)
@@ -40,7 +40,7 @@ const BonusPanel = ({
                   type={
                     team.id === bonus.answeringTeamId ? "success" : "secondary"
                   }
-                  onClick={() => onBonus(team.id, index)}
+                  onClick={() => onBonus(team.id, bonus.number)}
                   className={usesBouncebacks ? "" : "w-75"}
                 >
                   +{bonusPointValue} for {team.name}
