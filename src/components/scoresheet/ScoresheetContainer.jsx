@@ -149,9 +149,7 @@ const ScoresheetContainer = ({
 
   const onNextTossup = () => {
     const nextState = produce(scoresheetState, (draft) => {
-      draft.currentCycle.activePlayers = Object.values(
-        draft.activePlayers
-      ).flatMap((p) => p);
+      draft.currentCycle.activePlayers = draft.activePlayers;
       draft.cycles.push(draft.currentCycle);
       const nextCycle = initialCurrentCycle(rules);
       nextCycle.number = draft.currentCycle.number + 1;
