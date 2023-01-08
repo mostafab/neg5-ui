@@ -14,9 +14,10 @@ import ScoresheetSummary from "./ScoresheetSummary";
 import ScoresheetSubmissionPanel from "./ScoresheetSubmissionPanel";
 
 const initialBonuses = (rules) =>
-  times(rules.partsPerBonus, () => ({
+  times(rules.partsPerBonus, (index) => ({
     answeringTeamId: null,
     value: rules.bonusPointValue,
+    number: index + 1,
   }));
 
 const initialCurrentCycle = (rules) => ({
@@ -90,9 +91,10 @@ const ScoresheetContainer = ({
     const isNeg =
       rules.tossupValues.find((tv) => tv.value === value).answerType ===
       AnswerType.Neg;
+    const answerNumber = scoresheetState.currentCycle.answers.length + 1;
     const currentCycleNextState = {
       ...scoresheetState.currentCycle,
-      answers: [...scoresheetState.currentCycle.answers, { playerId, value }],
+      answers: [...scoresheetState.currentCycle.answers, { playerId, value, number: answerNumber }],
       stage: isNeg ? CycleStage.Tossup : CycleStage.Bonus,
     };
     setScoresheetState({
