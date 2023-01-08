@@ -53,7 +53,9 @@ const TossupPanel = ({
             onUndoNeg={onUndoNeg}
             playerOrderings={playerOrderings[team.id]}
             onMovePlayer={onMovePlayer}
-            activePlayers={activePlayers[team.id]}
+            activePlayers={activePlayers.filter((playerId) => {
+              return team.players.some((p) => p.id === playerId);
+            })}
             onToggleActive={onToggleActive}
           />
         </Col>

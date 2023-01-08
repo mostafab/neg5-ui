@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
 import times from "lodash/times";
@@ -6,6 +6,7 @@ import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
 
 import { CycleStage, AnswerType, Direction } from "@libs/enums";
+import { TournamentIdContext } from "@components/tournaments/common/context";
 
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
@@ -26,7 +27,7 @@ const initialCurrentCycle = (rules) => ({
   activePlayers: [],
 });
 
-const scoresheetInitialState = (rules, teams) => {
+const scoresheetInitialState = (rules, teams, tournamentId) => {
   const playersByTeamId = groupBy(
     teams.flatMap((t) => t.players),
     "teamId"
@@ -34,14 +35,17 @@ const scoresheetInitialState = (rules, teams) => {
   const playerOrderings = mapValues(playersByTeamId, (players) =>
     players.map((p) => p.id)
   );
-  const activePlayersByTeamId = mapValues(playersByTeamId, (players) =>
-    players.slice(0, rules.maxActivePlayersPerTeam).map((p) => p.id)
-  );
+  const activePlayers = Object.values(
+    mapValues(playersByTeamId, (players) =>
+      players.slice(0, rules.maxActivePlayersPerTeam).map((p) => p.id)
+    )
+  ).flatMap((playerIds) => playerIds);
   return {
     currentCycle: initialCurrentCycle(rules),
     cycles: [],
     playerOrderings,
-    activePlayers: activePlayersByTeamId,
+    activePlayers: activePlayers,
+    tournamentId,
   };
 };
 
@@ -52,12 +56,13 @@ const ScoresheetContainer = ({
   phases,
   onViewCreatedMatch,
 }) => {
+  const tournamentId = useContext(TournamentIdContext);
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
     scoresheetStartValues.team2Id,
   ].map((teamId) => teams.find((t) => t.id === teamId));
-  const [scoresheetState, setScoresheetState] = useState(
-    scoresheetInitialState(rules, scoresheetTeams)
+  const [scoresheetState, setScoresheetState] = useState(() =>
+    scoresheetInitialState(rules, scoresheetTeams, tournamentId)
   );
   const [endingMatch, setEndingMatch] = useState(false);
 
@@ -178,15 +183,15 @@ const ScoresheetContainer = ({
     setScoresheetState(nextState);
   };
 
-  const onToggleActive = ({ id, teamId }) => {
+  const onToggleActivePlayer = ({ id }) => {
     const nextState = produce(scoresheetState, (draft) => {
-      const index = draft.activePlayers[teamId].findIndex(
+      const index = draft.activePlayers.findIndex(
         (playerId) => playerId === id
       );
       if (index === -1) {
-        draft.activePlayers[teamId].push(id);
+        draft.activePlayers.push(id);
       } else {
-        draft.activePlayers[teamId] = draft.activePlayers[teamId].filter(
+        draft.activePlayers = draft.activePlayers.filter(
           (playerId) => playerId !== id
         );
       }
@@ -244,7 +249,7 @@ const ScoresheetContainer = ({
             playerOrderings={scoresheetState.playerOrderings}
             onMovePlayer={onMovePlayer}
             activePlayers={scoresheetState.activePlayers}
-            onToggleActive={onToggleActive}
+            onToggleActive={onToggleActivePlayer}
             onEndMatch={onEndMatch}
           />
         )}
