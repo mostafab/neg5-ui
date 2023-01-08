@@ -14,9 +14,10 @@ import ScoresheetSummary from "./ScoresheetSummary";
 import ScoresheetSubmissionPanel from "./ScoresheetSubmissionPanel";
 
 const initialBonuses = (rules) =>
-  times(rules.partsPerBonus, () => ({
+  times(rules.partsPerBonus, (index) => ({
     answeringTeamId: null,
     value: rules.bonusPointValue,
+    number: index + 1,
   }));
 
 const initialCurrentCycle = (rules) => ({
@@ -90,9 +91,13 @@ const ScoresheetContainer = ({
     const isNeg =
       rules.tossupValues.find((tv) => tv.value === value).answerType ===
       AnswerType.Neg;
+    const answerNumber = scoresheetState.currentCycle.answers.length + 1;
     const currentCycleNextState = {
       ...scoresheetState.currentCycle,
-      answers: [...scoresheetState.currentCycle.answers, { playerId, value }],
+      answers: [
+        ...scoresheetState.currentCycle.answers,
+        { playerId, value, number: answerNumber },
+      ],
       stage: isNeg ? CycleStage.Tossup : CycleStage.Bonus,
     };
     setScoresheetState({
@@ -137,12 +142,10 @@ const ScoresheetContainer = ({
     setScoresheetState(nextState);
   };
 
-  const onBonus = (teamId, bonusIndex) => {
+  const onBonus = (teamId, number) => {
     const nextState = produce(scoresheetState, (draft) => {
-      draft.currentCycle.bonuses[bonusIndex].answeringTeamId =
-        teamId === draft.currentCycle.bonuses[bonusIndex].answeringTeamId
-          ? null
-          : teamId;
+      const match = draft.currentCycle.bonuses.find((b) => b.number === number);
+      match.answeringTeamId = teamId === match.answeringTeamId ? null : teamId;
     });
     setScoresheetState(nextState);
   };
