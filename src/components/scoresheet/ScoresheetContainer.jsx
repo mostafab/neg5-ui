@@ -69,8 +69,9 @@ const ScoresheetContainer = ({
   );
   const [endingMatch, setEndingMatch] = useState(false);
   useEffect(() => {
-    console.log("cycle added or removed!!");
-    createOrUpdateDraftScoresheet();
+    if (scoresheetState.cycles.length > 0) {
+      createOrUpdateDraftScoresheet();
+    }
   }, [scoresheetState.cycles.length]);
 
   const onEndMatch = () => {
@@ -89,6 +90,9 @@ const ScoresheetContainer = ({
       setScoresheetState({
         ...scoresheetState,
         id: response.id,
+        addedBy: response.addedBy,
+        addedAt: response.addedAt,
+        lastUpdatedAt: response.lastUpdatedAt,
       });
     }
     console.log(response);
@@ -275,6 +279,7 @@ const ScoresheetContainer = ({
             activePlayers={scoresheetState.activePlayers}
             onToggleActive={onToggleActivePlayer}
             onEndMatch={onEndMatch}
+            lastUpdatedAt={scoresheetState.lastUpdatedAt}
           />
         )}
         {endingMatch && (
