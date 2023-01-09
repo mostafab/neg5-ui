@@ -12,15 +12,17 @@ import Card from "@components/common/cards";
 
 const ScoresheetTable = ({
   cycles,
-  currentCycle,
+  currentCycle = null,
   teams,
   rules,
-  playerOrderings,
+  playerOrderings = {},
   className = "",
+  readOnly = false,
+  inCard = true,
 }) => {
   const [firstTeam, secondTeam] = teams;
-  const firstTeamOrdering = playerOrderings[firstTeam.id];
-  const secondTeamOrdering = playerOrderings[secondTeam.id];
+  const firstTeamOrdering = playerOrderings[firstTeam.id] || [];
+  const secondTeamOrdering = playerOrderings[secondTeam.id] || [];
 
   const getPlayerDisplay = (player) => player.name.substring(0, 2);
 
@@ -81,7 +83,7 @@ const ScoresheetTable = ({
   };
 
   const renderScoresheetCycleRow = (cycle) => {
-    const role = currentCycle === cycle ? null : "button";
+    const role = currentCycle === cycle || readOnly ? null : "button";
     const isCurrentCycle = cycle === currentCycle;
     return (
       <tr className={isCurrentCycle ? "table-active" : ""} key={cycle.number}>
@@ -103,9 +105,15 @@ const ScoresheetTable = ({
       </tr>
     );
   };
+  const Wrapper = ({ children }) => {
+    if (inCard) {
+      return <Card className={className}>{children}</Card>;
+    }
+    return <>{children}</>;
+  };
   return (
-    <Card className={className}>
-      {currentCycle.number > 1 && (
+    <Wrapper>
+      {currentCycle?.number > 1 && (
         <Info>
           You can change a previous tossup/bonus cycle by clicking into a table
           cell.
@@ -149,11 +157,11 @@ const ScoresheetTable = ({
           </tr>
         </thead>
         <tbody>
-          {renderScoresheetCycleRow(currentCycle)}
+          {currentCycle && renderScoresheetCycleRow(currentCycle)}
           {cycles.map((cycle) => renderScoresheetCycleRow(cycle)).reverse()}
         </tbody>
       </Table>
-    </Card>
+    </Wrapper>
   );
 };
 

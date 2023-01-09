@@ -144,6 +144,7 @@ const MatchForm = ({
     });
     const sanitizedValues = sanitizeFormValuesRecursive(values);
     sanitizedValues.tournamentId = tournamentId;
+    sanitizedValues.scoresheetId = match.scoresheetId || null;
     const payload = await doValidatedApiRequest(() =>
       match.id ? updateMatch(sanitizedValues) : createMatch(sanitizedValues)
     );
