@@ -32,6 +32,10 @@ const ScoresheetModal = ({
     return `Round ${round}: ${teamVsString}`;
   };
 
+  const onSelectScoresheet = (scoresheet) => {
+    console.log(scoresheet);
+  }
+
   const renderPrestartContent = () => {
     if (!showList) {
       return (
@@ -70,7 +74,12 @@ const ScoresheetModal = ({
         >
           Start a new scoresheet
         </Button>
-        <ScoresheetsList scoresheets={scoresheets} teams={teams} />
+        <ScoresheetsList
+          scoresheets={scoresheets}
+          teams={teams}
+          currentUser={currentUser}
+          onSelect={onSelectScoresheet}
+        />
       </>
     );
   };

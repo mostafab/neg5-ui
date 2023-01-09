@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 
 import Card from "@components/common/cards";
+import { Form, Checkbox } from "@components/common/forms";
 import { X } from "@components/common/icon";
 
 const scoresheetTitle = (teams, scoresheet) => {
@@ -21,33 +22,51 @@ const ScoresheetsList = ({
   teams,
   onDelete,
 }) => {
-  const [showAll, setShowAll] = useState(false);
+  const [limitList, setLimit] = useState(true);
   return (
     <>
+      <Form
+        name="ScoresheetFilterForm"
+        customCtaButtons
+        initialValues={{ limit: limitList }}
+      >
+        <Checkbox name="limit" label="Only Mine" onChange={setLimit} />
+      </Form>
       <div>
-        {scoresheets.map((scoresheet) => (
-          <Card
-            key={scoresheet.id}
-            title={<h6>{scoresheetTitle(teams, scoresheet)}</h6>}
-            className="mb-3"
-            onClick={() => onSelect(scoresheet)}
-            actions={[
-              {
-                component: <X onClick={() => onDelete(scoresheet)} size="25" />,
-              },
-            ]}
-          >
-            <div className="small">{scoresheet.cycles.length} TUHs</div>
-            {scoresheet.lastUpdatedAt && (
-              <div className="small text-dark">
-                Last updated {dayjs(scoresheet.lastUpdatedAt).format("hh:mm A")}
+        {scoresheets
+          .filter((s) => !limitList || s.addedBy === currentUser.username)
+          .map((scoresheet) => (
+            <Card
+              key={scoresheet.id}
+              title={<h6>{scoresheetTitle(teams, scoresheet)}</h6>}
+              className="mb-3"
+              onClick={() => onSelect(scoresheet)}
+              actions={[
+                {
+                  component: (
+                    <X onClick={() => onDelete(scoresheet)} size="25" />
+                  ),
+                },
+              ]}
+            >
+              <div className="small">
+                {scoresheet.cycles.length}{" "}
+                {scoresheet.cycles.length === 1 ? "TUH" : "TUHs"}
               </div>
-            )}
-            <div className="small text-dark">
-              Started by {scoresheet.addedBy}
-            </div>
-          </Card>
-        ))}
+              {scoresheet.moderator && (
+                <div className="small">Moderator: {scoresheet.moderator}</div>
+              )}
+              {scoresheet.lastUpdatedAt && (
+                <div className="small text-dark mt-1">
+                  Last updated{" "}
+                  {dayjs(scoresheet.lastUpdatedAt).format("MMM DD hh:mm A")}
+                </div>
+              )}
+              <div className="small text-dark">
+                Started by {scoresheet.addedBy}
+              </div>
+            </Card>
+          ))}
       </div>
     </>
   );
