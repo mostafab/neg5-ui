@@ -14,3 +14,8 @@ export const getScoresheet = async (scoresheetId) => {
   const response = await client.get(`/neg5-api/scoresheets/${scoresheetId}`);
   return await response.data;
 };
+
+export const createOrUpdateDraft = async (body) => {
+  const response = await client.post("/neg5-api/scoresheets", body);
+  return await response.data;
+};

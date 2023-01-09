@@ -1,4 +1,5 @@
 import React from "react";
+import dayjs from "dayjs";
 
 import Card from "@components/common/cards";
 import { CycleStage } from "@libs/enums";
@@ -21,10 +22,21 @@ const CurrentCyclePanel = ({
   activePlayers,
   onToggleActive,
   onEndMatch,
+  lastUpdatedAt,
 }) => {
-  const title = `${
+  const stageTitle = `${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
   } ${currentCycle.number}`;
+  const title = (
+    <div className="d-flex justify-content-between">
+      {stageTitle}
+      {lastUpdatedAt && (
+        <span className="small text-dark ms-2">
+          Last saved at {dayjs(lastUpdatedAt).format("hh:mm:ss A")}
+        </span>
+      )}
+    </div>
+  );
   return (
     <Card title={title}>
       {currentCycle.stage === CycleStage.Tossup && (
