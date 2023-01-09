@@ -30,7 +30,7 @@ const initialCurrentCycle = (rules) => ({
   activePlayers: [],
 });
 
-const scoresheetInitialState = (rules, teams, tournamentId) => {
+const scoresheetInitialState = (rules, teams, tournamentId, startValues) => {
   const playersByTeamId = groupBy(
     teams.flatMap((t) => t.players),
     "teamId"
@@ -43,13 +43,18 @@ const scoresheetInitialState = (rules, teams, tournamentId) => {
       players.slice(0, rules.maxActivePlayersPerTeam).map((p) => p.id)
     )
   ).flatMap((playerIds) => playerIds);
-  return {
+  const state = {
     currentCycle: initialCurrentCycle(rules),
     cycles: [],
     playerOrderings,
     activePlayers: activePlayers,
     tournamentId,
+    ...startValues,
   };
+  if (startValues.cycles) {
+    state.currentCycle.number = startValues.cycles.length + 1;
+  }
+  return state;
 };
 
 const ScoresheetContainer = ({
@@ -65,7 +70,12 @@ const ScoresheetContainer = ({
     scoresheetStartValues.team2Id,
   ].map((teamId) => teams.find((t) => t.id === teamId));
   const [scoresheetState, setScoresheetState] = useState(() =>
-    scoresheetInitialState(rules, scoresheetTeams, tournamentId)
+    scoresheetInitialState(
+      rules,
+      scoresheetTeams,
+      tournamentId,
+      scoresheetStartValues
+    )
   );
   const [endingMatch, setEndingMatch] = useState(false);
   useEffect(() => {
@@ -95,7 +105,6 @@ const ScoresheetContainer = ({
         lastUpdatedAt: response.lastUpdatedAt,
       });
     }
-    console.log(response);
   };
 
   const onBack = () => {

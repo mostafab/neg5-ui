@@ -20,7 +20,6 @@ const ScoresheetModal = ({
 }) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
   const [showList, setShowList] = useState(false);
-  console.log(scoresheets);
   const getTitle = () => {
     if (!scoresheetStartValues) {
       return "Scoresheet";
@@ -33,8 +32,8 @@ const ScoresheetModal = ({
   };
 
   const onSelectScoresheet = (scoresheet) => {
-    console.log(scoresheet);
-  }
+    setScoresheetStartValues(scoresheet);
+  };
 
   const renderPrestartContent = () => {
     if (!showList) {
