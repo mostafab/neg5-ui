@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { loadMatches } from "@api/tournaments";
+import { loadTournamentScoresheet } from "@api/scoresheet";
 
 const initialState = {
   matches: [],
+  scoresheets: [],
 };
 
 const tournamentMatchesSlice = createSlice({
@@ -26,9 +28,13 @@ const tournamentMatchesSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loadTournamentMatchesAsync.fulfilled, (state, action) => {
-      state.matches = action.payload;
-    });
+    builder
+      .addCase(loadTournamentMatchesAsync.fulfilled, (state, action) => {
+        state.matches = action.payload;
+      })
+      .addCase(loadScoresheetsAsync.fulfilled, (state, action) => {
+        state.scoresheets = action.payload;
+      });
   },
 });
 
@@ -36,6 +42,13 @@ export const loadTournamentMatchesAsync = createAsyncThunk(
   "tournamentMatchesSlice/loadMatches",
   async (tournamentId) => {
     return await loadMatches(tournamentId);
+  }
+);
+
+export const loadScoresheetsAsync = createAsyncThunk(
+  "tournamentMatchesSlice/loadScoresheets",
+  async (tournamentId) => {
+    return await loadTournamentScoresheet(tournamentId);
   }
 );
 

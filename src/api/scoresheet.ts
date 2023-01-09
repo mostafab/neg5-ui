@@ -19,3 +19,10 @@ export const createOrUpdateDraft = async (body) => {
   const response = await client.post("/neg5-api/scoresheets", body);
   return await response.data;
 };
+
+export const loadTournamentScoresheet = async (tournamentId) => {
+  const response = await client.get(
+    `/neg5-api/tournaments/${tournamentId}/scoresheets`
+  );
+  return await response.data;
+};

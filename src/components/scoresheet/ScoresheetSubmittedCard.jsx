@@ -4,7 +4,7 @@ import Card from "@components/common/cards";
 import Icon from "@components/common/icon";
 
 const ScoresheetSubmittedCard = ({ onView }) => (
-  <Card>
+  <Card className="sticky-top">
     <div className="p-4">
       <div className="d-flex justify-content-center">
         <h5>Your scoresheet has been submitted!</h5>

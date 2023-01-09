@@ -1,7 +1,9 @@
 import { connect } from "react-redux";
 import keyBy from "lodash/keyBy";
+import orderBy from "lodash/orderBy";
 
 import TournamentMatchesPanel from "@components/tournaments/tournamentView/TournamentMatchesPanel";
+import { ScoresheetState } from "@libs/enums";
 
 const getPlayersById = (teams) => {
   return keyBy(
@@ -18,6 +20,13 @@ const mapStateToProps = ({
   loginReducer,
 }) => ({
   matches: tournamentMatchesReducer.matches,
+  draftScoresheets: orderBy(
+    tournamentMatchesReducer.scoresheets.filter(
+      (s) => s.status === ScoresheetState.Draft
+    ),
+    "lastUpdatedAt",
+    "desc"
+  ),
   teams: tournamentTeamsReducer.teams,
   rules: tournamentRulesReducer,
   playersById: getPlayersById(tournamentTeamsReducer.teams),

@@ -20,3 +20,8 @@ export const Direction = {
   Up: "up",
   Down: "down",
 };
+
+export const ScoresheetState = {
+  Draft: "draft",
+  Submitted: "submitted",
+};
