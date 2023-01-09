@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { loadTournamentMatchesAsync } from "@features/tournamentView/matchesSlice";
+import {
+  loadTournamentMatchesAsync,
+  loadScoresheetsAsync,
+} from "@features/tournamentView/matchesSlice";
 import { loadTournamentTeamsAsync } from "@features/tournamentView/teamsSlice";
 import { loadCollaboratorsDataAsync } from "@features/tournamentView/tournamentCollaboratorsSlice";
 
@@ -35,6 +38,7 @@ export const loadTournamentDataAsync = createAsyncThunk(
   async (tournamentId, { dispatch }) => {
     const data = await loadInformation(tournamentId);
     dispatch(loadTournamentMatchesAsync(tournamentId));
+    dispatch(loadScoresheetsAsync(tournamentId));
     dispatch(loadTournamentTeamsAsync(tournamentId));
     dispatch(loadCollaboratorsDataAsync(tournamentId));
     return data;

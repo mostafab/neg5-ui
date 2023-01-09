@@ -10,6 +10,7 @@ import MatchesModal from "@components/tournaments/tournamentView/matches/Matches
 
 const TournamentMatchesPanel = ({
   matches,
+  draftScoresheets,
   teams,
   rules,
   playersById,
@@ -108,6 +109,7 @@ const TournamentMatchesPanel = ({
           rules={rules}
           phases={phases}
           currentUser={currentUser}
+          scoresheets={draftScoresheets}
           onViewCreatedMatch={(matchId) => {
             setShowScoresheet(false);
             setSelectedMatch(matches.find((m) => m.id === matchId));
