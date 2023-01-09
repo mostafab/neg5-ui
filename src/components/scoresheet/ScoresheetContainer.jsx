@@ -1,10 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
 import times from "lodash/times";
 import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
 
+import { doValidatedApiRequest } from "@api/common";
+import { createOrUpdateDraft } from "@api/scoresheet";
 import { CycleStage, AnswerType, Direction } from "@libs/enums";
 import { TournamentIdContext } from "@components/tournaments/common/context";
 
@@ -66,9 +68,30 @@ const ScoresheetContainer = ({
     scoresheetInitialState(rules, scoresheetTeams, tournamentId)
   );
   const [endingMatch, setEndingMatch] = useState(false);
+  useEffect(() => {
+    console.log("cycle added or removed!!");
+    createOrUpdateDraftScoresheet();
+  }, [scoresheetState.cycles.length]);
 
   const onEndMatch = () => {
     setEndingMatch(true);
+  };
+
+  const createOrUpdateDraftScoresheet = async () => {
+    const payload = {
+      ...scoresheetStartValues,
+      ...scoresheetState,
+    };
+    const response = await doValidatedApiRequest(() =>
+      createOrUpdateDraft(payload)
+    );
+    if (!response.errors) {
+      setScoresheetState({
+        ...scoresheetState,
+        id: response.id,
+      });
+    }
+    console.log(response);
   };
 
   const onBack = () => {
