@@ -26,6 +26,15 @@ const tournamentMatchesSlice = createSlice({
       const matchId = action.payload.matchId;
       state.matches = state.matches.filter((m) => m.id !== matchId);
     },
+    scoresheetCreatedOrUpdated(state, action) {
+      const scoresheetId = action.payload.id;
+      const index = state.scoresheets.findIndex((s) => s.id === scoresheetId);
+      if (index === -1) {
+        state.scoresheets.push(action.payload);
+      } else {
+        state.scoresheets[index] = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -54,5 +63,8 @@ export const loadScoresheetsAsync = createAsyncThunk(
 
 export const tournamentMatchesReducer = tournamentMatchesSlice.reducer;
 
-export const { matchCreatedOrUpdated, matchDeleted } =
-  tournamentMatchesSlice.actions;
+export const {
+  matchCreatedOrUpdated,
+  matchDeleted,
+  scoresheetCreatedOrUpdated,
+} = tournamentMatchesSlice.actions;

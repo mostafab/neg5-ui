@@ -5,6 +5,8 @@ import times from "lodash/times";
 import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
 
+import { useAppDispatch } from "@store";
+import { scoresheetCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
 import { doValidatedApiRequest } from "@api/common";
 import { createOrUpdateDraft } from "@api/scoresheet";
 import { CycleStage, AnswerType, Direction } from "@libs/enums";
@@ -78,6 +80,7 @@ const ScoresheetContainer = ({
     )
   );
   const [endingMatch, setEndingMatch] = useState(false);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (scoresheetState.cycles.length > 0) {
       createOrUpdateDraftScoresheet();
@@ -104,6 +107,7 @@ const ScoresheetContainer = ({
         addedAt: response.addedAt,
         lastUpdatedAt: response.lastUpdatedAt,
       });
+      dispatch(scoresheetCreatedOrUpdated(response));
     }
   };
 
