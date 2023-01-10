@@ -35,6 +35,11 @@ const tournamentMatchesSlice = createSlice({
         state.scoresheets[index] = action.payload;
       }
     },
+    scoresheetDeleted(state, action) {
+      state.scoresheets = state.scoresheets.filter(
+        (s) => s.id !== action.payload.id
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -67,4 +72,5 @@ export const {
   matchCreatedOrUpdated,
   matchDeleted,
   scoresheetCreatedOrUpdated,
+  scoresheetDeleted,
 } = tournamentMatchesSlice.actions;

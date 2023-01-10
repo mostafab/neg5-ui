@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 
+import { useAppDispatch } from "@store";
+import { doValidatedApiRequest } from "@api/common";
+import { deleteScoresheet } from "@api/scoresheet";
+import { scoresheetDeleted } from "@features/tournamentView/matchesSlice";
+
 import Modal from "@components/common/modal";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
@@ -30,9 +35,19 @@ const ScoresheetModal = ({
       .join(" vs ");
     return `Round ${round}: ${teamVsString}`;
   };
+  const dispatch = useAppDispatch();
 
   const onSelectScoresheet = (scoresheet) => {
     setScoresheetStartValues(scoresheet);
+  };
+
+  const onDelete = async (scoresheet) => {
+    const response = await doValidatedApiRequest(() =>
+      deleteScoresheet(scoresheet.id)
+    );
+    if (!response.errors) {
+      dispatch(scoresheetDeleted({ id: scoresheet.id }));
+    }
   };
 
   const renderPrestartContent = () => {
@@ -78,6 +93,7 @@ const ScoresheetModal = ({
           teams={teams}
           currentUser={currentUser}
           onSelect={onSelectScoresheet}
+          onDelete={onDelete}
         />
       </>
     );

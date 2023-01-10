@@ -44,7 +44,13 @@ const ScoresheetsList = ({
               actions={[
                 {
                   component: (
-                    <X onClick={() => onDelete(scoresheet)} size="25" />
+                    <X
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(scoresheet);
+                      }}
+                      size="25"
+                    />
                   ),
                 },
               ]}
