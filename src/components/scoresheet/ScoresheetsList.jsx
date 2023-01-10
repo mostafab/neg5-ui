@@ -38,13 +38,31 @@ const ScoresheetsList = ({
           .map((scoresheet) => (
             <Card
               key={scoresheet.id}
-              title={<h6>{scoresheetTitle(teams, scoresheet)}</h6>}
+              title={
+                <h6>
+                  <a
+                    role="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onSelect(scoresheet);
+                    }}
+                    href="#"
+                  >
+                    {scoresheetTitle(teams, scoresheet)}
+                  </a>
+                </h6>
+              }
               className="mb-3"
-              onClick={() => onSelect(scoresheet)}
               actions={[
                 {
                   component: (
-                    <X onClick={() => onDelete(scoresheet)} size="25" />
+                    <X
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(scoresheet);
+                      }}
+                      size="25"
+                    />
                   ),
                 },
               ]}

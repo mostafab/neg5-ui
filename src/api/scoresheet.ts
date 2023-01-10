@@ -26,3 +26,8 @@ export const loadTournamentScoresheet = async (tournamentId) => {
   );
   return await response.data;
 };
+
+export const deleteScoresheet = async (scoresheetId) => {
+  const response = await client.delete(`/neg5-api/scoresheets/${scoresheetId}`);
+  return await response.data;
+};

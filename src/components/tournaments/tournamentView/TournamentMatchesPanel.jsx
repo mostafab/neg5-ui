@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
+import Pill from "@components/common/pill";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
@@ -51,6 +52,13 @@ const TournamentMatchesPanel = ({
             : []
         }
       >
+        {draftScoresheets.length > 0 && (
+          <Pill type="info" className="mb-2">
+            {draftScoresheets.length}{" "}
+            {draftScoresheets.length === 1 ? "scoresheet" : "scoresheets"} in
+            progress
+          </Pill>
+        )}
         {!enoughTeamsToAddMatch && (
           <div className="d-flex p-2 justify-content-center">
             Add at least two teams to add matches.

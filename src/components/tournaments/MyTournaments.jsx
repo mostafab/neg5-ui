@@ -32,17 +32,17 @@ const MyTournaments = ({
       )}
       <Container>
         <Row className="d-flex">
-          <Col sm={12} lg={12}>
+          <Col sm={12} md={12} lg={12} className="mb-3">
             <TournamentGallery
               title="Current & Upcoming Tournaments"
               tournaments={upcoming}
               cta={
                 <Button
-                  className="m-3 btn-sm"
-                  type="primary"
+                  className="btn-sm"
+                  type="outline-primary"
                   onClick={() => setShowForm(true)}
                 >
-                  <Icon name="Plus" size="20" />
+                  New Tournament
                 </Button>
               }
             />
