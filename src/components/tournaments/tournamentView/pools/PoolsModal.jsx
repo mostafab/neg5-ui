@@ -24,7 +24,8 @@ const PoolsModal = ({
         <Info>
           Pools are split by the different phases of your tournament (Pool Play,
           Playoffs, etc.). You can assign teams to pools in each respective
-          phase below.
+          phase below, and then generate a schedule for each pool in the Matches
+          panel.
         </Info>
         <PhaseTabs
           phases={phases}
