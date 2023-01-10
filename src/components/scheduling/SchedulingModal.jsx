@@ -5,7 +5,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Modal from "@components/common/modal";
 import Card from "@components/common/cards";
 
-import PhaseScheduleContent from "./PhaseScheduleContent";
+import PhaseScheduleEditor from "./PhaseScheduleEditor";
 
 const SchedulingModal = ({ teams, phases, onHide }) => {
   const [activeTab, setActiveTab] = useState(
@@ -17,7 +17,11 @@ const SchedulingModal = ({ teams, phases, onHide }) => {
         <Tabs transition={false} activeKey={activeTab} onSelect={setActiveTab}>
           {phases.map((phase) => (
             <Tab key={phase.id} eventKey={phase.id} title={phase.name}>
-              <PhaseScheduleContent phase={phase} teams={teams} />
+              <PhaseScheduleEditor
+                phase={phase}
+                teams={teams}
+                schedule={null}
+              />
             </Tab>
           ))}
         </Tabs>
