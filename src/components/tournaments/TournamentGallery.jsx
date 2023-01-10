@@ -13,7 +13,7 @@ const TournamentGallery = ({
   const router = useRouter();
   return (
     <div className={`TournamentGallery ${className}`}>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between mb-3">
         <h5 className="">{title}</h5>
         {cta}
       </div>
