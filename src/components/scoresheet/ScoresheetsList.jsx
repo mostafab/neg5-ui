@@ -41,6 +41,7 @@ const ScoresheetsList = ({
               title={
                 <h6>
                   <a
+                    role="button"
                     onClick={(e) => {
                       e.preventDefault();
                       onSelect(scoresheet);

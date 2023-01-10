@@ -11,7 +11,23 @@ const TournamentCard = ({
   onClick,
   isCollaborator,
 }) => (
-  <Card className="mb-4" title={name} onClick={onClick}>
+  <Card
+    className="mb-4"
+    title={
+      <h6>
+        <a
+          role="button"
+          href=""
+          onClick={(e) => {
+            e.preventDefault();
+            onClick();
+          }}
+        >
+          {name}
+        </a>
+      </h6>
+    }
+  >
     <p>{location}</p>
     <p>{tournamentDate}</p>
     <p>{questionSet}</p>
