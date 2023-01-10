@@ -17,7 +17,7 @@ const TournamentCard = ({
       <h6>
         <a
           role="button"
-          href=""
+          href="#"
           onClick={(e) => {
             e.preventDefault();
             onClick();

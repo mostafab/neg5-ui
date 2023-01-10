@@ -46,7 +46,7 @@ const ScoresheetsList = ({
                       e.preventDefault();
                       onSelect(scoresheet);
                     }}
-                    href=""
+                    href="#"
                   >
                     {scoresheetTitle(teams, scoresheet)}
                   </a>
