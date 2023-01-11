@@ -14,6 +14,8 @@ import {
 import { X } from "@components/common/icon";
 import { getTeamOptions } from "@libs/tournamentForms";
 
+import NonScheduledTeams from "./NonScheduledTeams";
+
 const initialValues = (matchesByRound) => {
   const rounds = orderBy(Object.keys(matchesByRound), Number);
   return {
@@ -68,58 +70,67 @@ const SchedulingForm = ({ schedule, teams }) => {
                 />
                 <X size="35" onClick={() => remove(roundIndex)} />
               </div>
-
-              <RepeatField
-                name={`rounds[${roundIndex}].matches`}
-                addObjectProps={{
-                  buttonText: "Add a Match",
-                  newObject: () => ({}),
-                }}
-                render={(
-                  _val,
-                  { index: matchIndex },
-                  { remove: removeMatch }
-                ) => {
-                  return (
-                    <div key={matchIndex}>
-                      <Row>
-                        <Col
-                          lg={12}
-                          md={12}
-                          sm={12}
-                          className="mb-2 d-flex justify-content-between"
-                        >
-                          <b>Match {matchIndex + 1}</b>
-                          <X
-                            size="30"
-                            onClick={() => removeMatch(matchIndex)}
-                          />
-                        </Col>
-                        <Col lg={4} md={6} sm={6}>
-                          <Select
-                            options={teamOptions}
-                            name={`rounds[${roundIndex}].matches[${matchIndex}].team1Id`}
-                            label="Select Team 1"
-                          />
-                        </Col>
-                        <Col lg={4} md={6} sm={6}>
-                          <Select
-                            options={teamOptions}
-                            name={`rounds[${roundIndex}].matches[${matchIndex}].team2Id`}
-                            label="Select Team 2"
-                          />
-                        </Col>
-                        <Col lg={4} md={12} sm={12}>
-                          <Text
-                            name={`rounds[${roundIndex}].matches[${matchIndex}].room`}
-                            label="Room"
-                          />
-                        </Col>
-                      </Row>
-                    </div>
-                  );
-                }}
-              />
+              <Row>
+                <Col lg={3} md={3} sm={3} xs={4}>
+                  <NonScheduledTeams
+                    scheduledMatches={val.matches}
+                    teams={teams}
+                  />
+                </Col>
+                <Col lg={9} md={9} sm={9} xs={8}>
+                  <RepeatField
+                    name={`rounds[${roundIndex}].matches`}
+                    addObjectProps={{
+                      buttonText: "Add a Match",
+                      newObject: () => ({}),
+                    }}
+                    render={(
+                      _val,
+                      { index: matchIndex },
+                      { remove: removeMatch }
+                    ) => {
+                      return (
+                        <div key={matchIndex}>
+                          <Row>
+                            <Col
+                              lg={12}
+                              md={12}
+                              sm={12}
+                              className="mb-2 d-flex justify-content-between"
+                            >
+                              <b>Match {matchIndex + 1}</b>
+                              <X
+                                size="30"
+                                onClick={() => removeMatch(matchIndex)}
+                              />
+                            </Col>
+                            <Col lg={4} md={6} sm={6}>
+                              <Select
+                                options={teamOptions}
+                                name={`rounds[${roundIndex}].matches[${matchIndex}].team1Id`}
+                                label="Select Team 1"
+                              />
+                            </Col>
+                            <Col lg={4} md={6} sm={6}>
+                              <Select
+                                options={teamOptions}
+                                name={`rounds[${roundIndex}].matches[${matchIndex}].team2Id`}
+                                label="Select Team 2"
+                              />
+                            </Col>
+                            <Col lg={4} md={12} sm={12}>
+                              <Text
+                                name={`rounds[${roundIndex}].matches[${matchIndex}].room`}
+                                label="Room"
+                              />
+                            </Col>
+                          </Row>
+                        </div>
+                      );
+                    }}
+                  />
+                </Col>
+              </Row>
             </Card>
           );
         }}
