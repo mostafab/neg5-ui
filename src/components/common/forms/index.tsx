@@ -72,6 +72,21 @@ export const Form = ({
 export const RepeatField = ({ name, render, addObjectProps = null }) => {
   const [field] = useField(name);
   const readOnly = fieldIsReadOnly(name, useReadOnlyContext());
+
+  const renderAddObjectButton = (arrayHelpers) => {
+    const pushFunc = () =>
+      arrayHelpers.push(addObjectProps.newObject({ value: field.value }));
+    if (addObjectProps.as) {
+      return addObjectProps.as(pushFunc);
+    }
+    return (
+      <div className="d-flex justify-content-center">
+        <Button type="link" onClick={pushFunc}>
+          {addObjectProps.buttonText}
+        </Button>
+      </div>
+    );
+  };
   return (
     <FieldArray
       name={name}
@@ -96,16 +111,7 @@ export const RepeatField = ({ name, render, addObjectProps = null }) => {
                 arrayHelpers
               )
             )}
-            {addObjectProps && !readOnly && (
-              <div className="d-flex justify-content-center">
-                <Button
-                  type="link"
-                  onClick={() => arrayHelpers.push(addObjectProps.newObject())}
-                >
-                  {addObjectProps.buttonText}
-                </Button>
-              </div>
-            )}
+            {addObjectProps && !readOnly && renderAddObjectButton(arrayHelpers)}
           </>
         );
       }}
@@ -228,7 +234,7 @@ export const Select = ({
           menu: (base) => ({
             ...base,
             borderRadius: "0",
-            zIndex: "2",
+            zIndex: "3",
           }),
           indicatorSeparator: (base) => ({
             ...base,

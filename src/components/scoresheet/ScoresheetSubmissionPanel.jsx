@@ -62,11 +62,11 @@ const ScoresheetSubmissionPanel = ({
   };
 
   const onSubmit = async (matchFormValues, _actions, setFormSubmitData) => {
-    const editableFields = pick(matchFormValues, editableMatchFormFields);
+    const endValues = pick(matchFormValues, editableMatchFormFields);
     const scoresheetPayload = {
       ...sanitizeFormValuesRecursive(startValues),
-      ...sanitizeFormValuesRecursive(editableFields),
       ...scoresheetState,
+      ...sanitizeFormValuesRecursive(endValues),
     };
     setFormSubmitData({
       submitting: true,

@@ -6,6 +6,7 @@ import Icon, { Add } from "@components/common/icon";
 import Pill from "@components/common/pill";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
+import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 
@@ -20,37 +21,45 @@ const TournamentMatchesPanel = ({
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
+  const [showSchedule, setShowSchedule] = useState(false);
   const enoughTeamsToAddMatch = teams.length >= 2;
+  const actions =
+    enoughTeamsToAddMatch && matches.length > 0
+      ? [
+          {
+            component: (
+              <Add message="Add Match" onClick={() => setSelectedMatch({})} />
+            ),
+          },
+          {
+            component: (
+              <Icon
+                className="ms-2"
+                name="ClipboardPlus"
+                message="Start a Scoresheet"
+                onClick={() => setShowScoresheet(true)}
+              />
+            ),
+          },
+        ]
+      : [];
+  actions.push({
+    component: (
+      <Icon
+        name="Calendar"
+        className="ms-2"
+        message="Schedule"
+        onClick={() => setShowSchedule(true)}
+      />
+    ),
+  });
   return (
     <>
       <Card
         title={
           <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
         }
-        actions={
-          enoughTeamsToAddMatch && matches.length > 0
-            ? [
-                {
-                  component: (
-                    <Add
-                      message="Add Match"
-                      onClick={() => setSelectedMatch({})}
-                    />
-                  ),
-                },
-                {
-                  component: (
-                    <Icon
-                      className="ms-2"
-                      name="ClipboardPlus"
-                      message="Start a Scoresheet"
-                      onClick={() => setShowScoresheet(true)}
-                    />
-                  ),
-                },
-              ]
-            : []
-        }
+        actions={actions}
       >
         {draftScoresheets.length > 0 && (
           <Pill type="info" className="mb-2">
@@ -122,6 +131,13 @@ const TournamentMatchesPanel = ({
             setShowScoresheet(false);
             setSelectedMatch(matches.find((m) => m.id === matchId));
           }}
+        />
+      )}
+      {showSchedule && (
+        <SchedulingModal
+          teams={teams}
+          phases={phases}
+          onHide={() => setShowSchedule(false)}
         />
       )}
     </>
