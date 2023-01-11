@@ -1,4 +1,5 @@
 import React from "react";
+import orderBy from "lodash/orderBy";
 
 import TeamList from "@components/tournaments/tournamentView/teams/TeamsList";
 
@@ -8,7 +9,10 @@ const NonScheduledTeams = ({ teams, scheduledMatches }) => {
       .map((m) => [m.team1Id, m.team2Id])
       .flatMap((teamIds) => teamIds)
   );
-  const leftoverTeams = teams.filter((t) => !scheduledTeams.has(t.id));
+  const leftoverTeams = orderBy(
+    teams.filter((t) => !scheduledTeams.has(t.id)),
+    "name"
+  );
   const title =
     leftoverTeams.length === 0
       ? "Unscheduled Teams"
