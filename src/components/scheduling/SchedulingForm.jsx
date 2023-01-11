@@ -12,6 +12,8 @@ import {
   Number as FormNumber,
 } from "@components/common/forms";
 import { X } from "@components/common/icon";
+import Pill from "@components/common/pill";
+
 import { getTeamOptions } from "@libs/tournamentForms";
 
 import NonScheduledTeams from "./NonScheduledTeams";
@@ -26,13 +28,54 @@ const initialValues = (matchesByRound) => {
   };
 };
 
-const SchedulingForm = ({ schedule, teams }) => {
-  const matchesByRound = groupBy(schedule.matches, "round");
+const BYE_OPTION = {
+  label: "BYE",
+  value: "Bye",
+};
+
+const getTeamPool = (team, phaseId) => {
+  return team.divisions.find((d) => d.phaseId === phaseId)?.id;
+};
+
+const renderCrossPoolPill = (scheduledMatch, phaseId, teams) => {
+  const { team1Id, team2Id } = scheduledMatch;
+  if (
+    !team1Id ||
+    !team2Id ||
+    team1Id === BYE_OPTION.value ||
+    team2Id === BYE_OPTION.value
+  ) {
+    return null;
+  }
+  const firstTeamPool = getTeamPool(
+    teams.find((t) => t.id === team1Id),
+    phaseId
+  );
+  const secondTeamPool = getTeamPool(
+    teams.find((t) => t.id === team2Id),
+    phaseId
+  );
+  if (firstTeamPool === secondTeamPool) {
+    return null;
+  }
+  return (
+    <Pill type="info" className="ms-2">
+      Cross-Pool
+    </Pill>
+  );
+};
+
+const SchedulingForm = ({
+  schedule,
+  teams,
+  pools,
+  poolTeams,
+  unassignedTeams,
+}) => {
+  const { matches, phaseId } = schedule;
+  const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
-  const teamOptions = [
-    { label: "BYE", value: "Bye" },
-    ...getTeamOptions(teams),
-  ];
+  const teamOptions = [BYE_OPTION, ...getTeamOptions(teams)];
   return (
     <Form
       name="SchedulingForm"
@@ -98,7 +141,10 @@ const SchedulingForm = ({ schedule, teams }) => {
                               sm={12}
                               className="mb-2 d-flex justify-content-between"
                             >
-                              <b>Match {matchIndex + 1}</b>
+                              <span>
+                                <b>Match {matchIndex + 1}</b>
+                                {renderCrossPoolPill(_val, phaseId, teams)}
+                              </span>
                               <X
                                 size="25"
                                 onClick={() => removeMatch(matchIndex)}

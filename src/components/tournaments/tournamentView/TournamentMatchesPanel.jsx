@@ -17,6 +17,7 @@ const TournamentMatchesPanel = ({
   rules,
   playersById,
   phases,
+  pools,
   currentUser,
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
@@ -137,6 +138,7 @@ const TournamentMatchesPanel = ({
         <SchedulingModal
           teams={teams}
           phases={phases}
+          pools={pools}
           onHide={() => setShowSchedule(false)}
         />
       )}

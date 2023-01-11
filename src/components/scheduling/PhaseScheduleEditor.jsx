@@ -8,11 +8,17 @@ import { TournamentIdContext } from "@components/tournaments/common/context";
 
 import SchedulingForm from "./SchedulingForm";
 
-const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
+const PhaseScheduleEditor = ({
+  phase,
+  teams,
+  schedule = null,
+  pools,
+  poolTeams,
+  unassignedTeams,
+}) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
   const tournamentId = useContext(TournamentIdContext);
-
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
@@ -58,7 +64,13 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
   }
   return (
     <div className="mt-3">
-      <SchedulingForm schedule={draft} teams={teams} />
+      <SchedulingForm
+        schedule={draft}
+        teams={teams}
+        pools={pools}
+        poolTeams={poolTeams}
+        unassignedTeams={unassignedTeams}
+      />
     </div>
   );
 };
