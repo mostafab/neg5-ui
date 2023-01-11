@@ -100,7 +100,7 @@ const SchedulingForm = ({ schedule, teams }) => {
                             >
                               <b>Match {matchIndex + 1}</b>
                               <X
-                                size="30"
+                                size="25"
                                 onClick={() => removeMatch(matchIndex)}
                               />
                             </Col>
