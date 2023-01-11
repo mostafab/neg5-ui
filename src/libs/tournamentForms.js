@@ -1,4 +1,6 @@
 import orderBy from "lodash/orderBy";
+import mapValues from "lodash/mapValues";
+import groupBy from "lodash/groupBy";
 
 export const getTeamOptions = (teams) =>
   orderBy(
@@ -22,4 +24,26 @@ export const answerTypeToPillType = {
   Power: "success",
   Base: "info",
   Neg: "danger",
+};
+
+export const getTeamOptionsWithPools = (teams, pools, phaseId) => {
+  const teamOptionsByPool = mapValues(
+    groupBy(
+      teams,
+      (team) => team.divisions.find((d) => d.phaseId === phaseId)?.id || null
+    ),
+    (poolTeams) => getTeamOptions(poolTeams)
+  );
+  const optionGroups = Object.entries(teamOptionsByPool).map(
+    ([poolId, teamOptions]) => {
+      return {
+        label:
+          poolId !== "null"
+            ? pools.find((p) => p.id === poolId).name
+            : "Unassigned",
+        options: teamOptions,
+      };
+    }
+  );
+  return optionGroups;
 };

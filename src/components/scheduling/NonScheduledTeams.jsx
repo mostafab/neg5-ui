@@ -3,7 +3,7 @@ import orderBy from "lodash/orderBy";
 
 import TeamList from "@components/tournaments/tournamentView/teams/TeamsList";
 
-const NonScheduledTeams = ({ teams, scheduledMatches }) => {
+const NonScheduledTeams = ({ teams, scheduledMatches, className = "" }) => {
   const scheduledTeams = new Set(
     scheduledMatches
       .map((m) => [m.team1Id, m.team2Id])
@@ -18,12 +18,12 @@ const NonScheduledTeams = ({ teams, scheduledMatches }) => {
       ? "Unscheduled Teams"
       : `Unscheduled Teams (${leftoverTeams.length})`;
   return (
-    <>
+    <div className={className}>
       <h6>
         <b>{title}</b>
       </h6>
       <TeamList teams={leftoverTeams} />
-    </>
+    </div>
   );
 };
 

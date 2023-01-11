@@ -14,7 +14,7 @@ import {
 import { X } from "@components/common/icon";
 import Pill from "@components/common/pill";
 
-import { getTeamOptions } from "@libs/tournamentForms";
+import { getTeamOptionsWithPools } from "@libs/tournamentForms";
 
 import NonScheduledTeams from "./NonScheduledTeams";
 
@@ -59,7 +59,7 @@ const renderCrossPoolPill = (scheduledMatch, phaseId, teams) => {
     return null;
   }
   return (
-    <Pill type="info" className="ms-2">
+    <Pill type="warning" className="ms-2">
       Cross-Pool
     </Pill>
   );
@@ -75,7 +75,10 @@ const SchedulingForm = ({
   const { matches, phaseId } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
-  const teamOptions = [BYE_OPTION, ...getTeamOptions(teams)];
+  const teamOptions = [
+    BYE_OPTION,
+    ...getTeamOptionsWithPools(teams, pools, phaseId),
+  ];
   return (
     <Form
       name="SchedulingForm"
@@ -118,6 +121,7 @@ const SchedulingForm = ({
                   <NonScheduledTeams
                     scheduledMatches={val.matches}
                     teams={teams}
+                    className="sticky-top"
                   />
                 </Col>
                 <Col lg={9} md={9} sm={9} xs={8}>
@@ -128,7 +132,7 @@ const SchedulingForm = ({
                       newObject: () => ({}),
                     }}
                     render={(
-                      _val,
+                      matchValue,
                       { index: matchIndex },
                       { remove: removeMatch }
                     ) => {
@@ -143,7 +147,11 @@ const SchedulingForm = ({
                             >
                               <span>
                                 <b>Match {matchIndex + 1}</b>
-                                {renderCrossPoolPill(_val, phaseId, teams)}
+                                {renderCrossPoolPill(
+                                  matchValue,
+                                  phaseId,
+                                  teams
+                                )}
                               </span>
                               <X
                                 size="25"

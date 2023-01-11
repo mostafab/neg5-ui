@@ -216,6 +216,13 @@ export const Select = ({
     formContext.getFieldHelpers(name).setValue(value);
     onChange && onChange(value, formContext);
   };
+  // Handles cases for option groups
+  const normalizedOptions = options.flatMap((o) => {
+    if (o.options) {
+      return o.options;
+    }
+    return [o];
+  });
   return (
     <div className="mb-3">
       <ReactSelect
@@ -252,8 +259,8 @@ export const Select = ({
         onChange={internalOnChange}
         value={
           multiple
-            ? options.filter((o) => field.value.indexOf(o.value) >= 0)
-            : options.find((o) => o.value === field.value) || ""
+            ? normalizedOptions.filter((o) => field.value.indexOf(o.value) >= 0)
+            : normalizedOptions.find((o) => o.value === field.value) || ""
         }
       />
       {meta.error && <span className="text-danger small">{meta.error}</span>}

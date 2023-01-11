@@ -22,6 +22,7 @@ const PhaseScheduleEditor = ({
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
+      phaseId: phase.id,
       matches: [
         {
           round: 1,
