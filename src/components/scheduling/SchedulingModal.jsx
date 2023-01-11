@@ -12,7 +12,7 @@ const SchedulingModal = ({ teams, phases, onHide }) => {
     phases.length === 0 ? "" : phases[0].id
   );
   return (
-    <Modal title="Scheduling" onHide={onHide} size="xl">
+    <Modal title="Scheduling" onHide={onHide} fullscreen>
       <Card>
         <Tabs transition={false} activeKey={activeTab} onSelect={setActiveTab}>
           {phases.map((phase) => (

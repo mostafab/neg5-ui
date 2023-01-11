@@ -15,7 +15,9 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
 
   const onNew = (e) => {
     e.preventDefault();
-    console.log("new schedule");
+    setDraft({
+      matches: [],
+    });
   };
 
   const onGenerate = async (e) => {
@@ -35,7 +37,7 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
       <div className="p-4 text-center">
         {!generating && (
           <>
-            <div>No schedule has been created for this phase yet.</div>
+            <div>No schedule has been created for this phase.</div>
             <a href="#" onClick={onNew}>
               Start from scratch
             </a>{" "}
