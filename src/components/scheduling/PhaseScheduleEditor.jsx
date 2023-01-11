@@ -6,6 +6,8 @@ import { generateSchedule } from "@api/schedule";
 import { Spinner } from "@components/common/icon";
 import { TournamentIdContext } from "@components/tournaments/common/context";
 
+import SchedulingForm from "./SchedulingForm";
+
 const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
@@ -23,10 +25,12 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
       generateSchedule({ phaseId: phase.id, tournamentId })
     );
     setGenerating(false);
-    console.log(response);
+    if (!response.errors) {
+      setDraft(response);
+    }
   };
 
-  if (!schedule) {
+  if (!draft) {
     return (
       <div className="p-4 text-center">
         {!generating && (
@@ -46,7 +50,11 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
       </div>
     );
   }
-  return <div>Stuff</div>;
+  return (
+    <div className="mt-3">
+      <SchedulingForm schedule={draft} teams={teams} />
+    </div>
+  );
 };
 
 export default PhaseScheduleEditor;
