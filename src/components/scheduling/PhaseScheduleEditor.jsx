@@ -16,7 +16,11 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
-      matches: [],
+      matches: [
+        {
+          round: 1,
+        },
+      ],
     });
   };
 

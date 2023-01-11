@@ -24,7 +24,7 @@ const SchedulingForm = ({ schedule, teams }) => {
   const matchesByRound = groupBy(schedule.matches, "round");
   const formValues = initialValues(matchesByRound);
   const teamOptions = [
-    { label: "Bye", value: "Bye" },
+    { label: "BYE", value: "Bye" },
     ...getTeamOptions(teams),
   ];
   return (
@@ -52,7 +52,9 @@ const SchedulingForm = ({ schedule, teams }) => {
                 <tr>
                   <th colSpan={COLSPAN}>
                     <div className="d-flex justify-content-between">
-                      <h5>Round {val.round}</h5>
+                      <h5>
+                        <b>Round {val.round}</b>
+                      </h5>
                       <X size="25" onClick={() => remove(roundIndex)} />
                     </div>
                   </th>
