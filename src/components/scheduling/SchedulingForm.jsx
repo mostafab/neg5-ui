@@ -74,21 +74,26 @@ const SchedulingForm = ({ schedule, teams }) => {
                   return (
                     <>
                       <Row key={matchIndex}>
-                        <Col lg={4} md={6}>
+                        <Col lg={4} md={6} sm={6}>
                           <Select
                             options={teamOptions}
                             name={`rounds[${roundIndex}].matches[${matchIndex}].team1Id`}
                             label="Select Team 1"
                           />
                         </Col>
-                        <Col lg={4} md={6}>
+                        <Col lg={4} md={6} sm={6}>
                           <Select
                             options={teamOptions}
                             name={`rounds[${roundIndex}].matches[${matchIndex}].team2Id`}
                             label="Select Team 2"
                           />
                         </Col>
-                        <Col lg={4} className="d-flex justify-content-between">
+                        <Col
+                          lg={4}
+                          md={12}
+                          sm={12}
+                          className="d-flex justify-content-between"
+                        >
                           <Text
                             name={`rounds[${roundIndex}].matches[${matchIndex}].room`}
                             label="Room"
