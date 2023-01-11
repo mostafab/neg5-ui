@@ -4,7 +4,13 @@ import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
 
 import Card from "@components/common/cards";
-import { Form, RepeatField, Select, Text } from "@components/common/forms";
+import {
+  Form,
+  RepeatField,
+  Select,
+  Text,
+  Number as FormNumber,
+} from "@components/common/forms";
 import { X } from "@components/common/icon";
 import { getTeamOptions } from "@libs/tournamentForms";
 
@@ -46,20 +52,23 @@ const SchedulingForm = ({ schedule, teams }) => {
         render={(val, { index: roundIndex }, { remove }) => {
           return (
             <Card
-              key={val.round}
-              title={
-                <h5>
-                  <b>Round {val.round}</b>
-                </h5>
-              }
+              key={roundIndex}
               shadow={false}
-              className="mb-3"
+              className="mb-5"
               actions={[
                 {
-                  component: <X size="25" onClick={() => remove(roundIndex)} />,
+                  component: <X size="35" onClick={() => remove(roundIndex)} />,
                 },
               ]}
             >
+              <div className="d-flex justify-content-between">
+                <FormNumber
+                  name={`rounds[${roundIndex}].round`}
+                  label="Round"
+                />
+                <X size="35" onClick={() => remove(roundIndex)} />
+              </div>
+
               <RepeatField
                 name={`rounds[${roundIndex}].matches`}
                 addObjectProps={{
@@ -72,8 +81,20 @@ const SchedulingForm = ({ schedule, teams }) => {
                   { remove: removeMatch }
                 ) => {
                   return (
-                    <>
-                      <Row key={matchIndex}>
+                    <div key={matchIndex}>
+                      <Row>
+                        <Col
+                          lg={12}
+                          md={12}
+                          sm={12}
+                          className="mb-2 d-flex justify-content-between"
+                        >
+                          <b>Match {matchIndex + 1}</b>
+                          <X
+                            size="30"
+                            onClick={() => removeMatch(matchIndex)}
+                          />
+                        </Col>
                         <Col lg={4} md={6} sm={6}>
                           <Select
                             options={teamOptions}
@@ -88,24 +109,14 @@ const SchedulingForm = ({ schedule, teams }) => {
                             label="Select Team 2"
                           />
                         </Col>
-                        <Col
-                          lg={4}
-                          md={12}
-                          sm={12}
-                          className="d-flex justify-content-between"
-                        >
+                        <Col lg={4} md={12} sm={12}>
                           <Text
                             name={`rounds[${roundIndex}].matches[${matchIndex}].room`}
                             label="Room"
                           />
-                          <X
-                            size="25"
-                            onClick={() => removeMatch(matchIndex)}
-                          />
                         </Col>
                       </Row>
-                      <hr />
-                    </>
+                    </div>
                   );
                 }}
               />
