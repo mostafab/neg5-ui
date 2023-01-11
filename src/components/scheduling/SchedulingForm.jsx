@@ -1,14 +1,18 @@
 import React from "react";
-import Table from "react-bootstrap/Table";
+import { Row, Col } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
 
-import { Form, RepeatField, Select, Text } from "@components/common/forms";
+import Card from "@components/common/cards";
+import {
+  Form,
+  RepeatField,
+  Select,
+  Text,
+  Number as FormNumber,
+} from "@components/common/forms";
 import { X } from "@components/common/icon";
-import Button from "@components/common/button";
 import { getTeamOptions } from "@libs/tournamentForms";
-
-const COLSPAN = 4;
 
 const initialValues = (matchesByRound) => {
   const rounds = orderBy(Object.keys(matchesByRound), Number);
@@ -47,77 +51,76 @@ const SchedulingForm = ({ schedule, teams }) => {
         }}
         render={(val, { index: roundIndex }, { remove }) => {
           return (
-            <Table responsive key={val.round} size="sm">
-              <thead>
-                <tr>
-                  <th colSpan={COLSPAN}>
-                    <div className="d-flex justify-content-between">
-                      <h5>
-                        <b>Round {val.round}</b>
-                      </h5>
-                      <X size="25" onClick={() => remove(roundIndex)} />
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <RepeatField
-                  name={`rounds[${roundIndex}].matches`}
-                  addObjectProps={{
-                    buttonText: "Add a Match",
-                    newObject: () => ({}),
-                    // eslint-disable-next-line react/display-name
-                    as: (push) => {
-                      return (
-                        <tr>
-                          <td colSpan={COLSPAN} className="text-end">
-                            <Button type="link" onClick={() => push()}>
-                              Add Match
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    },
-                  }}
-                  render={(
-                    _val,
-                    { index: matchIndex },
-                    { remove: removeMatch }
-                  ) => {
-                    return (
-                      <tr key={matchIndex}>
-                        <td className="pt-4">
+            <Card
+              key={roundIndex}
+              shadow={false}
+              className="mb-5"
+              actions={[
+                {
+                  component: <X size="35" onClick={() => remove(roundIndex)} />,
+                },
+              ]}
+            >
+              <div className="d-flex justify-content-between">
+                <FormNumber
+                  name={`rounds[${roundIndex}].round`}
+                  label="Round"
+                />
+                <X size="35" onClick={() => remove(roundIndex)} />
+              </div>
+
+              <RepeatField
+                name={`rounds[${roundIndex}].matches`}
+                addObjectProps={{
+                  buttonText: "Add a Match",
+                  newObject: () => ({}),
+                }}
+                render={(
+                  _val,
+                  { index: matchIndex },
+                  { remove: removeMatch }
+                ) => {
+                  return (
+                    <div key={matchIndex}>
+                      <Row>
+                        <Col
+                          lg={12}
+                          md={12}
+                          sm={12}
+                          className="mb-2 d-flex justify-content-between"
+                        >
+                          <b>Match {matchIndex + 1}</b>
+                          <X
+                            size="30"
+                            onClick={() => removeMatch(matchIndex)}
+                          />
+                        </Col>
+                        <Col lg={4} md={6} sm={6}>
                           <Select
                             options={teamOptions}
                             name={`rounds[${roundIndex}].matches[${matchIndex}].team1Id`}
                             label="Select Team 1"
                           />
-                        </td>
-                        <td className="pt-4">
+                        </Col>
+                        <Col lg={4} md={6} sm={6}>
                           <Select
                             options={teamOptions}
                             name={`rounds[${roundIndex}].matches[${matchIndex}].team2Id`}
                             label="Select Team 2"
                           />
-                        </td>
-                        <td className="pt-4">
+                        </Col>
+                        <Col lg={4} md={12} sm={12}>
                           <Text
                             name={`rounds[${roundIndex}].matches[${matchIndex}].room`}
                             label="Room"
                           />
-                        </td>
-                        <td className="align-middle text-end">
-                          <X
-                            size="25"
-                            onClick={() => removeMatch(matchIndex)}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  }}
-                />
-              </tbody>
-            </Table>
+                        </Col>
+                      </Row>
+                    </div>
+                  );
+                }}
+              />
+            </Card>
           );
         }}
       />

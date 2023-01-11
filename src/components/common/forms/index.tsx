@@ -147,6 +147,7 @@ export const Text = ({
   onChange = null,
   onBlur = null,
   onFocus = null,
+  className = "",
 }) => (
   <CommonFormElementWrapper
     name={name}
@@ -158,6 +159,7 @@ export const Text = ({
     onChange={onChange}
     onBlur={onBlur}
     onFocus={onFocus}
+    className={className}
   />
 );
 
@@ -329,6 +331,7 @@ const CommonFormElementWrapper = ({
   onChange = null,
   onBlur = null,
   onFocus = null,
+  className = "",
 }) => {
   const [field, meta] = useField(name);
   const isDisplay = type === "display";
@@ -344,7 +347,7 @@ const CommonFormElementWrapper = ({
   };
   return (
     <>
-      <FloatingLabel label={label} className="mb-3">
+      <FloatingLabel label={label} className={`mb-3 ${className}`}>
         <FormComponent.Control
           autoComplete={autoComplete ? "on" : "off"}
           type={type === "display" ? undefined : type}

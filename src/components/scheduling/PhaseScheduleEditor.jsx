@@ -47,7 +47,7 @@ const PhaseScheduleEditor = ({ phase, teams, schedule = null }) => {
             </a>{" "}
             or{" "}
             <a href="#" onClick={onGenerate}>
-              have one generated
+              have one pre-populated
             </a>{" "}
             from existing pools.
           </>
