@@ -65,13 +65,7 @@ const renderCrossPoolPill = (scheduledMatch, phaseId, teams) => {
   );
 };
 
-const SchedulingForm = ({
-  schedule,
-  teams,
-  pools,
-  poolTeams,
-  unassignedTeams,
-}) => {
+const SchedulingForm = ({ schedule, teams, pools }) => {
   const { matches, phaseId } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
@@ -117,14 +111,14 @@ const SchedulingForm = ({
                 <X size="35" onClick={() => remove(roundIndex)} />
               </div>
               <Row>
-                <Col lg={3} md={3} sm={3} xs={4}>
+                <Col lg={3} md={3} sm={12} xs={12} className="mb-3">
                   <NonScheduledTeams
                     scheduledMatches={val.matches}
                     teams={teams}
                     className="sticky-top"
                   />
                 </Col>
-                <Col lg={9} md={9} sm={9} xs={8}>
+                <Col lg={9} md={9} sm={12} xs={12}>
                   <RepeatField
                     name={`rounds[${roundIndex}].matches`}
                     addObjectProps={{
