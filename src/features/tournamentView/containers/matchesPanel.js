@@ -31,6 +31,7 @@ const mapStateToProps = ({
   rules: tournamentRulesReducer,
   playersById: getPlayersById(tournamentTeamsReducer.teams),
   phases: tournamentPhasesReducer.phases,
+  pools: tournamentPhasesReducer.pools,
   currentUser: loginReducer.currentUser.data,
 });
 
