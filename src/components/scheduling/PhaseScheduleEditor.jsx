@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import { doValidatedApiRequest } from "@api/common";
 import { generateSchedule } from "@api/schedule";
 
+import Button from "@components/common/button";
 import { Spinner } from "@components/common/icon";
 import { TournamentIdContext } from "@components/tournaments/common/context";
 
@@ -34,6 +35,7 @@ const PhaseScheduleEditor = ({
   const onGenerate = async (e) => {
     e.preventDefault();
     setGenerating(true);
+    setDraft(null);
     const response = await doValidatedApiRequest(() =>
       generateSchedule({ phaseId: phase.id, tournamentId })
     );
@@ -64,15 +66,20 @@ const PhaseScheduleEditor = ({
     );
   }
   return (
-    <div className="mt-3">
-      <SchedulingForm
-        schedule={draft}
-        teams={teams}
-        pools={pools}
-        poolTeams={poolTeams}
-        unassignedTeams={unassignedTeams}
-      />
-    </div>
+    <>
+      <Button type="link" onClick={onGenerate}>
+        Re-Generate
+      </Button>
+      <div>
+        <SchedulingForm
+          schedule={draft}
+          teams={teams}
+          pools={pools}
+          poolTeams={poolTeams}
+          unassignedTeams={unassignedTeams}
+        />
+      </div>
+    </>
   );
 };
 

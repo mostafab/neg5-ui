@@ -10,6 +10,7 @@ import {
   Select,
   Text,
   Number as FormNumber,
+  ResetListener,
 } from "@components/common/forms";
 import { X } from "@components/common/icon";
 import Pill from "@components/common/pill";
@@ -79,6 +80,10 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
       initialValues={formValues}
       submitButtonText="Save"
     >
+      <ResetListener
+        changeKey={schedule}
+        initialValues={() => initialValues(matchesByRound)}
+      />
       <RepeatField
         name="rounds"
         addObjectProps={{
