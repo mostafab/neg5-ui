@@ -43,8 +43,8 @@ const validation = Yup.object({
         .required("Please enter a name."),
       matches: Yup.array().of(
         Yup.object().shape({
-          team1Id: Yup.string().required("Choose a team or BYE"),
-          team2Id: Yup.string().required("Choose a team or BYE"),
+          team1Id: Yup.string().required("Choose a team or BYE").nullable(),
+          team2Id: Yup.string().required("Choose a team or BYE").nullable(),
         })
       ),
     })
