@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 
 import { doValidatedApiRequest } from "@api/common";
 import { generateSchedule } from "@api/schedule";
 
 import Button from "@components/common/button";
 import { Spinner } from "@components/common/icon";
-import { TournamentIdContext } from "@components/tournaments/common/context";
 
 import SchedulingForm from "./SchedulingForm";
 
@@ -19,7 +18,6 @@ const PhaseScheduleEditor = ({
 }) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
-  const tournamentId = useContext(TournamentIdContext);
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
@@ -37,7 +35,7 @@ const PhaseScheduleEditor = ({
     setGenerating(true);
     setDraft(null);
     const response = await doValidatedApiRequest(() =>
-      generateSchedule({ phaseId: phase.id, tournamentId })
+      generateSchedule({ tournamentPhaseId: phase.id })
     );
     setGenerating(false);
     if (!response.errors) {

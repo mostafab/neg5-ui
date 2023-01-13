@@ -38,15 +38,17 @@ const getTeamPool = (team, phaseId) => {
   return team.divisions.find((d) => d.phaseId === phaseId)?.id;
 };
 
-const renderCrossPoolPill = (scheduledMatch, phaseId, teams) => {
+const renderMatchPill = (scheduledMatch, phaseId, teams) => {
   const { team1Id, team2Id } = scheduledMatch;
-  if (
-    !team1Id ||
-    !team2Id ||
-    team1Id === BYE_OPTION.value ||
-    team2Id === BYE_OPTION.value
-  ) {
+  if (!team1Id || !team2Id) {
     return null;
+  }
+  if (team1Id === BYE_OPTION.value || team2Id === BYE_OPTION.value) {
+    return (
+      <Pill type="info" className="ms-2">
+        Bye
+      </Pill>
+    );
   }
   const firstTeamPool = getTeamPool(
     teams.find((t) => t.id === team1Id),
@@ -67,12 +69,12 @@ const renderCrossPoolPill = (scheduledMatch, phaseId, teams) => {
 };
 
 const SchedulingForm = ({ schedule, teams, pools }) => {
-  const { matches, phaseId } = schedule;
+  const { matches, tournamentPhaseId } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
   const teamOptions = [
     BYE_OPTION,
-    ...getTeamOptionsWithPools(teams, pools, phaseId),
+    ...getTeamOptionsWithPools(teams, pools, tournamentPhaseId),
   ];
   return (
     <Form
@@ -146,9 +148,9 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
                             >
                               <span>
                                 <b>Match {matchIndex + 1}</b>
-                                {renderCrossPoolPill(
+                                {renderMatchPill(
                                   matchValue,
-                                  phaseId,
+                                  tournamentPhaseId,
                                   teams
                                 )}
                               </span>
