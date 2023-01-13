@@ -25,7 +25,11 @@ const initialValues = (matchesByRound) => {
   return {
     rounds: rounds.map((r) => ({
       round: r,
-      matches: matchesByRound[r],
+      matches: matchesByRound[r].map((m) => ({
+        ...m,
+        team1Id: m.team1Id === undefined ? "" : m.team1Id,
+        team2Id: m.team2Id === undefined ? "" : m.team2Id,
+      })),
     })),
   };
 };
@@ -49,7 +53,7 @@ const validation = Yup.object({
 
 const BYE_OPTION = {
   label: "BYE",
-  value: "Bye",
+  value: "",
 };
 
 const getTeamPool = (team, phaseId) => {
@@ -58,15 +62,15 @@ const getTeamPool = (team, phaseId) => {
 
 const renderMatchPill = (scheduledMatch, phaseId, teams) => {
   const { team1Id, team2Id } = scheduledMatch;
-  if (!team1Id || !team2Id) {
-    return null;
-  }
   if (team1Id === BYE_OPTION.value || team2Id === BYE_OPTION.value) {
     return (
       <Pill type="info" className="ms-2">
         Bye
       </Pill>
     );
+  }
+  if (!team1Id || !team2Id) {
+    return null;
   }
   const firstTeamPool = getTeamPool(
     teams.find((t) => t.id === team1Id),
