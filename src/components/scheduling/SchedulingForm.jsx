@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
+import * as Yup from "yup";
 
 import Card from "@components/common/cards";
 import {
@@ -28,6 +29,23 @@ const initialValues = (matchesByRound) => {
     })),
   };
 };
+
+const validation = Yup.object({
+  rounds: Yup.array().of(
+    Yup.object().shape({
+      round: Yup.number()
+        .integer("Enter an integer")
+        .positive("Enter a positive integer")
+        .required("Please enter a name."),
+      matches: Yup.array().of(
+        Yup.object().shape({
+          team1Id: Yup.string().required("Choose a team or BYE"),
+          team2Id: Yup.string().required("Choose a team or BYE"),
+        })
+      ),
+    })
+  ),
+});
 
 const BYE_OPTION = {
   label: "BYE",
@@ -76,11 +94,16 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
     BYE_OPTION,
     ...getTeamOptionsWithPools(teams, pools, tournamentPhaseId),
   ];
+  const onSubmit = (values) => {
+    console.log(values);
+  };
   return (
     <Form
       name="SchedulingForm"
       initialValues={formValues}
+      validation={validation}
       submitButtonText="Save"
+      onSubmit={onSubmit}
     >
       <ResetListener
         changeKey={schedule}
