@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
+import * as Yup from "yup";
 
 import Card from "@components/common/cards";
 import {
@@ -24,14 +25,35 @@ const initialValues = (matchesByRound) => {
   return {
     rounds: rounds.map((r) => ({
       round: r,
-      matches: matchesByRound[r],
+      matches: matchesByRound[r].map((m) => ({
+        ...m,
+        team1Id: m.team1Id === undefined ? "" : m.team1Id,
+        team2Id: m.team2Id === undefined ? "" : m.team2Id,
+      })),
     })),
   };
 };
 
+const validation = Yup.object({
+  rounds: Yup.array().of(
+    Yup.object().shape({
+      round: Yup.number()
+        .integer("Enter an integer")
+        .positive("Enter a positive integer")
+        .required("Please enter a name."),
+      matches: Yup.array().of(
+        Yup.object().shape({
+          team1Id: Yup.string().required("Choose a team or BYE").nullable(),
+          team2Id: Yup.string().required("Choose a team or BYE").nullable(),
+        })
+      ),
+    })
+  ),
+});
+
 const BYE_OPTION = {
   label: "BYE",
-  value: "Bye",
+  value: "",
 };
 
 const getTeamPool = (team, phaseId) => {
@@ -40,15 +62,15 @@ const getTeamPool = (team, phaseId) => {
 
 const renderMatchPill = (scheduledMatch, phaseId, teams) => {
   const { team1Id, team2Id } = scheduledMatch;
-  if (!team1Id || !team2Id) {
-    return null;
-  }
   if (team1Id === BYE_OPTION.value || team2Id === BYE_OPTION.value) {
     return (
       <Pill type="info" className="ms-2">
         Bye
       </Pill>
     );
+  }
+  if (!team1Id || !team2Id) {
+    return null;
   }
   const firstTeamPool = getTeamPool(
     teams.find((t) => t.id === team1Id),
@@ -76,11 +98,16 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
     BYE_OPTION,
     ...getTeamOptionsWithPools(teams, pools, tournamentPhaseId),
   ];
+  const onSubmit = (values) => {
+    console.log(values);
+  };
   return (
     <Form
       name="SchedulingForm"
       initialValues={formValues}
+      validation={validation}
       submitButtonText="Save"
+      onSubmit={onSubmit}
     >
       <ResetListener
         changeKey={schedule}

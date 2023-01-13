@@ -25,6 +25,8 @@ const PhaseScheduleEditor = ({
       matches: [
         {
           round: 1,
+          team1Id: null,
+          team2Id: null,
         },
       ],
     });
