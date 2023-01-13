@@ -3,6 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loadMatches } from "@api/tournaments";
 import { loadTournamentScoresheet } from "@api/scoresheet";
 
+import { ScoresheetState } from "@libs/enums";
+
 const initialState = {
   matches: [],
   scoresheets: [],
@@ -20,6 +22,13 @@ const tournamentMatchesSlice = createSlice({
         state.matches[matchIndex] = match;
       } else {
         state.matches.push(match);
+      }
+      if (match.scoresheetId) {
+        state.scoresheets.forEach((s) => {
+          if (s.id === match.scoresheetId) {
+            s.status = ScoresheetState.Submitted;
+          }
+        });
       }
     },
     matchDeleted(state, action) {
