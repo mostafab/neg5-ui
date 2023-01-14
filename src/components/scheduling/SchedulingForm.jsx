@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
 import * as Yup from "yup";
 
+import { useAppDispatch } from "@store";
+import { scheduleCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
+import { doValidatedApiRequest } from "@api/common";
+import { createSchedule, updateSchedule } from "@api/schedule";
+import { sanitizeFormValuesRecursive } from "@libs/forms";
+
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import Card from "@components/common/cards";
 import {
   Form,
@@ -20,6 +27,11 @@ import { getTeamOptionsWithPools } from "@libs/tournamentForms";
 
 import NonScheduledTeams from "./NonScheduledTeams";
 
+const BYE_OPTION = {
+  label: "BYE",
+  value: "bye",
+};
+
 const initialValues = (matchesByRound) => {
   const rounds = orderBy(Object.keys(matchesByRound), Number);
   return {
@@ -27,8 +39,8 @@ const initialValues = (matchesByRound) => {
       round: r,
       matches: matchesByRound[r].map((m) => ({
         ...m,
-        team1Id: m.team1Id === undefined ? "" : m.team1Id,
-        team2Id: m.team2Id === undefined ? "" : m.team2Id,
+        team1Id: m.team1Id === undefined ? BYE_OPTION.value : m.team1Id,
+        team2Id: m.team2Id === undefined ? BYE_OPTION.value : m.team2Id,
       })),
     })),
   };
@@ -50,11 +62,6 @@ const validation = Yup.object({
     })
   ),
 });
-
-const BYE_OPTION = {
-  label: "BYE",
-  value: "",
-};
 
 const getTeamPool = (team, phaseId) => {
   return team.divisions.find((d) => d.phaseId === phaseId)?.id;
@@ -90,16 +97,57 @@ const renderMatchPill = (scheduledMatch, phaseId, teams) => {
   );
 };
 
-const SchedulingForm = ({ schedule, teams, pools }) => {
-  const { matches, tournamentPhaseId } = schedule;
+const SchedulingForm = ({
+  schedule,
+  teams,
+  pools,
+  readOnly = false,
+  onCancel,
+  onSubmitSuccess = null,
+}) => {
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
+  const dispatch = useAppDispatch();
+  const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
   const teamOptions = [
     BYE_OPTION,
     ...getTeamOptionsWithPools(teams, pools, tournamentPhaseId),
   ];
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const formatted = sanitizeFormValuesRecursive(values);
+    formatted.rounds = formatted.rounds.map((r) => ({
+      ...r,
+      matches: r.matches.map((m) => ({
+        ...m,
+        round: r.round,
+        team1Id: m.team1Id === BYE_OPTION.value ? null : m.team1Id,
+        team2Id: m.team2Id === BYE_OPTION.value ? null : m.team2Id,
+      })),
+    }));
+    const payload = {
+      id,
+      tournamentPhaseId,
+      matches: formatted.rounds.flatMap((r) => r.matches),
+    };
+    setSubmitData({
+      submitting: true,
+      error: null,
+    });
+    const response = await doValidatedApiRequest(() =>
+      payload.id ? updateSchedule(payload) : createSchedule(payload)
+    );
+    setSubmitData({
+      submitting: false,
+      error: response.errors || null,
+    });
+    if (!response.errors) {
+      dispatch(scheduleCreatedOrUpdated(response));
+      onSubmitSuccess && onSubmitSuccess(response);
+    }
   };
   return (
     <Form
@@ -108,6 +156,9 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
       validation={validation}
       submitButtonText="Save"
       onSubmit={onSubmit}
+      readOnly={readOnly}
+      onCancel={onCancel}
+      submitting={submitData.submitting}
     >
       <ResetListener
         changeKey={schedule}
@@ -127,22 +178,15 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
         }}
         render={(val, { index: roundIndex }, { remove }) => {
           return (
-            <Card
-              key={roundIndex}
-              shadow={false}
-              className="mb-5"
-              actions={[
-                {
-                  component: <X size="35" onClick={() => remove(roundIndex)} />,
-                },
-              ]}
-            >
+            <Card key={roundIndex} shadow={false} className="mb-5">
               <div className="d-flex justify-content-between">
                 <FormNumber
                   name={`rounds[${roundIndex}].round`}
                   label="Round"
                 />
-                <X size="35" onClick={() => remove(roundIndex)} />
+                {!readOnly && (
+                  <X size="35" onClick={() => remove(roundIndex)} />
+                )}
               </div>
               <Row>
                 <Col lg={3} md={3} sm={12} xs={12} className="mb-3">
@@ -181,10 +225,12 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
                                   teams
                                 )}
                               </span>
-                              <X
-                                size="25"
-                                onClick={() => removeMatch(matchIndex)}
-                              />
+                              {!readOnly && (
+                                <X
+                                  size="25"
+                                  onClick={() => removeMatch(matchIndex)}
+                                />
+                              )}
                             </Col>
                             <Col lg={4} md={6} sm={6}>
                               <Select
@@ -217,6 +263,7 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
           );
         }}
       />
+      {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
   );
 };

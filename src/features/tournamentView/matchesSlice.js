@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { loadMatches } from "@api/tournaments";
+import { loadSchedules } from "@api/schedule";
 import { loadTournamentScoresheet } from "@api/scoresheet";
 
 import { ScoresheetState } from "@libs/enums";
@@ -8,6 +9,7 @@ import { ScoresheetState } from "@libs/enums";
 const initialState = {
   matches: [],
   scoresheets: [],
+  schedules: [],
 };
 
 const tournamentMatchesSlice = createSlice({
@@ -49,6 +51,15 @@ const tournamentMatchesSlice = createSlice({
         (s) => s.id !== action.payload.id
       );
     },
+    scheduleCreatedOrUpdated(state, action) {
+      const id = action.payload.id;
+      const index = state.schedules.findIndex((s) => s.id === id);
+      if (index === -1) {
+        state.schedules.push(action.payload);
+      } else {
+        state.schedules[index] = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -57,6 +68,9 @@ const tournamentMatchesSlice = createSlice({
       })
       .addCase(loadScoresheetsAsync.fulfilled, (state, action) => {
         state.scoresheets = action.payload;
+      })
+      .addCase(loadSchedulesAsync.fulfilled, (state, action) => {
+        state.schedules = action.payload;
       });
   },
 });
@@ -75,6 +89,13 @@ export const loadScoresheetsAsync = createAsyncThunk(
   }
 );
 
+export const loadSchedulesAsync = createAsyncThunk(
+  "tournamentMatchesSlice/loadSchedules",
+  async (tournamentId) => {
+    return await loadSchedules(tournamentId);
+  }
+);
+
 export const tournamentMatchesReducer = tournamentMatchesSlice.reducer;
 
 export const {
@@ -82,4 +103,5 @@ export const {
   matchDeleted,
   scoresheetCreatedOrUpdated,
   scoresheetDeleted,
+  scheduleCreatedOrUpdated,
 } = tournamentMatchesSlice.actions;

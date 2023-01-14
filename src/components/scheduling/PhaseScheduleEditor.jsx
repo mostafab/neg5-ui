@@ -4,7 +4,7 @@ import { doValidatedApiRequest } from "@api/common";
 import { generateSchedule } from "@api/schedule";
 
 import Button from "@components/common/button";
-import { Spinner } from "@components/common/icon";
+import { Spinner, Edit } from "@components/common/icon";
 
 import SchedulingForm from "./SchedulingForm";
 
@@ -18,10 +18,11 @@ const PhaseScheduleEditor = ({
 }) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
+  const [readOnly, setReadOnly] = useState(schedule ? true : false);
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
-      phaseId: phase.id,
+      tournamentPhaseId: phase.id,
       matches: [
         {
           round: 1,
@@ -67,9 +68,16 @@ const PhaseScheduleEditor = ({
   }
   return (
     <>
-      <Button type="link" onClick={onGenerate}>
-        Re-Generate
-      </Button>
+      {!readOnly && (
+        <Button type="link" onClick={onGenerate}>
+          Re-Generate
+        </Button>
+      )}
+      {readOnly && (
+        <div className="text-end p-2">
+          <Edit size="20" onClick={() => setReadOnly(false)} />
+        </div>
+      )}
       <div>
         <SchedulingForm
           schedule={draft}
@@ -77,6 +85,12 @@ const PhaseScheduleEditor = ({
           pools={pools}
           poolTeams={poolTeams}
           unassignedTeams={unassignedTeams}
+          readOnly={readOnly}
+          onCancel={() => setReadOnly(true)}
+          onSubmitSuccess={(response) => {
+            setReadOnly(true);
+            setDraft(response);
+          }}
         />
       </div>
     </>
