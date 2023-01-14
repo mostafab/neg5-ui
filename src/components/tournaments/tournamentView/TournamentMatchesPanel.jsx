@@ -19,6 +19,7 @@ const TournamentMatchesPanel = ({
   phases,
   pools,
   currentUser,
+  schedules,
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
@@ -139,6 +140,7 @@ const TournamentMatchesPanel = ({
           teams={teams}
           phases={phases}
           pools={pools}
+          schedules={schedules}
           onHide={() => setShowSchedule(false)}
         />
       )}

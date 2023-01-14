@@ -27,6 +27,7 @@ const mapStateToProps = ({
     "lastUpdatedAt",
     "desc"
   ),
+  schedules: tournamentMatchesReducer.schedules,
   teams: tournamentTeamsReducer.teams,
   rules: tournamentRulesReducer,
   playersById: getPlayersById(tournamentTeamsReducer.teams),

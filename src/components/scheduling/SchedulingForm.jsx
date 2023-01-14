@@ -4,6 +4,10 @@ import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
 import * as Yup from "yup";
 
+import { doValidatedApiRequest } from "@api/common";
+import { createSchedule, updateSchedule } from "@api/schedule";
+import { sanitizeFormValuesRecursive } from "@libs/forms";
+
 import Card from "@components/common/cards";
 import {
   Form,
@@ -20,6 +24,11 @@ import { getTeamOptionsWithPools } from "@libs/tournamentForms";
 
 import NonScheduledTeams from "./NonScheduledTeams";
 
+const BYE_OPTION = {
+  label: "BYE",
+  value: "bye",
+};
+
 const initialValues = (matchesByRound) => {
   const rounds = orderBy(Object.keys(matchesByRound), Number);
   return {
@@ -27,8 +36,8 @@ const initialValues = (matchesByRound) => {
       round: r,
       matches: matchesByRound[r].map((m) => ({
         ...m,
-        team1Id: m.team1Id === undefined ? "" : m.team1Id,
-        team2Id: m.team2Id === undefined ? "" : m.team2Id,
+        team1Id: m.team1Id === undefined ? BYE_OPTION.value : m.team1Id,
+        team2Id: m.team2Id === undefined ? BYE_OPTION.value : m.team2Id,
       })),
     })),
   };
@@ -50,11 +59,6 @@ const validation = Yup.object({
     })
   ),
 });
-
-const BYE_OPTION = {
-  label: "BYE",
-  value: "",
-};
 
 const getTeamPool = (team, phaseId) => {
   return team.divisions.find((d) => d.phaseId === phaseId)?.id;
@@ -91,15 +95,34 @@ const renderMatchPill = (scheduledMatch, phaseId, teams) => {
 };
 
 const SchedulingForm = ({ schedule, teams, pools }) => {
-  const { matches, tournamentPhaseId } = schedule;
+  const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
   const teamOptions = [
     BYE_OPTION,
     ...getTeamOptionsWithPools(teams, pools, tournamentPhaseId),
   ];
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const formatted = sanitizeFormValuesRecursive(values);
+    formatted.rounds = formatted.rounds.map((r) => ({
+      ...r,
+      matches: r.matches.map((m) => ({
+        ...m,
+        round: r.round,
+        team1Id: m.team1Id === BYE_OPTION.value ? null : m.team1Id,
+        team2Id: m.team2Id === BYE_OPTION.value ? null : m.team2Id,
+      })),
+    }));
+    const payload = {
+      id,
+      tournamentPhaseId,
+      matches: formatted.rounds.flatMap((r) => r.matches),
+    };
+
+    const response = await doValidatedApiRequest(() =>
+      payload.id ? updateSchedule(payload) : createSchedule(payload)
+    );
+    console.log(response);
   };
   return (
     <Form
