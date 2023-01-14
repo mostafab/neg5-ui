@@ -229,13 +229,20 @@ export const Select = ({
         {...field}
         placeholder={label}
         styles={{
-          control: (base) => ({
-            ...base,
-            borderRadius: "0",
-            borderColor: meta.error ? "#e74c3c !important" : "#ced4da",
-            height: "100%",
-            zIndex: "1",
-          }),
+          control: (base) =>
+            (() => {
+              const styles = {
+                ...base,
+                borderRadius: "0",
+                borderColor: meta.error ? "#e74c3c !important" : "#ced4da",
+                height: "100%",
+                zIndex: "1",
+              };
+              if (isReadOnly) {
+                styles["border"] = "none";
+              }
+              return styles;
+            })(),
           container: (base) => ({
             ...base,
             height: "100%",
@@ -249,6 +256,26 @@ export const Select = ({
             ...base,
             display: "none",
           }),
+          indicatorsContainer: (base) =>
+            (() => {
+              const styles = {
+                ...base,
+              };
+              if (isReadOnly) {
+                styles["visibility"] = "hidden";
+              }
+              return styles;
+            })(),
+          singleValue: (base) =>
+            (() => {
+              const styles = {
+                ...base,
+              };
+              if (isReadOnly) {
+                styles["color"] = "black";
+              }
+              return styles;
+            })(),
         }}
         isSearchable={searchable}
         isDisabled={isReadOnly}
