@@ -4,7 +4,7 @@ import { doValidatedApiRequest } from "@api/common";
 import { generateSchedule } from "@api/schedule";
 
 import Button from "@components/common/button";
-import { Spinner } from "@components/common/icon";
+import { Spinner, Edit } from "@components/common/icon";
 
 import SchedulingForm from "./SchedulingForm";
 
@@ -73,6 +73,11 @@ const PhaseScheduleEditor = ({
           Re-Generate
         </Button>
       )}
+      {readOnly && (
+        <div className="text-end p-2">
+          <Edit size="20" onClick={() => setReadOnly(false)} />
+        </div>
+      )}
       <div>
         <SchedulingForm
           schedule={draft}
@@ -81,6 +86,7 @@ const PhaseScheduleEditor = ({
           poolTeams={poolTeams}
           unassignedTeams={unassignedTeams}
           readOnly={readOnly}
+          onCancel={() => setReadOnly(true)}
         />
       </div>
     </>

@@ -94,7 +94,13 @@ const renderMatchPill = (scheduledMatch, phaseId, teams) => {
   );
 };
 
-const SchedulingForm = ({ schedule, teams, pools, readOnly = false }) => {
+const SchedulingForm = ({
+  schedule,
+  teams,
+  pools,
+  readOnly = false,
+  onCancel,
+}) => {
   const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
@@ -132,6 +138,7 @@ const SchedulingForm = ({ schedule, teams, pools, readOnly = false }) => {
       submitButtonText="Save"
       onSubmit={onSubmit}
       readOnly={readOnly}
+      onCancel={onCancel}
     >
       <ResetListener
         changeKey={schedule}
