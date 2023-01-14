@@ -22,7 +22,7 @@ const PhaseScheduleEditor = ({
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
-      phaseId: phase.id,
+      tournamentPhaseId: phase.id,
       matches: [
         {
           round: 1,
@@ -87,7 +87,10 @@ const PhaseScheduleEditor = ({
           unassignedTeams={unassignedTeams}
           readOnly={readOnly}
           onCancel={() => setReadOnly(true)}
-          onSubmitSuccess={() => setReadOnly(true)}
+          onSubmitSuccess={(response) => {
+            setReadOnly(true);
+            setDraft(response);
+          }}
         />
       </div>
     </>

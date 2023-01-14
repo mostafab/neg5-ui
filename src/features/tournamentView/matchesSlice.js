@@ -51,6 +51,15 @@ const tournamentMatchesSlice = createSlice({
         (s) => s.id !== action.payload.id
       );
     },
+    scheduleCreatedOrUpdated(state, action) {
+      const id = action.payload.id;
+      const index = state.schedules.findIndex((s) => s.id === id);
+      if (index === -1) {
+        state.schedules.push(action.payload);
+      } else {
+        state.schedules[index] = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -94,4 +103,5 @@ export const {
   matchDeleted,
   scoresheetCreatedOrUpdated,
   scoresheetDeleted,
+  scheduleCreatedOrUpdated,
 } = tournamentMatchesSlice.actions;

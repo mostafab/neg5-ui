@@ -4,6 +4,8 @@ import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
 import * as Yup from "yup";
 
+import { useAppDispatch } from "@store";
+import { scheduleCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
 import { doValidatedApiRequest } from "@api/common";
 import { createSchedule, updateSchedule } from "@api/schedule";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
@@ -107,6 +109,7 @@ const SchedulingForm = ({
     submitting: false,
     error: null,
   });
+  const dispatch = useAppDispatch();
   const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
@@ -142,7 +145,8 @@ const SchedulingForm = ({
       error: response.errors || null,
     });
     if (!response.errors) {
-      onSubmitSuccess && onSubmitSuccess();
+      dispatch(scheduleCreatedOrUpdated(response));
+      onSubmitSuccess && onSubmitSuccess(response);
     }
   };
   return (
