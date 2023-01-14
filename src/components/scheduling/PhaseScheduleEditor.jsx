@@ -87,6 +87,7 @@ const PhaseScheduleEditor = ({
           unassignedTeams={unassignedTeams}
           readOnly={readOnly}
           onCancel={() => setReadOnly(true)}
+          onSubmitSuccess={() => setReadOnly(true)}
         />
       </div>
     </>

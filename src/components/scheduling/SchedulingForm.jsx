@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
@@ -8,6 +8,7 @@ import { doValidatedApiRequest } from "@api/common";
 import { createSchedule, updateSchedule } from "@api/schedule";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 
+import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import Card from "@components/common/cards";
 import {
   Form,
@@ -100,7 +101,12 @@ const SchedulingForm = ({
   pools,
   readOnly = false,
   onCancel,
+  onSubmitSuccess = null,
 }) => {
+  const [submitData, setSubmitData] = useState({
+    submitting: false,
+    error: null,
+  });
   const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
@@ -124,11 +130,20 @@ const SchedulingForm = ({
       tournamentPhaseId,
       matches: formatted.rounds.flatMap((r) => r.matches),
     };
-
+    setSubmitData({
+      submitting: true,
+      error: null,
+    });
     const response = await doValidatedApiRequest(() =>
       payload.id ? updateSchedule(payload) : createSchedule(payload)
     );
-    console.log(response);
+    setSubmitData({
+      submitting: false,
+      error: response.errors || null,
+    });
+    if (!response.errors) {
+      onSubmitSuccess && onSubmitSuccess();
+    }
   };
   return (
     <Form
@@ -139,6 +154,7 @@ const SchedulingForm = ({
       onSubmit={onSubmit}
       readOnly={readOnly}
       onCancel={onCancel}
+      submitting={submitData.submitting}
     >
       <ResetListener
         changeKey={schedule}
@@ -243,6 +259,7 @@ const SchedulingForm = ({
           );
         }}
       />
+      {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
   );
 };
