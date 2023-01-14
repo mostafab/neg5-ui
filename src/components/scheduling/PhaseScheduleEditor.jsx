@@ -68,7 +68,7 @@ const PhaseScheduleEditor = ({
   }
   return (
     <>
-      {!readOnly && (
+      {!readOnly && !draft.id && (
         <Button type="link" onClick={onGenerate}>
           Re-Generate
         </Button>
