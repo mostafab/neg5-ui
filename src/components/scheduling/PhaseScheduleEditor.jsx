@@ -18,6 +18,7 @@ const PhaseScheduleEditor = ({
 }) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
+  const [readOnly, setReadOnly] = useState(schedule ? true : false);
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
@@ -67,9 +68,11 @@ const PhaseScheduleEditor = ({
   }
   return (
     <>
-      <Button type="link" onClick={onGenerate}>
-        Re-Generate
-      </Button>
+      {!readOnly && (
+        <Button type="link" onClick={onGenerate}>
+          Re-Generate
+        </Button>
+      )}
       <div>
         <SchedulingForm
           schedule={draft}
@@ -77,6 +80,7 @@ const PhaseScheduleEditor = ({
           pools={pools}
           poolTeams={poolTeams}
           unassignedTeams={unassignedTeams}
+          readOnly={readOnly}
         />
       </div>
     </>

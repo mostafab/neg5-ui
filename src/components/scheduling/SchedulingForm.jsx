@@ -94,7 +94,7 @@ const renderMatchPill = (scheduledMatch, phaseId, teams) => {
   );
 };
 
-const SchedulingForm = ({ schedule, teams, pools }) => {
+const SchedulingForm = ({ schedule, teams, pools, readOnly = false }) => {
   const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
@@ -131,6 +131,7 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
       validation={validation}
       submitButtonText="Save"
       onSubmit={onSubmit}
+      readOnly={readOnly}
     >
       <ResetListener
         changeKey={schedule}
@@ -150,22 +151,15 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
         }}
         render={(val, { index: roundIndex }, { remove }) => {
           return (
-            <Card
-              key={roundIndex}
-              shadow={false}
-              className="mb-5"
-              actions={[
-                {
-                  component: <X size="35" onClick={() => remove(roundIndex)} />,
-                },
-              ]}
-            >
+            <Card key={roundIndex} shadow={false} className="mb-5">
               <div className="d-flex justify-content-between">
                 <FormNumber
                   name={`rounds[${roundIndex}].round`}
                   label="Round"
                 />
-                <X size="35" onClick={() => remove(roundIndex)} />
+                {!readOnly && (
+                  <X size="35" onClick={() => remove(roundIndex)} />
+                )}
               </div>
               <Row>
                 <Col lg={3} md={3} sm={12} xs={12} className="mb-3">
@@ -204,10 +198,12 @@ const SchedulingForm = ({ schedule, teams, pools }) => {
                                   teams
                                 )}
                               </span>
-                              <X
-                                size="25"
-                                onClick={() => removeMatch(matchIndex)}
-                              />
+                              {!readOnly && (
+                                <X
+                                  size="25"
+                                  onClick={() => removeMatch(matchIndex)}
+                                />
+                              )}
                             </Col>
                             <Col lg={4} md={6} sm={6}>
                               <Select
