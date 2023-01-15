@@ -108,7 +108,7 @@ const ScoresheetModal = ({
             {renderResumeScoresheetButton()}
             <Card
               title="Fill out a few fields to get started."
-              className="mt-lg-4 mt-md-4 mb-3"
+              className="mt-4 mb-3"
             >
               {scheduledMatches.length > 0 && (
                 <div className="mb-3">
@@ -159,7 +159,7 @@ const ScoresheetModal = ({
             <Card
               title="Start a scheduled match"
               shadow={false}
-              className="mt-lg-4 mt-md-4 mb-3"
+              className="mt-4"
             >
               <div className="mb-3">
                 <a
