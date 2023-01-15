@@ -10,9 +10,17 @@ import Modal from "@components/common/modal";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
 
+import ScheduledMatches from "@components/scheduling/ScheduledMatches";
+
 import ScoresheetStartForm from "./ScoresheetStartForm";
 import ScoresheetContainer from "./ScoresheetContainer";
 import ScoresheetsList from "./ScoresheetsList";
+
+const PreStartStage = {
+  ScoresheetsList: "scoresheets",
+  Form: "form",
+  Schedule: "schedule",
+};
 
 const ScoresheetModal = ({
   onHide,
@@ -22,9 +30,14 @@ const ScoresheetModal = ({
   scoresheets,
   currentUser,
   onViewCreatedMatch,
+  scheduledMatches,
+  schedules,
 }) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
-  const [showList, setShowList] = useState(false);
+  const [startFormSeedValues, setStartFormSeedValues] = useState(null);
+  const [prestartStage, setPrestartStage] = useState(
+    scheduledMatches.length > 0 ? PreStartStage.Schedule : PreStartStage.Form
+  );
   const getTitle = () => {
     if (!scoresheetStartValues) {
       return "Scoresheet";
@@ -41,6 +54,26 @@ const ScoresheetModal = ({
     setScoresheetStartValues(scoresheet);
   };
 
+  const onSelectScheduledMatch = ({
+    round,
+    room,
+    team1Id,
+    team2Id,
+    scheduleId,
+  }) => {
+    const phaseId = schedules.find(
+      (s) => s.id === scheduleId
+    )?.tournamentPhaseId;
+    setStartFormSeedValues({
+      round,
+      team1Id,
+      team2Id,
+      room,
+      phases: phaseId ? [phaseId] : [],
+    });
+    setPrestartStage(PreStartStage.Form);
+  };
+
   const onDelete = async (scoresheet) => {
     const response = await doValidatedApiRequest(() =>
       deleteScoresheet(scoresheet.id)
@@ -50,40 +83,111 @@ const ScoresheetModal = ({
     }
   };
 
+  const renderResumeScoresheetButton = () => {
+    if (scoresheets.length === 0) {
+      return null;
+    }
+    return (
+      <div style={{ textAlign: "center" }} className="d-flex">
+        <Button
+          className="w-100"
+          type="secondary"
+          onClick={() => setPrestartStage(PreStartStage.ScoresheetsList)}
+        >
+          Resume an in-progress scoresheet ({scoresheets.length})
+        </Button>
+      </div>
+    );
+  };
+
   const renderPrestartContent = () => {
-    if (!showList) {
-      return (
-        <>
-          <Card
-            title="Fill out a few fields to get started."
-            className="mt-lg-5 mt-md-5 mb-3"
-          >
-            <ScoresheetStartForm
+    switch (prestartStage) {
+      case PreStartStage.Form:
+        return (
+          <>
+            {renderResumeScoresheetButton()}
+            <Card
+              title="Fill out a few fields to get started."
+              className="mt-lg-4 mt-md-4 mb-3"
+            >
+              {scheduledMatches.length > 0 && (
+                <div className="mb-3">
+                  <a
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPrestartStage(PreStartStage.Schedule);
+                    }}
+                  >
+                    Or start a scheduled match
+                  </a>
+                </div>
+              )}
+              <ScoresheetStartForm
+                teams={teams}
+                phases={phases}
+                onSubmit={(values) => setScoresheetStartValues(values)}
+                currentUser={currentUser}
+                seedValues={startFormSeedValues}
+              />
+            </Card>
+          </>
+        );
+      case PreStartStage.ScoresheetsList:
+        return (
+          <>
+            <Button
+              type="secondary"
+              onClick={() => setPrestartStage(PreStartStage.Form)}
+              className="w-100 mt-lg-5 mt-md-5 mb-3"
+            >
+              Start a new scoresheet
+            </Button>
+            <ScoresheetsList
+              scoresheets={scoresheets}
               teams={teams}
-              phases={phases}
-              onSubmit={(values) => setScoresheetStartValues(values)}
               currentUser={currentUser}
+              onSelect={onSelectScoresheet}
+              onDelete={onDelete}
             />
-          </Card>
-          {scoresheets.length > 0 && (
-            <div style={{ textAlign: "center" }} className="d-flex">
-              <Button
-                className="w-100"
-                type="secondary"
-                onClick={() => setShowList(true)}
-              >
-                Or resume an in-progress scoresheet ({scoresheets.length})
-              </Button>
-            </div>
-          )}
-        </>
-      );
+          </>
+        );
+      case PreStartStage.Schedule:
+        return (
+          <>
+            {renderResumeScoresheetButton()}
+            <Card
+              title="Start a scheduled match"
+              shadow={false}
+              className="mt-lg-4 mt-md-4 mb-3"
+            >
+              <div className="mb-3">
+                <a
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPrestartStage(PreStartStage.Form);
+                  }}
+                >
+                  Or start a new scoresheet
+                </a>
+              </div>
+              <div>
+                <ScheduledMatches
+                  teams={teams}
+                  matches={scheduledMatches}
+                  onSelect={onSelectScheduledMatch}
+                />
+              </div>
+            </Card>
+          </>
+        );
     }
     return (
       <>
         <Button
           type="secondary"
-          onClick={() => setShowList(false)}
+          onClick={() => setPrestartStage(PreStartStage.Form)}
           className="w-100 mt-lg-5 mt-md-5 mb-3"
         >
           Start a new scoresheet
