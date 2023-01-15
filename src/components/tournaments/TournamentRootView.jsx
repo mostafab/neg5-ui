@@ -10,7 +10,9 @@ import PhasesPanel from "@features/tournamentView/containers/phasesPanel";
 import TeamsPanel from "@features/tournamentView/containers/teamsPanel";
 import MatchesPanel from "@features/tournamentView/containers/matchesPanel";
 import CollaboratorsPanel from "@features/tournamentView/containers/collaboratorsPanel";
+
 import { TournamentIdContext } from "@components/tournaments/common/context";
+import TournamentNotificationsListener from "@components/tournaments/common/TournamentNotificationListener";
 
 const TournamentRootView = ({ tournamentId }) => {
   const dispatch = useAppDispatch();
@@ -49,6 +51,7 @@ const TournamentRootView = ({ tournamentId }) => {
           </Col>
         </Row>
       </Container>
+      <TournamentNotificationsListener tournamentId={tournamentId} />
     </TournamentIdContext.Provider>
   );
 };
