@@ -16,7 +16,7 @@ const ScheduledMatches = ({ matches, teams, onSelect }) => {
     );
   };
   return (
-    <ListGroup className="vh-100 overflow-scroll">
+    <ListGroup className="overflow-scroll" style={{ maxHeight: "75vh" }}>
       {orderBy(matches, "round").map((m) => (
         <ListGroup.Item action key={m.id} onClick={() => onSelect(m)}>
           {getMatchTitle(m)}

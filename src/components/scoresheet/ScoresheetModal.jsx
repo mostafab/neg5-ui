@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 
 import { useAppDispatch } from "@store";
@@ -38,6 +38,9 @@ const ScoresheetModal = ({
   const [prestartStage, setPrestartStage] = useState(
     scheduledMatches.length > 0 ? PreStartStage.Schedule : PreStartStage.Form
   );
+  useEffect(() => {
+    setStartFormSeedValues(null);
+  }, [prestartStage]);
   const getTitle = () => {
     if (!scoresheetStartValues) {
       return "Scoresheet";
@@ -90,7 +93,7 @@ const ScoresheetModal = ({
     return (
       <div style={{ textAlign: "center" }} className="d-flex">
         <Button
-          className="w-100"
+          className="w-100 mt-5"
           type="secondary"
           onClick={() => setPrestartStage(PreStartStage.ScoresheetsList)}
         >
@@ -108,7 +111,7 @@ const ScoresheetModal = ({
             {renderResumeScoresheetButton()}
             <Card
               title="Fill out a few fields to get started."
-              className="mt-lg-4 mt-md-4 mb-3"
+              className="mt-4 mb-3"
             >
               {scheduledMatches.length > 0 && (
                 <div className="mb-3">
@@ -139,7 +142,7 @@ const ScoresheetModal = ({
             <Button
               type="secondary"
               onClick={() => setPrestartStage(PreStartStage.Form)}
-              className="w-100 mt-lg-5 mt-md-5 mb-3"
+              className="w-100 mt-5 mb-3"
             >
               Start a new scoresheet
             </Button>
@@ -159,7 +162,7 @@ const ScoresheetModal = ({
             <Card
               title="Start a scheduled match"
               shadow={false}
-              className="mt-lg-4 mt-md-4 mb-3"
+              className="mt-4"
             >
               <div className="mb-3">
                 <a
@@ -169,7 +172,7 @@ const ScoresheetModal = ({
                     setPrestartStage(PreStartStage.Form);
                   }}
                 >
-                  Or start a new scoresheet
+                  Or start a scoresheet from scratch
                 </a>
               </div>
               <div>
@@ -188,7 +191,7 @@ const ScoresheetModal = ({
         <Button
           type="secondary"
           onClick={() => setPrestartStage(PreStartStage.Form)}
-          className="w-100 mt-lg-5 mt-md-5 mb-3"
+          className="w-100 mt-5 mb-3"
         >
           Start a new scoresheet
         </Button>

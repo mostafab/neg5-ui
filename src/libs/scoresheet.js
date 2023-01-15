@@ -2,6 +2,8 @@ import orderBy from "lodash/orderBy";
 import mapValues from "lodash/mapValues";
 import keyBy from "lodash/keyBy";
 
+import { ScoresheetState } from "@libs/enums";
+
 export const orderPlayers = (players, playerIdOrderings) => {
   return orderBy(players, (p) => playerIdOrderings.indexOf(p.id));
 };
@@ -33,12 +35,26 @@ export const buildPlayersSummary = (teams, cycles, rules) => {
   return playerValues;
 };
 
-export const getMatchesToBePlayed = (matches, schedules) => {
+export const getMatchesToBePlayed = (matches, schedules, scoresheets) => {
+  const draftScoresheets = scoresheets.filter(
+    (s) => s.status === ScoresheetState.Draft
+  );
   return (
     schedules
       .flatMap((s) => s.matches)
       // Filter out byes
       .filter(({ team1Id, team2Id }) => team1Id && team2Id)
+      .filter(({ team1Id, team2Id, round: scheduledRound }) => {
+        return !draftScoresheets.some((s) => {
+          if (s.round !== scheduledRound) {
+            return false;
+          }
+          return (
+            (s.team1Id === team1Id || s.team1Id === team2Id) &&
+            (s.team2Id === team1Id || s.team2Id === team2Id)
+          );
+        });
+      })
       .filter(({ team1Id, team2Id, round: scheduledRound }) => {
         return !matches.some(({ round: matchRound, teams }) => {
           if (matchRound !== scheduledRound) {
