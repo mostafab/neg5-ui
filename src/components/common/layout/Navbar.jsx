@@ -11,7 +11,7 @@ const Navbar = ({ currentUser = {} }) => (
       <BootstrapNavbar.Toggle aria-controls="navbar" />
       <BootstrapNavbar.Collapse id="navbar" className="justify-content-end">
         <BootstrapNavbar.Text>
-          <Link href="/">Home</Link>
+          <Link href="/">Tournaments</Link>
         </BootstrapNavbar.Text>
         <BootstrapNav>
           <BootstrapNavDropdown title={currentUser.data?.username}>
