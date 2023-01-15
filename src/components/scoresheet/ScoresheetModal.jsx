@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 
 import { useAppDispatch } from "@store";
@@ -38,6 +38,9 @@ const ScoresheetModal = ({
   const [prestartStage, setPrestartStage] = useState(
     scheduledMatches.length > 0 ? PreStartStage.Schedule : PreStartStage.Form
   );
+  useEffect(() => {
+    setStartFormSeedValues(null);
+  }, [prestartStage]);
   const getTitle = () => {
     if (!scoresheetStartValues) {
       return "Scoresheet";
