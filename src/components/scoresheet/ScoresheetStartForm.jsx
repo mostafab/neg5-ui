@@ -29,12 +29,18 @@ const validation = Yup.object({
   phases: Yup.array().required().min(1, "Choose at least one phase."),
 });
 
-const ScoresheetStartForm = ({ teams, phases, onSubmit, currentUser }) => (
+const ScoresheetStartForm = ({
+  teams,
+  phases,
+  onSubmit,
+  currentUser,
+  seedValues,
+}) => (
   <Form
     name="ScoresheetStartForm"
     onSubmit={onSubmit}
     submitButtonText="Start"
-    initialValues={initialValues(phases, currentUser)}
+    initialValues={seedValues || initialValues(phases, currentUser)}
     validation={validation}
   >
     <Row>

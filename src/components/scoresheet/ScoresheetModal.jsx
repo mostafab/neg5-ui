@@ -34,6 +34,7 @@ const ScoresheetModal = ({
   schedules,
 }) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
+  const [startFormSeedValues, setStartFormSeedValues] = useState(null);
   const [prestartStage, setPrestartStage] = useState(
     scheduledMatches.length > 0 ? PreStartStage.Schedule : PreStartStage.Form
   );
@@ -63,13 +64,14 @@ const ScoresheetModal = ({
     const phaseId = schedules.find(
       (s) => s.id === scheduleId
     )?.tournamentPhaseId;
-    setScoresheetStartValues({
+    setStartFormSeedValues({
       round,
       team1Id,
       team2Id,
       room,
       phases: phaseId ? [phaseId] : [],
     });
+    setPrestartStage(PreStartStage.Form);
   };
 
   const onDelete = async (scoresheet) => {
@@ -126,6 +128,7 @@ const ScoresheetModal = ({
                 phases={phases}
                 onSubmit={(values) => setScoresheetStartValues(values)}
                 currentUser={currentUser}
+                seedValues={startFormSeedValues}
               />
             </Card>
           </>
