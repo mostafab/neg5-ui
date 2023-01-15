@@ -235,7 +235,7 @@ const MatchForm = ({
                   <Col lg={6} sm={12} md={12}>
                     <Number
                       name={`teams[${index}].overtimeTossupsGotten`}
-                      label={`${teamLabelPrefix} Overtime TUs`}
+                      label={`${teamLabelPrefix} TUs w/o bonuses`}
                     />
                   </Col>
                   {usesBouncebacks && (
