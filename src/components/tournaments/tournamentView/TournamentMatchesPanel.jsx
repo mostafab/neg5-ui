@@ -130,6 +130,7 @@ const TournamentMatchesPanel = ({
           phases={phases}
           currentUser={currentUser}
           scoresheets={draftScoresheets}
+          schedules={schedules}
           scheduledMatches={scheduledMatches}
           onViewCreatedMatch={(matchId) => {
             setShowScoresheet(false);

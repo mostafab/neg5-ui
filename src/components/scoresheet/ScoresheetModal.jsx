@@ -31,6 +31,7 @@ const ScoresheetModal = ({
   currentUser,
   onViewCreatedMatch,
   scheduledMatches,
+  schedules,
 }) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
   const [prestartStage, setPrestartStage] = useState(
@@ -52,8 +53,23 @@ const ScoresheetModal = ({
     setScoresheetStartValues(scoresheet);
   };
 
-  const onSelectScheduledMatch = (match) => {
-    console.log(match);
+  const onSelectScheduledMatch = ({
+    round,
+    room,
+    team1Id,
+    team2Id,
+    scheduleId,
+  }) => {
+    const phaseId = schedules.find(
+      (s) => s.id === scheduleId
+    )?.tournamentPhaseId;
+    setScoresheetStartValues({
+      round,
+      team1Id,
+      team2Id,
+      room,
+      phases: phaseId ? [phaseId] : [],
+    });
   };
 
   const onDelete = async (scoresheet) => {
@@ -76,7 +92,7 @@ const ScoresheetModal = ({
           type="secondary"
           onClick={() => setPrestartStage(PreStartStage.ScoresheetsList)}
         >
-          Or resume an in-progress scoresheet ({scoresheets.length})
+          Resume an in-progress scoresheet ({scoresheets.length})
         </Button>
       </div>
     );
@@ -87,9 +103,10 @@ const ScoresheetModal = ({
       case PreStartStage.Form:
         return (
           <>
+            {renderResumeScoresheetButton()}
             <Card
               title="Fill out a few fields to get started."
-              className="mt-lg-5 mt-md-5 mb-3"
+              className="mt-lg-4 mt-md-4 mb-3"
             >
               {scheduledMatches.length > 0 && (
                 <div className="mb-3">
@@ -111,7 +128,6 @@ const ScoresheetModal = ({
                 currentUser={currentUser}
               />
             </Card>
-            {renderResumeScoresheetButton()}
           </>
         );
       case PreStartStage.ScoresheetsList:
@@ -136,10 +152,11 @@ const ScoresheetModal = ({
       case PreStartStage.Schedule:
         return (
           <>
+            {renderResumeScoresheetButton()}
             <Card
               title="Start a scheduled match"
               shadow={false}
-              className="mt-lg-5 mt-md-5 mb-3"
+              className="mt-lg-4 mt-md-4 mb-3"
             >
               <div className="mb-3">
                 <a
@@ -160,7 +177,6 @@ const ScoresheetModal = ({
                 />
               </div>
             </Card>
-            {renderResumeScoresheetButton()}
           </>
         );
     }
