@@ -31,7 +31,8 @@ const mapStateToProps = ({
   schedules: tournamentMatchesReducer.schedules,
   scheduledMatches: getMatchesToBePlayed(
     tournamentMatchesReducer.matches,
-    tournamentMatchesReducer.schedules
+    tournamentMatchesReducer.schedules,
+    tournamentMatchesReducer.scoresheets
   ),
   teams: tournamentTeamsReducer.teams,
   rules: tournamentRulesReducer,
