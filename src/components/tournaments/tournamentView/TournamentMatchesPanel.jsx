@@ -79,7 +79,7 @@ const TournamentMatchesPanel = ({
         {enoughTeamsToAddMatch && matches.length === 0 && (
           <div className="d-flex p-2 justify-content-center">
             <div style={{ textAlign: "center" }}>
-              When you're ready, you can{" "}
+              On tournament day, you can{" "}
               <a
                 onClick={(e) => {
                   e.preventDefault();
