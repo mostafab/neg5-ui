@@ -269,7 +269,9 @@ const SchedulingForm = ({
           );
         }}
       />
-      {submitData.error && <CommonErrorBanner errors={submitData.error} />}
+      {submitData.error && (
+        <CommonErrorBanner errors={submitData.error} className="mt-3" />
+      )}
     </Form>
   );
 };
