@@ -25,7 +25,7 @@ const editableMatchFormFields = [
   "notes",
   "isTiebreaker",
   "teams[0].overtimeTossupsGotten",
-  "teams[1].overtimeTossupsGotten"
+  "teams[1].overtimeTossupsGotten",
 ];
 
 const ScoresheetSubmissionPanel = ({
