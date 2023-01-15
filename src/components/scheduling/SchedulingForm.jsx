@@ -157,7 +157,13 @@ const SchedulingForm = ({
       submitButtonText="Save"
       onSubmit={onSubmit}
       readOnly={readOnly}
-      onCancel={onCancel}
+      onCancel={() => {
+        setSubmitData({
+          error: null,
+          submitting: false,
+        });
+        onCancel();
+      }}
       submitting={submitData.submitting}
     >
       <ResetListener
@@ -263,7 +269,9 @@ const SchedulingForm = ({
           );
         }}
       />
-      {submitData.error && <CommonErrorBanner errors={submitData.error} />}
+      {submitData.error && (
+        <CommonErrorBanner errors={submitData.error} className="mt-3" />
+      )}
     </Form>
   );
 };

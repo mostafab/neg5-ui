@@ -56,4 +56,8 @@ export const Spinner = (props) => (
   <BootstrapSpinner size="sm" animation="border" {...props} />
 );
 
+export const Check = (props) => (
+  <Icon name="CheckCircleFill" fill="#18BC9C" {...props} />
+);
+
 export default Icon;
