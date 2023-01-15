@@ -40,7 +40,11 @@ const ScoresheetStartForm = ({
     name="ScoresheetStartForm"
     onSubmit={onSubmit}
     submitButtonText="Start"
-    initialValues={seedValues || initialValues(phases, currentUser)}
+    initialValues={
+      seedValues
+        ? { ...initialValues(phases, currentUser), ...seedValues }
+        : initialValues(phases, currentUser)
+    }
     validation={validation}
   >
     <Row>
