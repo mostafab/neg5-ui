@@ -52,6 +52,10 @@ const ScoresheetModal = ({
     setScoresheetStartValues(scoresheet);
   };
 
+  const onSelectScheduledMatch = (match) => {
+    console.log(match);
+  };
+
   const onDelete = async (scoresheet) => {
     const response = await doValidatedApiRequest(() =>
       deleteScoresheet(scoresheet.id)
@@ -149,7 +153,11 @@ const ScoresheetModal = ({
                 </a>
               </div>
               <div>
-                <ScheduledMatches teams={teams} matches={scheduledMatches} />
+                <ScheduledMatches
+                  teams={teams}
+                  matches={scheduledMatches}
+                  onSelect={onSelectScheduledMatch}
+                />
               </div>
             </Card>
             {renderResumeScoresheetButton()}
