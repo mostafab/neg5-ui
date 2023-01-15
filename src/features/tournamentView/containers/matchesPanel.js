@@ -4,6 +4,7 @@ import orderBy from "lodash/orderBy";
 
 import TournamentMatchesPanel from "@components/tournaments/tournamentView/TournamentMatchesPanel";
 import { ScoresheetState } from "@libs/enums";
+import { getMatchesToBePlayed } from "@libs/scoresheet";
 
 const getPlayersById = (teams) => {
   return keyBy(
@@ -28,6 +29,10 @@ const mapStateToProps = ({
     "desc"
   ),
   schedules: tournamentMatchesReducer.schedules,
+  scheduledMatches: getMatchesToBePlayed(
+    tournamentMatchesReducer.matches,
+    tournamentMatchesReducer.schedules
+  ),
   teams: tournamentTeamsReducer.teams,
   rules: tournamentRulesReducer,
   playersById: getPlayersById(tournamentTeamsReducer.teams),

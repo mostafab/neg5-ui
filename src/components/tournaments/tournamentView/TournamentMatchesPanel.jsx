@@ -20,6 +20,7 @@ const TournamentMatchesPanel = ({
   pools,
   currentUser,
   schedules,
+  scheduledMatches,
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
@@ -129,6 +130,7 @@ const TournamentMatchesPanel = ({
           phases={phases}
           currentUser={currentUser}
           scoresheets={draftScoresheets}
+          scheduledMatches={scheduledMatches}
           onViewCreatedMatch={(matchId) => {
             setShowScoresheet(false);
             setSelectedMatch(matches.find((m) => m.id === matchId));

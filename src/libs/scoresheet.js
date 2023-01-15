@@ -32,3 +32,24 @@ export const buildPlayersSummary = (teams, cycles, rules) => {
 
   return playerValues;
 };
+
+export const getMatchesToBePlayed = (matches, schedules) => {
+  return (
+    schedules
+      .flatMap((s) => s.matches)
+      // Filter out byes
+      .filter(({ team1Id, team2Id }) => team1Id && team2Id)
+      .filter(({ team1Id, team2Id, round: scheduledRound }) => {
+        return !matches.some(({ round: matchRound, teams }) => {
+          if (matchRound !== scheduledRound) {
+            return false;
+          }
+          const [team1, team2] = teams;
+          return (
+            (team1.teamId === team1Id || team1.teamId === team2Id) &&
+            (team2.teamId === team1Id || team2.teamId === team2Id)
+          );
+        });
+      })
+  );
+};
