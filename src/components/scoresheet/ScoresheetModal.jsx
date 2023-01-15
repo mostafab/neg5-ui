@@ -93,7 +93,7 @@ const ScoresheetModal = ({
     return (
       <div style={{ textAlign: "center" }} className="d-flex">
         <Button
-          className="w-100 mt-5"
+          className="w-100 mt-lg-5 mt-md-5"
           type="secondary"
           onClick={() => setPrestartStage(PreStartStage.ScoresheetsList)}
         >
@@ -142,7 +142,7 @@ const ScoresheetModal = ({
             <Button
               type="secondary"
               onClick={() => setPrestartStage(PreStartStage.Form)}
-              className="w-100 mt-5 mb-3"
+              className="w-100 mt-lg-5 mt-md-5 mb-3"
             >
               Start a new scoresheet
             </Button>
@@ -191,7 +191,7 @@ const ScoresheetModal = ({
         <Button
           type="secondary"
           onClick={() => setPrestartStage(PreStartStage.Form)}
-          className="w-100 mt-5 mb-3"
+          className="w-100 mt-lg-5 mt-md-5 mb-3"
         >
           Start a new scoresheet
         </Button>
