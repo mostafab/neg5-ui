@@ -172,7 +172,7 @@ const ScoresheetModal = ({
                     setPrestartStage(PreStartStage.Form);
                   }}
                 >
-                  Or start a new scoresheet
+                  Or start a scoresheet from scratch
                 </a>
               </div>
               <div>
