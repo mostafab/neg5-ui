@@ -12,6 +12,8 @@ import Button from "@components/common/button";
 
 import ScheduledMatches from "@components/scheduling/ScheduledMatches";
 
+import { ScoresheetState } from "@libs/enums";
+
 import ScoresheetStartForm from "./ScoresheetStartForm";
 import ScoresheetContainer from "./ScoresheetContainer";
 import ScoresheetsList from "./ScoresheetsList";
@@ -35,9 +37,19 @@ const ScoresheetModal = ({
 }) => {
   const [scoresheetStartValues, setScoresheetStartValues] = useState(null);
   const [startFormSeedValues, setStartFormSeedValues] = useState(null);
-  const [prestartStage, setPrestartStage] = useState(
-    scheduledMatches.length > 0 ? PreStartStage.Schedule : PreStartStage.Form
-  );
+  const [prestartStage, setPrestartStage] = useState(() => {
+    const draftScoresheetsForUser = scoresheets.filter(
+      (s) =>
+        s.status === ScoresheetState.Draft &&
+        s.addedBy === currentUser?.username
+    ).length;
+    if (draftScoresheetsForUser > 0) {
+      return PreStartStage.ScoresheetsList;
+    }
+    return scheduledMatches.length > 0
+      ? PreStartStage.Schedule
+      : PreStartStage.Form;
+  });
   useEffect(() => {
     setStartFormSeedValues(null);
   }, [prestartStage]);
@@ -145,6 +157,13 @@ const ScoresheetModal = ({
               className="w-100 mt-lg-5 mt-md-5 mb-3"
             >
               Start a new scoresheet
+            </Button>
+            <Button
+              type="secondary"
+              onClick={() => setPrestartStage(PreStartStage.Schedule)}
+              className="w-100 mb-3"
+            >
+              View Scheduled Matches
             </Button>
             <ScoresheetsList
               scoresheets={scoresheets}
