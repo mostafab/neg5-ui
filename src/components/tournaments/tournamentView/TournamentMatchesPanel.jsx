@@ -60,54 +60,62 @@ const TournamentMatchesPanel = ({
   });
   return (
     <>
-      <Card
-        title={
-          <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
-        }
-        actions={actions}
-      >
-        {!enoughTeamsToAddMatch && (
-          <div className="d-flex p-2 justify-content-center">
-            Add at least two teams to add matches.
-          </div>
-        )}
-        {enoughTeamsToAddMatch &&
-          matches.length === 0 &&
-          draftScoresheets.length === 0 && (
-            <div className="d-flex p-2 justify-content-center">
-              <div style={{ textAlign: "center" }}>
-                On tournament day, you can{" "}
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setSelectedMatch({});
-                  }}
-                  href=""
-                >
-                  manually record
-                </a>{" "}
-                a match, or use the{" "}
-                <a
-                  href=""
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowScoresheet(true);
-                  }}
-                >
-                  scoresheet
-                </a>{" "}
-                for future matches. Matches you or any collaborators add will
-                show up here.
+      <Row>
+        <Col
+          lg={draftScoresheets.length > 0 ? 7 : 12}
+          md={draftScoresheets.length > 0 ? 12 : 12}
+          sm={12}
+          className="mb-sm-3"
+        >
+          <Card
+            title={
+              <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
+            }
+            actions={actions}
+          >
+            {!enoughTeamsToAddMatch && (
+              <div className="d-flex p-2 justify-content-center">
+                Add at least two teams to add matches.
               </div>
-            </div>
-          )}
-        <Row>
-          {draftScoresheets.length > 0 && (
-            <Col
-              lg={matches.length > 0 ? 4 : 12}
-              md={matches.length > 0 ? 6 : 12}
-              sm={12}
-            >
+            )}
+            {enoughTeamsToAddMatch && matches.length === 0 && (
+              <div className="d-flex p-2 justify-content-center">
+                <div style={{ textAlign: "center" }}>
+                  On tournament day, you can{" "}
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedMatch({});
+                    }}
+                    href=""
+                  >
+                    manually record
+                  </a>{" "}
+                  a match, or use the{" "}
+                  <a
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowScoresheet(true);
+                    }}
+                  >
+                    scoresheet
+                  </a>{" "}
+                  for future matches. Matches you or any collaborators add will
+                  show up here.
+                </div>
+              </div>
+            )}
+            <MatchesAccordian
+              matches={matches}
+              teams={teams}
+              onSelectMatch={(match) => setSelectedMatch(match)}
+            />
+          </Card>
+        </Col>
+        {draftScoresheets.length > 0 && (
+          <Col lg={5} md={12} sm={12}>
+            <Card shadow={false} title="In-progress Matches">
               <Pill type="info" className="mb-2">
                 {draftScoresheets.length}{" "}
                 {draftScoresheets.length === 1 ? "match" : "matches"} in
@@ -122,23 +130,11 @@ const TournamentMatchesPanel = ({
                   includeIcon
                 />
               </div>
-            </Col>
-          )}
-          {matches.length > 0 && (
-            <Col
-              lg={draftScoresheets.length > 0 ? 8 : 12}
-              md={draftScoresheets.length > 0 ? 6 : 12}
-              sm={12}
-            >
-              <MatchesAccordian
-                matches={matches}
-                teams={teams}
-                onSelectMatch={(match) => setSelectedMatch(match)}
-              />
-            </Col>
-          )}
-        </Row>
-      </Card>
+            </Card>
+          </Col>
+        )}
+      </Row>
+
       {selectedMatch && (
         <MatchesModal
           matches={matches}
