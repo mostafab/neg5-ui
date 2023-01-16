@@ -1,16 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
-import { Row, Col } from "react-bootstrap";
 
 import Card from "@components/common/cards";
-import Icon, { Add, Spinner } from "@components/common/icon";
-import Pill from "@components/common/pill";
+import Icon, { Add } from "@components/common/icon";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
-import ScoresheetsList from "@components/scoresheet/ScoresheetsList";
 import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
+
+import InProgressMatchesPanel from "@components/tournaments/tournamentView/matches/InProgressMatchesPanel";
 
 const TournamentMatchesPanel = ({
   matches,
@@ -60,83 +59,60 @@ const TournamentMatchesPanel = ({
   });
   return (
     <>
-      <Row>
-        <Col
-          lg={draftScoresheets.length > 0 ? 7 : 12}
-          md={draftScoresheets.length > 0 ? 12 : 12}
-          sm={12}
-          className="mb-3"
-        >
-          <Card
-            title={
-              <span>
-                Recorded Matches {matches.length > 0 && `(${matches.length})`}
-              </span>
-            }
-            actions={actions}
-          >
-            {!enoughTeamsToAddMatch && (
-              <div className="d-flex p-2 justify-content-center">
-                Add at least two teams to add matches.
-              </div>
-            )}
-            {enoughTeamsToAddMatch && matches.length === 0 && (
-              <div className="d-flex p-2 justify-content-center">
-                <div style={{ textAlign: "center" }}>
-                  On tournament day, you can{" "}
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedMatch({});
-                    }}
-                    href=""
-                  >
-                    manually record
-                  </a>{" "}
-                  a match, or use the{" "}
-                  <a
-                    href=""
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowScoresheet(true);
-                    }}
-                  >
-                    scoresheet
-                  </a>{" "}
-                  for future matches. Matches you or any collaborators add will
-                  show up here.
-                </div>
-              </div>
-            )}
-            <MatchesAccordian
-              matches={matches}
-              teams={teams}
-              onSelectMatch={(match) => setSelectedMatch(match)}
-            />
-          </Card>
-        </Col>
-        {draftScoresheets.length > 0 && (
-          <Col lg={5} md={12} sm={12}>
-            <Card shadow={false} title="In-progress Matches">
-              <Pill type="info" className="mb-2">
-                {draftScoresheets.length}{" "}
-                {draftScoresheets.length === 1 ? "match" : "matches"} in
-                progress
-              </Pill>
-              <div style={{ maxHeight: "75vh", overflow: "scroll" }}>
-                <ScoresheetsList
-                  scoresheets={draftScoresheets}
-                  teams={teams}
-                  currentUser={currentUser}
-                  filter={false}
-                  draftIcon={Spinner}
-                />
-              </div>
-            </Card>
-          </Col>
+      {draftScoresheets.length > 0 && (
+        <InProgressMatchesPanel
+          teams={teams}
+          draftScoresheets={draftScoresheets}
+          currentUser={currentUser}
+        />
+      )}
+      <Card
+        title={
+          <span>
+            Recorded Matches {matches.length > 0 && `(${matches.length})`}
+          </span>
+        }
+        actions={actions}
+      >
+        {!enoughTeamsToAddMatch && (
+          <div className="d-flex p-2 justify-content-center">
+            Add at least two teams to add matches.
+          </div>
         )}
-      </Row>
-
+        {enoughTeamsToAddMatch && matches.length === 0 && (
+          <div className="d-flex p-2 justify-content-center">
+            <div style={{ textAlign: "center" }}>
+              On tournament day, you can{" "}
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedMatch({});
+                }}
+                href=""
+              >
+                manually record
+              </a>{" "}
+              a match, or use the{" "}
+              <a
+                href=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowScoresheet(true);
+                }}
+              >
+                scoresheet
+              </a>{" "}
+              for future matches. Matches you or any collaborators add will show
+              up here.
+            </div>
+          </div>
+        )}
+        <MatchesAccordian
+          matches={matches}
+          teams={teams}
+          onSelectMatch={(match) => setSelectedMatch(match)}
+        />
+      </Card>
       {selectedMatch && (
         <MatchesModal
           matches={matches}
