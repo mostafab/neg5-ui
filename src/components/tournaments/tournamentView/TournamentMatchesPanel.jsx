@@ -65,11 +65,13 @@ const TournamentMatchesPanel = ({
           lg={draftScoresheets.length > 0 ? 7 : 12}
           md={draftScoresheets.length > 0 ? 12 : 12}
           sm={12}
-          className="mb-sm-3"
+          className="mb-3"
         >
           <Card
             title={
-              <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
+              <span>
+                Recorded Matches {matches.length > 0 && `(${matches.length})`}
+              </span>
             }
             actions={actions}
           >
