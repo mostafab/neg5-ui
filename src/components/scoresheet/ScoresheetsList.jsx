@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
+import orderBy from "lodash/orderBy";
 
 import { ScoresheetState } from "@libs/enums";
 
@@ -46,7 +47,7 @@ const ScoresheetsList = ({
         </Form>
       )}
       <div>
-        {scoresheets
+        {orderBy(scoresheets, "lastUpdatedAt", "desc")
           .filter((s) => !limitList || s.addedBy === currentUser.username)
           .map((scoresheet) => (
             <Card

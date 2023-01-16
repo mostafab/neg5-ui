@@ -113,13 +113,15 @@ const TournamentMatchesPanel = ({
                 {draftScoresheets.length === 1 ? "match" : "matches"} in
                 progress
               </Pill>
-              <ScoresheetsList
-                scoresheets={draftScoresheets}
-                teams={teams}
-                currentUser={currentUser}
-                filter={false}
-                includeIcon
-              />
+              <div style={{ maxHeight: "75vh", overflow: "scroll" }}>
+                <ScoresheetsList
+                  scoresheets={draftScoresheets}
+                  teams={teams}
+                  currentUser={currentUser}
+                  filter={false}
+                  includeIcon
+                />
+              </div>
             </Col>
           )}
           {matches.length > 0 && (
