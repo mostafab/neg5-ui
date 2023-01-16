@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import orderBy from "lodash/orderBy";
 
-import { ScoresheetState } from "@libs/enums";
-
 import Card from "@components/common/cards";
 import { Form, Checkbox } from "@components/common/forms";
 import { X } from "@components/common/icon";
 
-export const scoresheetTitle = (teams, scoresheet, DraftIcon = null) => {
+export const scoresheetTitle = (teams, scoresheet) => {
   const teamVsString = [scoresheet.team1Id, scoresheet.team2Id]
     .map((teamId) => {
       return teams.find((t) => t.id === teamId).name;
@@ -18,9 +16,6 @@ export const scoresheetTitle = (teams, scoresheet, DraftIcon = null) => {
   return (
     <span>
       Round {scoresheet.round} - {teamVsString}
-      {DraftIcon && scoresheet.status === ScoresheetState.Draft && (
-        <DraftIcon className="ms-2" />
-      )}
     </span>
   );
 };
@@ -32,7 +27,6 @@ const ScoresheetsList = ({
   teams,
   onDelete,
   filter = true,
-  draftIcon = null,
 }) => {
   const [limitList, setLimit] = useState(filter);
   return (
@@ -64,10 +58,10 @@ const ScoresheetsList = ({
                       }}
                       href="#"
                     >
-                      {scoresheetTitle(teams, scoresheet, draftIcon)}
+                      {scoresheetTitle(teams, scoresheet)}
                     </a>
                   ) : (
-                    scoresheetTitle(teams, scoresheet, draftIcon)
+                    scoresheetTitle(teams, scoresheet)
                   )}
                 </h6>
               }

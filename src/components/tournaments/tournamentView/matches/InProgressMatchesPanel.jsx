@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import orderBy from "lodash/orderBy";
 
 import Card from "@components/common/cards";
-import { Spinner } from "@components/common/icon";
 import Pill from "@components/common/pill";
 import Modal from "@components/common/modal";
 
@@ -53,7 +52,6 @@ const InProgressMatchesPanel = ({
             teams={teams}
             currentUser={currentUser}
             filter={false}
-            draftIcon={Spinner}
             onSelect={(s) => setSelected(s)}
           />
         </div>
