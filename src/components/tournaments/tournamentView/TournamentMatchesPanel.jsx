@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 
 import Card from "@components/common/cards";
-import Icon, { Add } from "@components/common/icon";
+import Icon, { Add, Spinner } from "@components/common/icon";
 import Pill from "@components/common/pill";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
@@ -129,7 +129,7 @@ const TournamentMatchesPanel = ({
                   teams={teams}
                   currentUser={currentUser}
                   filter={false}
-                  includeIcon
+                  draftIcon={Spinner}
                 />
               </div>
             </Card>
