@@ -13,7 +13,11 @@ export const getMatchTeamsDisplayString = (
   const base = orderedTeams
     .map((t) => {
       const teamName = teamsById[t.teamId]?.name;
-      const score = t.forfeit ? "(Forfeit)" : t.score ? `(${t.score})` : "";
+      const score = t.forfeit
+        ? "(Forfeit)"
+        : t.score !== undefined
+        ? `(${t.score})`
+        : "";
       return `${teamName} ${score}`;
     })
     .join(" vs ");
