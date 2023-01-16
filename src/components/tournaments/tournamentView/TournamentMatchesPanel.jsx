@@ -4,13 +4,12 @@ import { Row, Col } from "react-bootstrap";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
-import Pill from "@components/common/pill";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
-import ScoresheetsList from "@components/scoresheet/ScoresheetsList";
 import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
+import InProgressMatchesPanel from "@components/tournaments/tournamentView/matches/InProgressMatchesPanel";
 
 const TournamentMatchesPanel = ({
   matches,
@@ -61,15 +60,27 @@ const TournamentMatchesPanel = ({
   return (
     <>
       <Row>
+        {draftScoresheets.length > 0 && (
+          <Col lg={6} md={6} sm={12}>
+            <InProgressMatchesPanel
+              teams={teams}
+              draftScoresheets={draftScoresheets}
+              currentUser={currentUser}
+              rules={rules}
+            />
+          </Col>
+        )}
+
         <Col
-          lg={draftScoresheets.length > 0 ? 7 : 12}
-          md={draftScoresheets.length > 0 ? 12 : 12}
+          lg={draftScoresheets.length > 0 ? 6 : 12}
+          md={draftScoresheets.length > 0 ? 6 : 12}
           sm={12}
-          className="mb-sm-3"
         >
           <Card
             title={
-              <span>Matches {matches.length > 0 && `(${matches.length})`}</span>
+              <span>
+                Recorded Matches {matches.length > 0 && `(${matches.length})`}
+              </span>
             }
             actions={actions}
           >
@@ -113,28 +124,7 @@ const TournamentMatchesPanel = ({
             />
           </Card>
         </Col>
-        {draftScoresheets.length > 0 && (
-          <Col lg={5} md={12} sm={12}>
-            <Card shadow={false} title="In-progress Matches">
-              <Pill type="info" className="mb-2">
-                {draftScoresheets.length}{" "}
-                {draftScoresheets.length === 1 ? "match" : "matches"} in
-                progress
-              </Pill>
-              <div style={{ maxHeight: "75vh", overflow: "scroll" }}>
-                <ScoresheetsList
-                  scoresheets={draftScoresheets}
-                  teams={teams}
-                  currentUser={currentUser}
-                  filter={false}
-                  includeIcon
-                />
-              </div>
-            </Card>
-          </Col>
-        )}
       </Row>
-
       {selectedMatch && (
         <MatchesModal
           matches={matches}
