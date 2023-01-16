@@ -6,9 +6,9 @@ import { ScoresheetState } from "@libs/enums";
 
 import Card from "@components/common/cards";
 import { Form, Checkbox } from "@components/common/forms";
-import { X, Spinner } from "@components/common/icon";
+import { X } from "@components/common/icon";
 
-const scoresheetTitle = (teams, scoresheet, includeIcon = false) => {
+const scoresheetTitle = (teams, scoresheet, DraftIcon = null) => {
   const teamVsString = [scoresheet.team1Id, scoresheet.team2Id]
     .map((teamId) => {
       return teams.find((t) => t.id === teamId).name;
@@ -18,8 +18,8 @@ const scoresheetTitle = (teams, scoresheet, includeIcon = false) => {
   return (
     <span>
       Round {scoresheet.round} - {teamVsString}
-      {includeIcon && scoresheet.status === ScoresheetState.Draft && (
-        <Spinner className="ms-2" />
+      {DraftIcon && scoresheet.status === ScoresheetState.Draft && (
+        <DraftIcon className="ms-2" />
       )}
     </span>
   );
@@ -32,7 +32,7 @@ const ScoresheetsList = ({
   teams,
   onDelete,
   filter = true,
-  includeIcon = false,
+  draftIcon = null,
 }) => {
   const [limitList, setLimit] = useState(filter);
   return (
@@ -64,10 +64,10 @@ const ScoresheetsList = ({
                       }}
                       href="#"
                     >
-                      {scoresheetTitle(teams, scoresheet, includeIcon)}
+                      {scoresheetTitle(teams, scoresheet, draftIcon)}
                     </a>
                   ) : (
-                    scoresheetTitle(teams, scoresheet, includeIcon)
+                    scoresheetTitle(teams, scoresheet, draftIcon)
                   )}
                 </h6>
               }
