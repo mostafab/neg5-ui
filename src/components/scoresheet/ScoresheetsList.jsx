@@ -8,7 +8,7 @@ import Card from "@components/common/cards";
 import { Form, Checkbox } from "@components/common/forms";
 import { X } from "@components/common/icon";
 
-const scoresheetTitle = (teams, scoresheet, DraftIcon = null) => {
+export const scoresheetTitle = (teams, scoresheet, DraftIcon = null) => {
   const teamVsString = [scoresheet.team1Id, scoresheet.team2Id]
     .map((teamId) => {
       return teams.find((t) => t.id === teamId).name;

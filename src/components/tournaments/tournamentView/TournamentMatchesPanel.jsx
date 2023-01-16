@@ -64,6 +64,7 @@ const TournamentMatchesPanel = ({
           teams={teams}
           draftScoresheets={draftScoresheets}
           currentUser={currentUser}
+          rules={rules}
         />
       )}
       <Card
