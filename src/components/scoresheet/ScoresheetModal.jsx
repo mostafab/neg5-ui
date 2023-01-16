@@ -158,13 +158,15 @@ const ScoresheetModal = ({
             >
               Start a new scoresheet
             </Button>
-            <Button
-              type="secondary"
-              onClick={() => setPrestartStage(PreStartStage.Schedule)}
-              className="w-100 mb-3"
-            >
-              View Scheduled Matches
-            </Button>
+            {scheduledMatches.length > 0 && (
+              <Button
+                type="secondary"
+                onClick={() => setPrestartStage(PreStartStage.Schedule)}
+                className="w-100 mb-3"
+              >
+                View Scheduled Matches
+              </Button>
+            )}
             <ScoresheetsList
               scoresheets={scoresheets}
               teams={teams}
