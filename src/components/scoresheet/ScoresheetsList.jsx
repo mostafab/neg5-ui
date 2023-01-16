@@ -1,18 +1,27 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
 
+import { ScoresheetState } from "@libs/enums";
+
 import Card from "@components/common/cards";
 import { Form, Checkbox } from "@components/common/forms";
-import { X } from "@components/common/icon";
+import { X, Spinner } from "@components/common/icon";
 
-const scoresheetTitle = (teams, scoresheet) => {
+const scoresheetTitle = (teams, scoresheet, includeIcon = false) => {
   const teamVsString = [scoresheet.team1Id, scoresheet.team2Id]
     .map((teamId) => {
       return teams.find((t) => t.id === teamId).name;
     })
     .join(" vs ");
 
-  return `Round ${scoresheet.round} - ${teamVsString}`;
+  return (
+    <span>
+      Round {scoresheet.round} - {teamVsString}
+      {includeIcon && scoresheet.status === ScoresheetState.Draft && (
+        <Spinner className="ms-2" />
+      )}
+    </span>
+  );
 };
 
 const ScoresheetsList = ({
@@ -22,6 +31,7 @@ const ScoresheetsList = ({
   teams,
   onDelete,
   filter = true,
+  includeIcon = false,
 }) => {
   const [limitList, setLimit] = useState(filter);
   return (
@@ -53,10 +63,10 @@ const ScoresheetsList = ({
                       }}
                       href="#"
                     >
-                      {scoresheetTitle(teams, scoresheet)}
+                      {scoresheetTitle(teams, scoresheet, includeIcon)}
                     </a>
                   ) : (
-                    scoresheetTitle(teams, scoresheet)
+                    scoresheetTitle(teams, scoresheet, includeIcon)
                   )}
                 </h6>
               }

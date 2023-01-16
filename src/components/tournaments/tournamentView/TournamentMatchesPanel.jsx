@@ -29,7 +29,7 @@ const TournamentMatchesPanel = ({
   const [showSchedule, setShowSchedule] = useState(false);
   const enoughTeamsToAddMatch = teams.length >= 2;
   const actions =
-    enoughTeamsToAddMatch && matches.length > 0
+    enoughTeamsToAddMatch && (matches.length > 0 || draftScoresheets.length > 0)
       ? [
           {
             component: (
@@ -71,34 +71,36 @@ const TournamentMatchesPanel = ({
             Add at least two teams to add matches.
           </div>
         )}
-        {enoughTeamsToAddMatch && matches.length === 0 && (
-          <div className="d-flex p-2 justify-content-center">
-            <div style={{ textAlign: "center" }}>
-              On tournament day, you can{" "}
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSelectedMatch({});
-                }}
-                href=""
-              >
-                manually record
-              </a>{" "}
-              a match, or use the{" "}
-              <a
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowScoresheet(true);
-                }}
-              >
-                scoresheet
-              </a>{" "}
-              for future matches. Matches you or any collaborators add will show
-              up here.
+        {enoughTeamsToAddMatch &&
+          matches.length === 0 &&
+          draftScoresheets.length === 0 && (
+            <div className="d-flex p-2 justify-content-center">
+              <div style={{ textAlign: "center" }}>
+                On tournament day, you can{" "}
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSelectedMatch({});
+                  }}
+                  href=""
+                >
+                  manually record
+                </a>{" "}
+                a match, or use the{" "}
+                <a
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowScoresheet(true);
+                  }}
+                >
+                  scoresheet
+                </a>{" "}
+                for future matches. Matches you or any collaborators add will
+                show up here.
+              </div>
             </div>
-          </div>
-        )}
+          )}
         <Row>
           {draftScoresheets.length > 0 && (
             <Col
@@ -108,14 +110,15 @@ const TournamentMatchesPanel = ({
             >
               <Pill type="info" className="mb-2">
                 {draftScoresheets.length}{" "}
-                {draftScoresheets.length === 1 ? "scoresheet" : "scoresheets"}{" "}
-                in progress
+                {draftScoresheets.length === 1 ? "match" : "matches"} in
+                progress
               </Pill>
               <ScoresheetsList
                 scoresheets={draftScoresheets}
                 teams={teams}
                 currentUser={currentUser}
                 filter={false}
+                includeIcon
               />
             </Col>
           )}
