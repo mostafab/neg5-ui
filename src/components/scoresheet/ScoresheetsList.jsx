@@ -21,51 +21,63 @@ const ScoresheetsList = ({
   currentUser,
   teams,
   onDelete,
+  filter = true,
 }) => {
-  const [limitList, setLimit] = useState(true);
+  const [limitList, setLimit] = useState(filter);
   return (
     <>
-      <Form
-        name="ScoresheetFilterForm"
-        customCtaButtons
-        initialValues={{ limit: limitList }}
-      >
-        <Checkbox name="limit" label="Only Mine" onChange={setLimit} />
-      </Form>
+      {filter && (
+        <Form
+          name="ScoresheetFilterForm"
+          customCtaButtons
+          initialValues={{ limit: limitList }}
+        >
+          <Checkbox name="limit" label="Only Mine" onChange={setLimit} />
+        </Form>
+      )}
       <div>
         {scoresheets
           .filter((s) => !limitList || s.addedBy === currentUser.username)
           .map((scoresheet) => (
             <Card
               key={scoresheet.id}
+              shadow={false}
               title={
                 <h6>
-                  <a
-                    role="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onSelect(scoresheet);
-                    }}
-                    href="#"
-                  >
-                    {scoresheetTitle(teams, scoresheet)}
-                  </a>
+                  {onSelect ? (
+                    <a
+                      role="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onSelect(scoresheet);
+                      }}
+                      href="#"
+                    >
+                      {scoresheetTitle(teams, scoresheet)}
+                    </a>
+                  ) : (
+                    scoresheetTitle(teams, scoresheet)
+                  )}
                 </h6>
               }
               className="mb-3"
-              actions={[
-                {
-                  component: (
-                    <X
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(scoresheet);
-                      }}
-                      size="25"
-                    />
-                  ),
-                },
-              ]}
+              actions={
+                onDelete
+                  ? [
+                      {
+                        component: (
+                          <X
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDelete(scoresheet);
+                            }}
+                            size="25"
+                          />
+                        ),
+                      },
+                    ]
+                  : null
+              }
             >
               <div className="small">
                 {scoresheet.cycles.length}{" "}

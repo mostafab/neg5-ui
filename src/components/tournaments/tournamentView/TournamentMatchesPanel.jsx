@@ -1,11 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
+import { Row, Col } from "react-bootstrap";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
 import Pill from "@components/common/pill";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
+import ScoresheetsList from "@components/scoresheet/ScoresheetsList";
 import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
@@ -64,13 +66,6 @@ const TournamentMatchesPanel = ({
         }
         actions={actions}
       >
-        {draftScoresheets.length > 0 && (
-          <Pill type="info" className="mb-2">
-            {draftScoresheets.length}{" "}
-            {draftScoresheets.length === 1 ? "scoresheet" : "scoresheets"} in
-            progress
-          </Pill>
-        )}
         {!enoughTeamsToAddMatch && (
           <div className="d-flex p-2 justify-content-center">
             Add at least two teams to add matches.
@@ -104,11 +99,40 @@ const TournamentMatchesPanel = ({
             </div>
           </div>
         )}
-        <MatchesAccordian
-          matches={matches}
-          teams={teams}
-          onSelectMatch={(match) => setSelectedMatch(match)}
-        />
+        <Row>
+          {draftScoresheets.length > 0 && (
+            <Col
+              lg={matches.length > 0 ? 4 : 12}
+              md={matches.length > 0 ? 6 : 12}
+              sm={12}
+            >
+              <Pill type="info" className="mb-2">
+                {draftScoresheets.length}{" "}
+                {draftScoresheets.length === 1 ? "scoresheet" : "scoresheets"}{" "}
+                in progress
+              </Pill>
+              <ScoresheetsList
+                scoresheets={draftScoresheets}
+                teams={teams}
+                currentUser={currentUser}
+                filter={false}
+              />
+            </Col>
+          )}
+          {matches.length > 0 && (
+            <Col
+              lg={draftScoresheets.length > 0 ? 8 : 12}
+              md={draftScoresheets.length > 0 ? 6 : 12}
+              sm={12}
+            >
+              <MatchesAccordian
+                matches={matches}
+                teams={teams}
+                onSelectMatch={(match) => setSelectedMatch(match)}
+              />
+            </Col>
+          )}
+        </Row>
       </Card>
       {selectedMatch && (
         <MatchesModal
