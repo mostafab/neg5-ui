@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
+import { Row, Col } from "react-bootstrap";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
@@ -8,7 +9,6 @@ import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
 import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
-
 import InProgressMatchesPanel from "@components/tournaments/tournamentView/matches/InProgressMatchesPanel";
 
 const TournamentMatchesPanel = ({
@@ -59,61 +59,72 @@ const TournamentMatchesPanel = ({
   });
   return (
     <>
-      {draftScoresheets.length > 0 && (
-        <InProgressMatchesPanel
-          teams={teams}
-          draftScoresheets={draftScoresheets}
-          currentUser={currentUser}
-          rules={rules}
-        />
-      )}
-      <Card
-        title={
-          <span>
-            Recorded Matches {matches.length > 0 && `(${matches.length})`}
-          </span>
-        }
-        actions={actions}
-      >
-        {!enoughTeamsToAddMatch && (
-          <div className="d-flex p-2 justify-content-center">
-            Add at least two teams to add matches.
-          </div>
+      <Row>
+        {draftScoresheets.length > 0 && (
+          <Col lg={6} md={6} sm={12}>
+            <InProgressMatchesPanel
+              teams={teams}
+              draftScoresheets={draftScoresheets}
+              currentUser={currentUser}
+              rules={rules}
+            />
+          </Col>
         )}
-        {enoughTeamsToAddMatch && matches.length === 0 && (
-          <div className="d-flex p-2 justify-content-center">
-            <div style={{ textAlign: "center" }}>
-              On tournament day, you can{" "}
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSelectedMatch({});
-                }}
-                href=""
-              >
-                manually record
-              </a>{" "}
-              a match, or use the{" "}
-              <a
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowScoresheet(true);
-                }}
-              >
-                scoresheet
-              </a>{" "}
-              for future matches. Matches you or any collaborators add will show
-              up here.
-            </div>
-          </div>
-        )}
-        <MatchesAccordian
-          matches={matches}
-          teams={teams}
-          onSelectMatch={(match) => setSelectedMatch(match)}
-        />
-      </Card>
+
+        <Col
+          lg={draftScoresheets.length > 0 ? 6 : 12}
+          md={draftScoresheets.length > 0 ? 6 : 12}
+          sm={12}
+        >
+          <Card
+            title={
+              <span>
+                Recorded Matches {matches.length > 0 && `(${matches.length})`}
+              </span>
+            }
+            actions={actions}
+          >
+            {!enoughTeamsToAddMatch && (
+              <div className="d-flex p-2 justify-content-center">
+                Add at least two teams to add matches.
+              </div>
+            )}
+            {enoughTeamsToAddMatch && matches.length === 0 && (
+              <div className="d-flex p-2 justify-content-center">
+                <div style={{ textAlign: "center" }}>
+                  On tournament day, you can{" "}
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedMatch({});
+                    }}
+                    href=""
+                  >
+                    manually record
+                  </a>{" "}
+                  a match, or use the{" "}
+                  <a
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowScoresheet(true);
+                    }}
+                  >
+                    scoresheet
+                  </a>{" "}
+                  for future matches. Matches you or any collaborators add will
+                  show up here.
+                </div>
+              </div>
+            )}
+            <MatchesAccordian
+              matches={matches}
+              teams={teams}
+              onSelectMatch={(match) => setSelectedMatch(match)}
+            />
+          </Card>
+        </Col>
+      </Row>
       {selectedMatch && (
         <MatchesModal
           matches={matches}
