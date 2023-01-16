@@ -97,6 +97,9 @@ const ScoresheetsList = ({
               {scoresheet.moderator && (
                 <div className="small">Moderator: {scoresheet.moderator}</div>
               )}
+              {scoresheet.room && (
+                <div className="small">Room: {scoresheet.room}</div>
+              )}
               {scoresheet.lastUpdatedAt && (
                 <div className="small text-dark mt-1">
                   Last updated{" "}
