@@ -240,6 +240,10 @@ export const Select = ({
             if (isReadOnly) {
               styles["border"] = "none";
             }
+            if (!multiple) {
+              styles["height"] = "calc(3.5rem + 2px)";
+              styles["lineHeight"] = "1.25";
+            }
             return styles;
           },
           container: (base) => ({

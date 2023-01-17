@@ -1,13 +1,22 @@
 import React from "react";
+import { Row, Col } from "react-bootstrap";
 import * as Yup from "yup";
 
 import { Text, Date } from "@components/common/forms";
+import StateSelect from "@components/common/StateSelect";
 
 const TournamentInfoFields = () => (
   <>
     <Text name="name" label="Name" />
     <Date name="tournamentDate" label="Date" />
-    <Text name="location" label="Location" />
+    <Row>
+      <Col>
+        <Text name="location" label="Location" />
+      </Col>
+      <Col>
+        <StateSelect name="state" />
+      </Col>
+    </Row>
     <Text name="questionSet" label="Question Set" />
   </>
 );
