@@ -7,6 +7,7 @@ import PhasesPanel from "@components/tournaments/tournamentView/TournamentPhases
 const mapStateToProps = ({
   tournamentPhasesReducer,
   tournamentTeamsReducer,
+  tournamentPermissionsReducer,
 }) => ({
   phases: tournamentPhasesReducer.phases,
   pools: tournamentPhasesReducer.pools,
@@ -15,6 +16,7 @@ const mapStateToProps = ({
     tournamentTeamsReducer.teams,
     tournamentPhasesReducer.phases
   ),
+  editable: tournamentPermissionsReducer.data?.canEditPools,
 });
 
 export default connect(mapStateToProps, null)(PhasesPanel);

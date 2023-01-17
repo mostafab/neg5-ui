@@ -9,6 +9,7 @@ const TournamentPhasesPanel = ({
   pools,
   poolTeams,
   teamsNotAssignedPools,
+  editable,
 }) => {
   const [showModal, setShowModal] = useState(false);
   return (
@@ -17,11 +18,15 @@ const TournamentPhasesPanel = ({
         className="TournamentPhasesPanel"
         shadow
         title="Team Pools"
-        actions={[
-          {
-            component: <Edit onClick={() => setShowModal(true)} />,
-          },
-        ]}
+        actions={
+          editable
+            ? [
+                {
+                  component: <Edit onClick={() => setShowModal(true)} />,
+                },
+              ]
+            : []
+        }
       />
       {showModal && (
         <PoolsModal

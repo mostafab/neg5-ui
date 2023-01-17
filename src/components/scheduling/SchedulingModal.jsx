@@ -11,7 +11,14 @@ import { groupTeamsWithoutAssignedPool, groupTeamsByPools } from "@libs/teams";
 
 import PhaseScheduleEditor from "./PhaseScheduleEditor";
 
-const SchedulingModal = ({ teams, phases, onHide, pools, schedules }) => {
+const SchedulingModal = ({
+  teams,
+  phases,
+  onHide,
+  pools,
+  schedules,
+  editable,
+}) => {
   const [activeTab, setActiveTab] = useState(
     phases.length === 0 ? "" : phases[0].id
   );
@@ -38,6 +45,7 @@ const SchedulingModal = ({ teams, phases, onHide, pools, schedules }) => {
                   pools={poolsInPhase}
                   poolTeams={poolTeamsForThisPhase}
                   unassignedTeams={teamsNotAssignedPools[phase.id] || []}
+                  editable={editable}
                 />
               </Tab>
             );

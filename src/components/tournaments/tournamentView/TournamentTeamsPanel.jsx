@@ -9,7 +9,7 @@ import TeamsModal from "@components/tournaments/tournamentView/teams/TeamsModal"
 import TeamsList from "@components/tournaments/tournamentView/teams/TeamsList";
 import NoTeamsAdded from "@components/tournaments/tournamentView/teams/NoTeamsAdded";
 
-const TournamentTeamsPanel = ({ teams, matches }) => {
+const TournamentTeamsPanel = ({ teams, matches, editable }) => {
   const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
   const [selectedTeam, setSelectedTeam] = useState(null);
   return (
@@ -17,7 +17,7 @@ const TournamentTeamsPanel = ({ teams, matches }) => {
       <Card
         title={teams.length > 0 ? `Teams (${teams.length})` : "Teams"}
         actions={
-          teams.length === 0
+          teams.length === 0 || !editable
             ? []
             : [
                 {
@@ -54,6 +54,7 @@ const TournamentTeamsPanel = ({ teams, matches }) => {
           onSelectTeam={setSelectedTeam}
           selectedTeam={selectedTeam}
           matches={matches}
+          editable={editable}
         />
       )}
     </>

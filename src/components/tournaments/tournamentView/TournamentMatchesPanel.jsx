@@ -22,6 +22,7 @@ const TournamentMatchesPanel = ({
   currentUser,
   schedules,
   scheduledMatches,
+  permissions,
 }) => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
@@ -57,6 +58,8 @@ const TournamentMatchesPanel = ({
       />
     ),
   });
+
+  const { scheduleEditable, matchesEditable } = permissions;
   return (
     <>
       <Row>
@@ -135,6 +138,7 @@ const TournamentMatchesPanel = ({
           rules={rules}
           playersById={playersById}
           phases={phases}
+          canEditAllMatches={matchesEditable}
         />
       )}
       {showScoresheet && (
@@ -160,6 +164,7 @@ const TournamentMatchesPanel = ({
           pools={pools}
           schedules={schedules}
           onHide={() => setShowSchedule(false)}
+          editable={scheduleEditable}
         />
       )}
     </>

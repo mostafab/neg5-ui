@@ -18,6 +18,7 @@ const mapStateToProps = ({
   tournamentTeamsReducer,
   tournamentRulesReducer,
   tournamentPhasesReducer,
+  tournamentPermissionsReducer,
   loginReducer,
 }) => ({
   matches: tournamentMatchesReducer.matches,
@@ -40,6 +41,10 @@ const mapStateToProps = ({
   phases: tournamentPhasesReducer.phases,
   pools: tournamentPhasesReducer.pools,
   currentUser: loginReducer.currentUser.data,
+  permissions: {
+    scheduleEditable: tournamentPermissionsReducer.data?.canEditSchedule,
+    matchesEditable: tournamentPermissionsReducer.data?.canEditMatches,
+  },
 });
 
 export default connect(mapStateToProps, null)(TournamentMatchesPanel);

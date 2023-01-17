@@ -20,6 +20,7 @@ const TeamDisplay = ({
   teams,
   onSubmitSuccess,
   onDeleteSuccess,
+  editable,
 }) => {
   const [readOnly, setReadOnly] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -86,7 +87,7 @@ const TeamDisplay = ({
       {!isDeleting && (
         <Row>
           <Col lg={team.id ? 6 : 12} md={12} sm={12}>
-            {team.id && readOnly && !isDeleting && (
+            {team.id && readOnly && !isDeleting && editable && (
               <DropdownActions
                 className="mb-3"
                 actions={[
@@ -106,7 +107,7 @@ const TeamDisplay = ({
             )}
             <TeamForm
               team={team}
-              readOnly={readOnly && team.id}
+              readOnly={(readOnly && team.id) || !editable}
               onCancel={team.id ? () => setReadOnly(true) : null}
               onSubmitSuccess={
                 team.id
