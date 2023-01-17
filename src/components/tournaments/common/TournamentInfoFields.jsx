@@ -10,10 +10,10 @@ const TournamentInfoFields = () => (
     <Text name="name" label="Name" />
     <Date name="tournamentDate" label="Date" />
     <Row>
-      <Col>
+      <Col lg={6} md={6} sm={12}>
         <Text name="location" label="Location" />
       </Col>
-      <Col>
+      <Col lg={6} md={6} sm={12}>
         <StateSelect name="state" />
       </Col>
     </Row>
