@@ -13,7 +13,9 @@ const MemoizedPusher = () => {
           cluster,
         });
       } else {
-        console.warn("No appKey or cluster configured for Pusher. Returning a null instance.")
+        console.warn(
+          "No appKey or cluster configured for Pusher. Returning a null instance."
+        );
       }
     }
     return pusher;
