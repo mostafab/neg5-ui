@@ -9,7 +9,7 @@ const mapStateToProps = ({
   rules: tournamentRulesReducer,
   editable:
     tournamentMatchesReducer.matches.length === 0 &&
-    tournamentMatchesReducer.schedules.length === 0,
+    tournamentMatchesReducer.scoresheets.length === 0,
 });
 
 export default connect(mapStateToProps, null)(TournamentRulesPanel);
