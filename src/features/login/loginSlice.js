@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { attemptLogin, attemptRegister } from "@api/login";
 import { getUser } from "@api/user";
-import { setLoginCookie } from "@libs/cookies";
+import { setLoginCookie, clearLoginCookie } from "@libs/cookies";
 
 const initialState = {
   loggingIn: false,
@@ -62,6 +62,11 @@ export const getCurrentUserAsync = createAsyncThunk(
     return await getUser();
   }
 );
+
+export const logout = createAsyncThunk("loginSlice/logout", async () => {
+  clearLoginCookie();
+  document.location = "/";
+});
 
 export const loginAsync = createAsyncThunk(
   "loginSlice/login",
