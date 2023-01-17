@@ -15,10 +15,13 @@ const PhaseScheduleEditor = ({
   pools,
   poolTeams,
   unassignedTeams,
+  editable,
 }) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
-  const [readOnly, setReadOnly] = useState(schedule ? true : false);
+  const [readOnly, setReadOnly] = useState(
+    schedule || !editable ? true : false
+  );
   const onNew = (e) => {
     e.preventDefault();
     setDraft({

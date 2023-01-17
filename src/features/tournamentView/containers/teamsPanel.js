@@ -5,9 +5,11 @@ import TournamentTeamsPanel from "@components/tournaments/tournamentView/Tournam
 const mapStateToProps = ({
   tournamentTeamsReducer,
   tournamentMatchesReducer,
+  tournamentPermissionsReducer,
 }) => ({
   teams: tournamentTeamsReducer.teams,
   matches: tournamentMatchesReducer.matches,
+  editable: tournamentPermissionsReducer.data?.canEditTeams,
 });
 
 export default connect(mapStateToProps, null)(TournamentTeamsPanel);

@@ -8,6 +8,7 @@ const TournamentCollaboratorsPanel = ({
   collaborators,
   currentUserId,
   directorId,
+  editable,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const renderCardBody = () => {
@@ -24,11 +25,15 @@ const TournamentCollaboratorsPanel = ({
     <>
       <Card
         title="Collaborators"
-        actions={[
-          {
-            component: <Edit onClick={() => setShowModal(true)} />,
-          },
-        ]}
+        actions={
+          editable
+            ? [
+                {
+                  component: <Edit onClick={() => setShowModal(true)} />,
+                },
+              ]
+            : []
+        }
       >
         {renderCardBody()}
         {showModal && (

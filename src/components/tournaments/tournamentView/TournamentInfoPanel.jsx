@@ -8,7 +8,7 @@ import Pill from "@components/common/pill";
 import TournamentInfoModal from "@components/tournaments/info/TournamentInfoModal";
 import { labelWithValue } from "./utilities";
 
-const TournamentInfoPanel = ({ tournamentInfo }) => {
+const TournamentInfoPanel = ({ tournamentInfo, editable }) => {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     document.title = tournamentInfo?.name
@@ -22,11 +22,15 @@ const TournamentInfoPanel = ({ tournamentInfo }) => {
     <>
       <Card
         title={<h4>{tournamentInfo.name}</h4>}
-        actions={[
-          {
-            component: <Edit onClick={() => setShowModal(true)} />,
-          },
-        ]}
+        actions={
+          editable
+            ? [
+                {
+                  component: <Edit onClick={() => setShowModal(true)} />,
+                },
+              ]
+            : []
+        }
       >
         {tournamentInfo.hidden && (
           <Pill className="mb-2" type="secondary">

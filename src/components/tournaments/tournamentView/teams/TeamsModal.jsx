@@ -7,19 +7,28 @@ import Button from "@components/common/button";
 import TeamsList from "./TeamsList";
 import TeamDisplay from "./TeamDisplay";
 
-const TeamsModal = ({ matches, teams, selectedTeam, onHide, onSelectTeam }) => (
+const TeamsModal = ({
+  matches,
+  teams,
+  selectedTeam,
+  onHide,
+  onSelectTeam,
+  editable,
+}) => (
   <Modal title="Teams" fullscreen onHide={onHide} className="TeamsModal">
     <Row>
       <Col lg={3} md={4} className="mb-3">
-        <div className="d-grid">
-          <Button
-            type="outline-primary"
-            className="mb-3"
-            onClick={() => onSelectTeam({})}
-          >
-            Add A New Team
-          </Button>
-        </div>
+        {editable && (
+          <div className="d-grid">
+            <Button
+              type="outline-primary"
+              className="mb-3"
+              onClick={() => onSelectTeam({})}
+            >
+              Add A New Team
+            </Button>
+          </div>
+        )}
         <TeamsList
           selectedTeam={selectedTeam}
           onSelectTeam={onSelectTeam}
@@ -34,6 +43,7 @@ const TeamsModal = ({ matches, teams, selectedTeam, onHide, onSelectTeam }) => (
           teams={teams}
           onSubmitSuccess={onSelectTeam}
           onDeleteSuccess={() => onSelectTeam({})}
+          editable={editable}
         />
       </Col>
     </Row>

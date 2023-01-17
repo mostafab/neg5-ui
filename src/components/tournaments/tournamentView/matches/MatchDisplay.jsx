@@ -24,6 +24,7 @@ const MatchDisplay = ({
   phases,
   onSubmitSuccess,
   onDeleteSuccess,
+  editable,
 }) => {
   const match = selectedMatch;
   const [readOnly, setReadOnly] = useState(true);
@@ -78,27 +79,39 @@ const MatchDisplay = ({
     }
   };
 
-  let actions = [
-    {
-      label: "Edit",
-      onClick: () => setReadOnly(false),
-      separator: match.scoresheetId ? null : <hr className="mt-1 mb-1" />,
-    },
-    {
-      label: <span className="text-danger">Delete Match</span>,
-      onClick: () => setIsDeleting(true),
-    },
-  ];
+  let actions = editable
+    ? [
+        {
+          label: "Edit",
+          onClick: () => setReadOnly(false),
+          separator: match.scoresheetId ? null : <hr className="mt-1 mb-1" />,
+        },
+        {
+          label: <span className="text-danger">Delete Match</span>,
+          onClick: () => setIsDeleting(true),
+        },
+      ]
+    : [];
   if (scoresheetData) {
-    actions = [
-      actions[0],
-      {
-        label: "View Scoresheet",
-        onClick: () => setViewScoresheet(true),
-        separator: <hr className="mt-1 mb-1" />,
-      },
-      actions[1],
-    ];
+    actions =
+      actions.length > 0
+        ? [
+            actions[0],
+            {
+              label: "View Scoresheet",
+              onClick: () => setViewScoresheet(true),
+              separator: <hr className="mt-1 mb-1" />,
+            },
+            actions[1],
+          ]
+        : [
+            {
+              label: "View Scoresheet",
+              onClick: () => setViewScoresheet(true),
+              separator:
+                actions.length > 0 ? <hr className="mt-1 mb-1" /> : null,
+            },
+          ];
   }
   return (
     <Card>

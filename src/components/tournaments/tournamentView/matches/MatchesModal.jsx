@@ -16,6 +16,7 @@ const MatchesModal = ({
   rules,
   playersById,
   phases,
+  canEditAllMatches,
 }) => (
   <Modal title="Matches" fullscreen onHide={onHide} className="MatchesModal">
     <Row>
@@ -43,6 +44,7 @@ const MatchesModal = ({
           phases={phases}
           onSubmitSuccess={(result) => onSelectMatch(result)}
           onDeleteSuccess={() => onSelectMatch({})}
+          editable={canEditAllMatches}
         />
       </Col>
     </Row>
