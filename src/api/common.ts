@@ -11,6 +11,6 @@ export const doValidatedApiRequest = async (callback) => {
       const responseMessage = e.response?.data?.message || fallBackError;
       return { errors: [responseMessage] };
     }
-    return { errors: [fallBackError] };
+    return { errors: [e.message || fallBackError] };
   }
 };
