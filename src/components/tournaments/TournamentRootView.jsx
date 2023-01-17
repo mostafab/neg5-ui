@@ -21,7 +21,10 @@ const TournamentRootView = ({ tournamentId }) => {
   useEffect(() => {
     dispatch(loadTournamentDataAsync(tournamentId));
   }, [tournamentId]);
-  const [liveUpdatesChannel, setChannel] = useState(null);
+  const [liveUpdatesChannel, setChannel] = useState({
+    subscribe: () => {},
+    unsubscribe: () => {},
+  });
   useEffect(() => {
     const pusher = InitPusher();
     const channelName = `tournament-view-${tournamentId}`;
