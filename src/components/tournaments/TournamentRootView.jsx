@@ -25,21 +25,24 @@ const TournamentRootView = ({ tournamentId }) => {
     subscribe: () => {},
     unsubscribe: () => {},
   });
+  // Subscribe to Pusher updates
   useEffect(() => {
     const pusher = InitPusher();
-    const channelName = `tournament-view-${tournamentId}`;
-    const channel = pusher.subscribe(channelName);
-    setChannel({
-      subscribe: (event, callback) => {
-        channel.bind(event, callback);
-      },
-      unsubscribe: (event) => {
-        channel.unbind(event);
-      },
-    });
-    return () => {
-      pusher.unsubscribe(channelName);
-    };
+    if (pusher) {
+      const channelName = `tournament-view-${tournamentId}`;
+      const channel = pusher.subscribe(channelName);
+      setChannel({
+        subscribe: (event, callback) => {
+          channel.bind(event, callback);
+        },
+        unsubscribe: (event) => {
+          channel.unbind(event);
+        },
+      });
+      return () => {
+        pusher.unsubscribe(channelName);
+      };
+    }
   }, [tournamentId]);
   return (
     <TournamentIdContext.Provider value={tournamentId}>
