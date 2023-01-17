@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import Card from "@components/common/cards";
@@ -10,6 +10,11 @@ import { labelWithValue } from "./utilities";
 
 const TournamentInfoPanel = ({ tournamentInfo }) => {
   const [showModal, setShowModal] = useState(false);
+  useEffect(() => {
+    document.title = tournamentInfo?.name
+      ? `${tournamentInfo?.name} | Neg 5`
+      : "Neg 5";
+  }, [tournamentInfo?.name]);
   const dateValue = tournamentInfo.tournamentDate
     ? dayjs(tournamentInfo.tournamentDate).format("MMMM D, YYYY")
     : null;

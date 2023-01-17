@@ -7,19 +7,23 @@ import RulesModal from "@components/tournaments/rules/RulesModal";
 
 import { labelWithValue } from "./utilities";
 
-const TournamentRulesPanel = ({ rules }) => {
+const TournamentRulesPanel = ({ rules, editable }) => {
   const [showForm, setShowForm] = useState(false);
   return (
     <>
       <Card
         title="Rules"
-        actions={[
-          {
-            component: <Edit onClick={() => setShowForm(true)} />,
-            icon: "PencilSquare",
-            onClick: () => setShowForm(true),
-          },
-        ]}
+        actions={
+          editable
+            ? [
+                {
+                  component: <Edit onClick={() => setShowForm(true)} />,
+                  icon: "PencilSquare",
+                  onClick: () => setShowForm(true),
+                },
+              ]
+            : []
+        }
       >
         {labelWithValue("Bonus Point Value", rules.bonusPointValue)}
         {labelWithValue("Parts Per Bonus", rules.partsPerBonus)}

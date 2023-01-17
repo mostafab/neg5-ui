@@ -167,6 +167,7 @@ const ScoresheetModal = ({
                 View Scheduled Matches
               </Button>
             )}
+            {scoresheets.length > 0 && <h5>In-progress scoresheets</h5>}
             <ScoresheetsList
               scoresheets={scoresheets}
               teams={teams}

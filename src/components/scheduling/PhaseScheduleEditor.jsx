@@ -31,6 +31,7 @@ const PhaseScheduleEditor = ({
         },
       ],
     });
+    setReadOnly(false);
   };
 
   const onGenerate = async (e) => {
@@ -43,6 +44,7 @@ const PhaseScheduleEditor = ({
     setGenerating(false);
     if (!response.errors) {
       setDraft(response);
+      setReadOnly(false);
     }
   };
 
@@ -86,7 +88,12 @@ const PhaseScheduleEditor = ({
           poolTeams={poolTeams}
           unassignedTeams={unassignedTeams}
           readOnly={readOnly}
-          onCancel={() => setReadOnly(true)}
+          onCancel={() => {
+            setReadOnly(true);
+            if (!draft.id) {
+              setDraft(null);
+            }
+          }}
           onSubmitSuccess={(response) => {
             setReadOnly(true);
             setDraft(response);
