@@ -10,7 +10,7 @@ import TeamDisplay from "./TeamDisplay";
 const TeamsModal = ({ matches, teams, selectedTeam, onHide, onSelectTeam }) => (
   <Modal title="Teams" fullscreen onHide={onHide} className="TeamsModal">
     <Row>
-      <Col lg={3} md={4} className="d-none d-md-block d-lg-block d-xl-block">
+      <Col lg={3} md={4} className="mb-3">
         <div className="d-grid">
           <Button
             type="outline-primary"
