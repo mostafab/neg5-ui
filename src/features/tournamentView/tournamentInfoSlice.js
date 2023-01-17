@@ -17,6 +17,7 @@ const initialState = {
   questionSet: null,
   comments: null,
   hidden: null,
+  state: null,
 };
 
 const tournamentInfoSlice = createSlice({
@@ -24,7 +25,10 @@ const tournamentInfoSlice = createSlice({
   initialState,
   reducers: {
     informationUpdated(state, action) {
-      Object.assign(state, action.payload);
+      Object.keys(initialState).forEach((key) => {
+        state[key] =
+          action.payload[key] === undefined ? null : action.payload[key];
+      });
     },
   },
   extraReducers: (builder) => {

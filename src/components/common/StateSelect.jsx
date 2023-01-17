@@ -209,8 +209,11 @@ const options = [
   },
 ];
 
-const StateSelect = ({ name }) => (
-  <Select name={name} label="State" options={options} />
-);
+const optionsWithNAOption = [{ value: "", label: "N/A" }, ...options];
+
+const StateSelect = ({ name, includeNone = true }) => {
+  const opts = includeNone ? optionsWithNAOption : options;
+  return <Select name={name} label="State" options={opts} />;
+};
 
 export default StateSelect;
