@@ -19,9 +19,7 @@ const PhaseScheduleEditor = ({
 }) => {
   const [draft, setDraft] = useState(schedule);
   const [generating, setGenerating] = useState(false);
-  const [readOnly, setReadOnly] = useState(
-    schedule || !editable ? true : false
-  );
+  const [readOnly, setReadOnly] = useState(schedule ? true : false);
   const onNew = (e) => {
     e.preventDefault();
     setDraft({
@@ -55,17 +53,21 @@ const PhaseScheduleEditor = ({
     return (
       <div className="p-4 text-center">
         {!generating && (
-          <>
+          <div>
             <div>No schedule has been created for this phase.</div>
-            <a href="#" onClick={onNew}>
-              Start from scratch
-            </a>{" "}
-            or{" "}
-            <a href="#" onClick={onGenerate}>
-              have one pre-populated
-            </a>{" "}
-            from existing pools.
-          </>
+            {editable && (
+              <>
+                <a href="#" onClick={onNew}>
+                  Start from scratch
+                </a>
+                or
+                <a href="#" onClick={onGenerate}>
+                  have one pre-populated
+                </a>{" "}
+                from existing pools.
+              </>
+            )}
+          </div>
         )}
         {generating && <Spinner size={25} />}
       </div>
@@ -78,7 +80,7 @@ const PhaseScheduleEditor = ({
           Re-Generate
         </Button>
       )}
-      {readOnly && (
+      {readOnly && editable && (
         <div className="text-end p-2">
           <Edit size="20" onClick={() => setReadOnly(false)} />
         </div>
