@@ -4,7 +4,11 @@ import Card from "@components/common/cards";
 import { Edit } from "@components/common/icon";
 import CollaboratorsModal from "./CollaboratorsModal";
 
-const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
+const TournamentCollaboratorsPanel = ({
+  collaborators,
+  currentUserId,
+  directorId,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const renderCardBody = () => {
     return (
@@ -32,6 +36,7 @@ const TournamentCollaboratorsPanel = ({ collaborators, currentUserId }) => {
             collaborators={collaborators}
             onHide={() => setShowModal(false)}
             currentUserId={currentUserId}
+            directorId={directorId}
           />
         )}
       </Card>

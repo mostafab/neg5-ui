@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import dayjs from "dayjs";
 
 import TournamentInfoPanel from "@components/tournaments/tournamentView/TournamentInfoPanel";
 

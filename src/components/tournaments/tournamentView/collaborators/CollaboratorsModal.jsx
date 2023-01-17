@@ -17,7 +17,12 @@ import UserSearch from "./UserSearch";
 import CollaboratorsList from "./CollaboratorsList";
 
 /* eslint-disable react/no-unescaped-entities */
-const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => {
+const CollaboratorsModal = ({
+  collaborators,
+  onHide,
+  currentUserId,
+  directorId,
+}) => {
   const [submitData, setSubmitData] = useState({
     error: null,
   });
@@ -68,6 +73,7 @@ const CollaboratorsModal = ({ collaborators, onHide, currentUserId }) => {
         onSelect={(user) => addOrUpdateUser(user.id, false)}
         filterFunction={(c) =>
           c.id !== currentUserId &&
+          c.id !== directorId &&
           !collaborators.find((collab) => collab.userId === c.id)
         }
       />
