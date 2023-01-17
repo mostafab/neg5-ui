@@ -59,8 +59,8 @@ const PhaseScheduleEditor = ({
               <>
                 <a href="#" onClick={onNew}>
                   Start from scratch
-                </a>
-                or
+                </a>{" "}
+                or{" "}
                 <a href="#" onClick={onGenerate}>
                   have one pre-populated
                 </a>{" "}
