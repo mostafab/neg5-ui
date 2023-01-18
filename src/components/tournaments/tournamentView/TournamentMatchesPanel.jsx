@@ -1,15 +1,27 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
+import keyBy from "lodash/keyBy";
+
+import { Events } from "@libs/liveEvents";
+import { getMatchTeamsDisplayString } from "@libs/matches";
+import { useAppDispatch } from "@store";
+import {
+  scoresheetCreatedOrUpdated,
+  matchCreatedOrUpdated,
+} from "@features/tournamentView/matchesSlice";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
+import toast from "@components/common/toast";
 
 import ScoresheetModal from "@components/scoresheet/ScoresheetModal";
+import { scoresheetTitle } from "@components/scoresheet/ScoresheetsList";
 import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 import InProgressMatchesPanel from "@components/tournaments/tournamentView/matches/InProgressMatchesPanel";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 
 const TournamentMatchesPanel = ({
   matches,
@@ -27,6 +39,47 @@ const TournamentMatchesPanel = ({
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    liveChangesContext.subscribe(Events.scoresheet.createdOrUpdated, (data) => {
+      dispatch(scoresheetCreatedOrUpdated(data));
+
+      const { cycles, addedBy } = data;
+      if (cycles?.length === 1) {
+        const title = (
+          <>
+            <div className="small">{addedBy} started a new match</div>
+            <div className="small">{scoresheetTitle(teams, data)}</div>
+          </>
+        );
+        toast(title, { type: "info" });
+      }
+    });
+    liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
+      const { oldId, match } = data;
+      dispatch(matchCreatedOrUpdated({ match, oldId }));
+      if (!oldId) {
+        const teamsById = keyBy(teams, "id");
+        const title = (
+          <>
+            <div className="small">A match was just submitted</div>
+            <div className="small">
+              {getMatchTeamsDisplayString(match, teamsById, {
+                includeRound: true,
+              })}
+            </div>
+          </>
+        );
+        toast(title, { type: "success" });
+      }
+    });
+
+    return () => {
+      liveChangesContext.unsubscribe(Events.scoresheet.createdOrUpdated);
+      liveChangesContext.unsubscribe(Events.match.createdOrUpdated);
+    };
+  }, [liveChangesContext, teams]);
   const enoughTeamsToAddMatch = teams.length >= 2;
   const actions =
     enoughTeamsToAddMatch && (matches.length > 0 || draftScoresheets.length > 0)

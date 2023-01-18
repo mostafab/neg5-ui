@@ -1,5 +1,5 @@
 const ContentSecurityPolicy = `
-  default-src 'self';
+  default-src 'self' wss://ws-mt1.pusher.com https://sockjs-mt1.pusher.com;
   img-src 'self' data:;
   script-src 'self' 'unsafe-eval';
   child-src 'self';
@@ -23,5 +23,9 @@ module.exports = {
         headers: securityHeaders,
       },
     ];
+  },
+  env: {
+    PUSHER_APP_KEY: process.env.PUSHER_APP_KEY,
+    PUSHER_APP_CLUSTER: process.env.PUSHER_APP_CLUSTER,
   },
 };

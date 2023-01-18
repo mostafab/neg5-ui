@@ -12,7 +12,6 @@ export const scoresheetTitle = (teams, scoresheet) => {
       return teams.find((t) => t.id === teamId)?.name;
     })
     .join(" vs ");
-
   return (
     <span>
       Round {scoresheet.round} - {teamVsString}

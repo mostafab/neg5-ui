@@ -7,6 +7,7 @@ import { createStore } from "@store";
 import theme from "theme";
 
 import "bootswatch/dist/flatly/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import "@styles/index.scss";
 

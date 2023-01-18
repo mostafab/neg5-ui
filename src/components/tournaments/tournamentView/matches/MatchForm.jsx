@@ -6,6 +6,7 @@ import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapValues";
 
 import { useAppDispatch } from "@store";
+import { Events } from "@libs/liveEvents";
 import { matchCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
 
 import {
@@ -19,7 +20,10 @@ import {
 } from "@components/common/forms";
 import { X } from "@components/common/icon";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 
 import { getTeamOptions, getPhaseOptions } from "@libs/tournamentForms";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
@@ -133,6 +137,7 @@ const MatchForm = ({
   }, [match.id, readOnly]);
 
   const tournamentId = useContext(TournamentIdContext);
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
   const internalOnSubmit = async (values, actions) => {
     if (onSubmit) {
       onSubmit(values, actions, setSubmitData);
@@ -167,6 +172,10 @@ const MatchForm = ({
         actions.resetForm({ values: initialValues(match) });
       }
       onSubmitSuccess && onSubmitSuccess(payload);
+      liveUpdatesContext.trigger(Events.match.createdOrUpdated, {
+        oldId: match.id || null,
+        match: payload,
+      });
     }
   };
 
