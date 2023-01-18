@@ -11,6 +11,8 @@ import PhasesPanel from "@features/tournamentView/containers/phasesPanel";
 import TeamsPanel from "@features/tournamentView/containers/teamsPanel";
 import MatchesPanel from "@features/tournamentView/containers/matchesPanel";
 import CollaboratorsPanel from "@features/tournamentView/containers/collaboratorsPanel";
+
+import { ToastContainer } from "@components/common/toast";
 import {
   TournamentIdContext,
   TournamentLiveChangesContext,
@@ -82,6 +84,7 @@ const TournamentRootView = ({ tournamentId }) => {
           </Row>
         </Container>
       </TournamentLiveChangesContext.Provider>
+      <ToastContainer />
     </TournamentIdContext.Provider>
   );
 };
