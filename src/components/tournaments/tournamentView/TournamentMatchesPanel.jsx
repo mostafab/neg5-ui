@@ -57,11 +57,8 @@ const TournamentMatchesPanel = ({
         dispatch(scoresheetCreatedOrUpdated(scoresheetData));
         if (isNew) {
           toast(
-            `${rest.addedBy} started a new match.`,
-            scoresheetTitle(teams, scoresheetData),
-            {
-              type: "info",
-            }
+            `${scoresheetData.addedBy} started a new match.`,
+            scoresheetTitle(teams, scoresheetData)
           );
         }
       }
