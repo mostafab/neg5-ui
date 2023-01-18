@@ -14,12 +14,16 @@ import Button from "@components/common/button";
 import { Info } from "@components/common/alerts";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 
 import { createTeam, updateTeam } from "@api/team";
 import { doValidatedApiRequest } from "@api/common";
 import { teamCreatedOrUpdated } from "@features/tournamentView/teamsSlice";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
+import { Events } from "@libs/liveEvents";
 import { useAppDispatch } from "@store";
 
 const initialPlayerValue = () => ({
@@ -68,6 +72,7 @@ const TeamForm = ({
   }, [team.id, readOnly]);
   const dispatch = useAppDispatch();
   const tournamentId = useContext(TournamentIdContext);
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
 
   const onSubmit = async (values, { resetForm }) => {
     setSubmitData({
@@ -96,6 +101,7 @@ const TeamForm = ({
         resetForm({ values: initialValues(team) });
       }
       onSubmitSuccess && onSubmitSuccess(payload);
+      liveUpdatesContext.trigger(Events.teams.createdOrUpdated, payload);
     }
   };
 

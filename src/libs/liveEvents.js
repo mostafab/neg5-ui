@@ -8,4 +8,7 @@ export const Events = {
   tournamentInfo: {
     updated: "client-tournament/infoUpdated",
   },
+  teams: {
+    createdOrUpdated: "client-team/createdOrUpdated",
+  },
 };
