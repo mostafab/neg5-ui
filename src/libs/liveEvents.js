@@ -25,4 +25,7 @@ export const Events = {
   phases: {
     added: "client-phases/added",
   },
+  schedule: {
+    createdOrUpdated: "client-schedule/createdOrUpdated",
+  },
 };
