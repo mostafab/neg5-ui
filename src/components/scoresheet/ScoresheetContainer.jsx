@@ -113,7 +113,9 @@ const ScoresheetContainer = ({
         lastUpdatedAt: response.lastUpdatedAt,
       });
       dispatch(scoresheetCreatedOrUpdated(response));
-      liveChangesContext.trigger(Events.scoresheet.createdOrUpdated, response);
+      liveChangesContext.trigger(Events.scoresheet.createdOrUpdated, {
+        id: response.id,
+      });
     }
   };
 
