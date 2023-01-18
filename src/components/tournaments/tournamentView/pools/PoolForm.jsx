@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import * as Yup from "yup";
 import InputGroup from "react-bootstrap/InputGroup";
 
@@ -11,6 +11,9 @@ import { createPool } from "@api/pool";
 import { doValidatedApiRequest } from "@api/common";
 import { poolCreated } from "@features/tournamentView/phasesSlice";
 
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
+
+import { Events } from "@libs/liveEvents";
 import { sanitizeFormValues } from "@libs/forms";
 
 const initialValues = (phaseId, pool) => ({
@@ -28,6 +31,7 @@ const NewPoolForm = ({ className = "", phaseId, pool }) => {
     error: null,
   });
   const dispatch = useAppDispatch();
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
 
   const onSubmit = async (values, { resetForm }) => {
     setSubmitData({
@@ -48,6 +52,7 @@ const NewPoolForm = ({ className = "", phaseId, pool }) => {
       });
       dispatch(poolCreated(payload));
       resetForm({ values: initialValues(phaseId, pool) });
+      liveUpdatesContext.trigger(Events.pools.added, payload);
     }
   };
 

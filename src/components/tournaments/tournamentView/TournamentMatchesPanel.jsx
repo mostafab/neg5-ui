@@ -9,6 +9,8 @@ import { useAppDispatch } from "@store";
 import {
   scoresheetCreatedOrUpdated,
   matchCreatedOrUpdated,
+  matchDeleted,
+  loadSchedulesAsync,
 } from "@features/tournamentView/matchesSlice";
 
 import Card from "@components/common/cards";
@@ -21,7 +23,10 @@ import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 import InProgressMatchesPanel from "@components/tournaments/tournamentView/matches/InProgressMatchesPanel";
-import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
+import {
+  TournamentLiveChangesContext,
+  TournamentIdContext,
+} from "@components/tournaments/common/context";
 
 const TournamentMatchesPanel = ({
   matches,
@@ -39,6 +44,7 @@ const TournamentMatchesPanel = ({
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
+  const tournamentId = useContext(TournamentIdContext);
   const liveChangesContext = useContext(TournamentLiveChangesContext);
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -47,13 +53,9 @@ const TournamentMatchesPanel = ({
 
       const { cycles, addedBy } = data;
       if (cycles?.length === 1) {
-        const title = (
-          <>
-            <div className="small">{addedBy} started a new match</div>
-            <div className="small">{scoresheetTitle(teams, data)}</div>
-          </>
-        );
-        toast(title, { type: "info" });
+        toast(`${addedBy} started a new match.`, scoresheetTitle(teams, data), {
+          type: "info",
+        });
       }
     });
     liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
@@ -61,25 +63,34 @@ const TournamentMatchesPanel = ({
       dispatch(matchCreatedOrUpdated({ match, oldId }));
       if (!oldId) {
         const teamsById = keyBy(teams, "id");
-        const title = (
-          <>
-            <div className="small">A match was just submitted</div>
-            <div className="small">
-              {getMatchTeamsDisplayString(match, teamsById, {
-                includeRound: true,
-              })}
-            </div>
-          </>
+        toast(
+          "A match was just submitted",
+          getMatchTeamsDisplayString(match, teamsById, {
+            includeRound: true,
+          }),
+          { type: "success" }
         );
-        toast(title, { type: "success" });
       }
     });
+    liveChangesContext.subscribe(Events.match.deleted, ({ matchId }) => {
+      dispatch(matchDeleted({ matchId }));
+    });
+    liveChangesContext.subscribe(
+      Events.schedule.createdOrUpdated,
+      ({ tournamentPhaseId }) => {
+        dispatch(loadSchedulesAsync(tournamentId));
+        const phaseName = phases.find((p) => p.id === tournamentPhaseId)?.name;
+        toast(`Schedule updated`, `${phaseName} schedule was just updated.`);
+      }
+    );
 
     return () => {
       liveChangesContext.unsubscribe(Events.scoresheet.createdOrUpdated);
       liveChangesContext.unsubscribe(Events.match.createdOrUpdated);
+      liveChangesContext.unsubscribe(Events.match.deleted);
+      liveChangesContext.unsubscribe(Events.schedule.createdOrUpdated);
     };
-  }, [liveChangesContext, teams]);
+  }, [liveChangesContext, teams, tournamentId, phases]);
   const enoughTeamsToAddMatch = teams.length >= 2;
   const actions =
     enoughTeamsToAddMatch && (matches.length > 0 || draftScoresheets.length > 0)

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import groupBy from "lodash/groupBy";
@@ -9,7 +9,9 @@ import { scheduleCreatedOrUpdated } from "@features/tournamentView/matchesSlice"
 import { doValidatedApiRequest } from "@api/common";
 import { createSchedule, updateSchedule } from "@api/schedule";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
+import { Events } from "@libs/liveEvents";
 
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import Card from "@components/common/cards";
 import {
@@ -110,6 +112,7 @@ const SchedulingForm = ({
     error: null,
   });
   const dispatch = useAppDispatch();
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
   const { matches, tournamentPhaseId, id } = schedule;
   const matchesByRound = groupBy(matches, "round");
   const formValues = initialValues(matchesByRound);
@@ -147,6 +150,10 @@ const SchedulingForm = ({
     if (!response.errors) {
       dispatch(scheduleCreatedOrUpdated(response));
       onSubmitSuccess && onSubmitSuccess(response);
+      liveUpdatesContext.trigger(Events.schedule.createdOrUpdated, {
+        id: response.id,
+        tournamentPhaseId: response.tournamentPhaseId,
+      });
     }
   };
   return (

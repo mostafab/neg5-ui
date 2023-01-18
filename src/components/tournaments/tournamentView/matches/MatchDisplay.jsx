@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { useAppDispatch } from "@store";
 import { matchDeleted } from "@features/tournamentView/matchesSlice";
@@ -7,12 +7,14 @@ import { getScoresheet } from "@api/scoresheet";
 import { doValidatedApiRequest } from "@api/common";
 
 import { formatAddedAtDate } from "@libs/dates";
+import { Events } from "@libs/liveEvents";
 import DropdownActions from "@components/common/DropdownActions";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
 import ActionConfirmationAlert from "@components/common/ActionConfirmationAlert";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import ScoresheetTable from "@components/scoresheet/ScoresheetTable";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 
 import MatchForm from "./MatchForm";
 
@@ -44,7 +46,7 @@ const MatchDisplay = ({
     });
     reloadScoresheet();
   }, [match.id]);
-
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
   const dispatch = useAppDispatch();
   const onConfirmDelete = async () => {
     setSubmitData({
@@ -63,6 +65,7 @@ const MatchDisplay = ({
       });
       dispatch(matchDeleted({ matchId: match.id }));
       onDeleteSuccess({ id: match.id });
+      liveUpdatesContext.trigger(Events.match.deleted, { matchId: match.id });
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 import produce from "immer";
 import pickBy from "lodash/pickBy";
@@ -7,7 +7,9 @@ import isEqual from "lodash/isEqual";
 import Button from "@components/common/button";
 import { X } from "@components/common/icon";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 
+import { Events } from "@libs/liveEvents";
 import { useAppDispatch } from "@store";
 import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
 import { poolsDeleted } from "@features/tournamentView/phasesSlice";
@@ -69,6 +71,7 @@ const TeamPoolsEditor = ({
     error: null,
   });
   const dispatch = useAppDispatch();
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
 
   useEffect(() => {
     setOriginalAssignments({
@@ -183,6 +186,13 @@ const TeamPoolsEditor = ({
           poolIds: payload.poolsToRemove,
         })
       );
+      liveUpdatesContext.trigger(Events.teams.poolsUpdated, {
+        assignments: response,
+        phaseId,
+      });
+      liveUpdatesContext.trigger(Events.pools.deleted, {
+        poolIds: payload.poolsToRemove,
+      });
     }
   };
 

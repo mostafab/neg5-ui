@@ -1,17 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Col, Row } from "react-bootstrap";
 import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
 
+import { useAppDispatch } from "@store";
+import {
+  teamCreatedOrUpdated,
+  teamDeleted,
+} from "@features/tournamentView/teamsSlice";
+import { Events } from "@libs/liveEvents";
+
 import { Add } from "@components/common/icon";
 import Card from "@components/common/cards";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 import TeamsModal from "@components/tournaments/tournamentView/teams/TeamsModal";
 import TeamsList from "@components/tournaments/tournamentView/teams/TeamsList";
 import NoTeamsAdded from "@components/tournaments/tournamentView/teams/NoTeamsAdded";
+import { useEffect } from "react";
 
 const TournamentTeamsPanel = ({ teams, matches, editable }) => {
-  const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    liveUpdatesContext.subscribe(Events.teams.createdOrUpdated, (data) => {
+      dispatch(teamCreatedOrUpdated(data));
+    });
+    liveUpdatesContext.subscribe(Events.teams.deleted, ({ teamId }) => {
+      dispatch(teamDeleted({ teamId }));
+    });
+    return () => {
+      liveUpdatesContext.unsubscribe(Events.teams.createdOrUpdated);
+      liveUpdatesContext.unsubscribe(Events.teams.deleted);
+    };
+  }, [liveUpdatesContext]);
+  const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
   return (
     <>
       <Card

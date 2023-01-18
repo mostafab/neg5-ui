@@ -8,8 +8,14 @@ export const ToastContainer = () => (
   <ToastifyContainer theme="colored" hideProgressBar draggable={false} />
 );
 
-const toast = (message, opts) => {
-  toastify(message, { autoClose: 5000, ...opts });
+const toast = (title, message, opts = { type: "info" }) => {
+  const content = (
+    <>
+      <div>{title}</div>
+      <div className="small">{message}</div>
+    </>
+  );
+  toastify(content, { autoClose: 5000, ...opts });
 };
 
 export default toast;

@@ -5,13 +5,17 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { Form, Text } from "@components/common/forms";
 import Button from "@components/common/button";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 
 import { useAppDispatch } from "@store";
 import { createPhase } from "@api/phase";
 import { doValidatedApiRequest } from "@api/common";
 import { phaseCreated } from "@features/tournamentView/phasesSlice";
 
+import { Events } from "@libs/liveEvents";
 import { sanitizeFormValues } from "@libs/forms";
 
 const initialValues = (phase) => ({
@@ -30,6 +34,7 @@ const PhaseForm = ({ phase, onSubmitSuccess }) => {
     error: null,
   });
   const tournamentId = useContext(TournamentIdContext);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
   const onSubmit = async (values, { resetForm }) => {
     setSubmitData({
       submitting: true,
@@ -51,6 +56,7 @@ const PhaseForm = ({ phase, onSubmitSuccess }) => {
       dispatch(phaseCreated(payload));
       resetForm({ values: initialValues(phase) });
       onSubmitSuccess && onSubmitSuccess(payload);
+      liveChangesContext.trigger(Events.phases.added, payload);
     }
   };
   return (

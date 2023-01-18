@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+
+import { useAppDispatch } from "@store";
+import { rulesUpdated } from "@features/tournamentView/rulesSlice";
+import { Events } from "@libs/liveEvents";
 
 import Card from "@components/common/cards";
 import { Edit } from "@components/common/icon";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 import TossupValuePill from "@components/tournaments/common/TossupValuePill";
 import RulesModal from "@components/tournaments/rules/RulesModal";
 
@@ -9,6 +14,17 @@ import { labelWithValue } from "./utilities";
 
 const TournamentRulesPanel = ({ rules, editable }) => {
   const [showForm, setShowForm] = useState(false);
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    liveUpdatesContext.subscribe(Events.rules.updated, (data) => {
+      dispatch(rulesUpdated(data));
+    });
+
+    return () => {
+      liveUpdatesContext.unsubscribe(Events.rules.updated);
+    };
+  }, [liveUpdatesContext]);
   return (
     <>
       <Card

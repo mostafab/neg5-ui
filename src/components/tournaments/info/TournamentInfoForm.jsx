@@ -7,13 +7,18 @@ import { informationUpdated } from "@features/tournamentView/tournamentInfoSlice
 import { updateBasicInformation } from "@api/tournaments";
 import { doValidatedApiRequest } from "@api/common";
 
+import { Events } from "@libs/liveEvents";
+
 import { Info } from "@components/common/alerts";
 import { Form, Checkbox } from "@components/common/forms";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import TournamentInfoFields, {
   validation,
 } from "@components/tournaments/common/TournamentInfoFields";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 
@@ -30,6 +35,7 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
   );
   const dispatch = useAppDispatch();
   const tournamentId = useContext(TournamentIdContext);
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
   const onSubmit = async (values) => {
     const payload = sanitizeFormValuesRecursive(values);
     setSubmitData({
@@ -50,6 +56,7 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
       });
       dispatch(informationUpdated(response));
       onSubmitSuccess && onSubmitSuccess();
+      liveUpdatesContext.trigger(Events.tournamentInfo.updated, response);
     }
   };
 
