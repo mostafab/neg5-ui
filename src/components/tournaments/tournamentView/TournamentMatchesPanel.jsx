@@ -6,8 +6,9 @@ import keyBy from "lodash/keyBy";
 import { Events } from "@libs/liveEvents";
 import { getMatchTeamsDisplayString } from "@libs/matches";
 import { useAppDispatch } from "@store";
+import { getScoresheet } from "@api/scoresheet";
 import {
-  loadScoresheetsAsync,
+  scoresheetCreatedOrUpdated,
   matchCreatedOrUpdated,
   matchDeleted,
   loadSchedulesAsync,
@@ -48,19 +49,23 @@ const TournamentMatchesPanel = ({
   const liveChangesContext = useContext(TournamentLiveChangesContext);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    liveChangesContext.subscribe(Events.scoresheet.createdOrUpdated, (data) => {
-      const { isNew, ...rest } = data;
-      dispatch(loadScoresheetsAsync(tournamentId));
-      if (isNew) {
-        toast(
-          `${rest.addedBy} started a new match.`,
-          scoresheetTitle(teams, rest),
-          {
-            type: "info",
-          }
-        );
+    liveChangesContext.subscribe(
+      Events.scoresheet.createdOrUpdated,
+      async ({ id }) => {
+        const scoresheetData = await getScoresheet(id);
+        const isNew = scoresheetData.cycles.length === 1;
+        dispatch(scoresheetCreatedOrUpdated(scoresheetData));
+        if (isNew) {
+          toast(
+            `${rest.addedBy} started a new match.`,
+            scoresheetTitle(teams, scoresheetData),
+            {
+              type: "info",
+            }
+          );
+        }
       }
-    });
+    );
     liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
       const { oldId, match } = data;
       dispatch(matchCreatedOrUpdated({ match, oldId }));
