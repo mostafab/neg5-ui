@@ -5,13 +5,17 @@ import { useAppDispatch } from "@store";
 import { rulesUpdated } from "@features/tournamentView/rulesSlice";
 import { updateRules } from "@api/rules";
 import { doValidatedApiRequest } from "@api/common";
+import { Events } from "@libs/liveEvents";
 
 import { Form } from "@components/common/forms";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import ScoringRulesField, {
   validation,
 } from "@components/tournaments/common/ScoringRulesFields";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 
 import { sanitizeFormValuesRecursive } from "@libs/forms";
 
@@ -25,6 +29,7 @@ const RulesForm = ({ rules, onSubmitSuccess = null }) => {
   });
   const dispatch = useAppDispatch();
   const tournamentId = useContext(TournamentIdContext);
+  const liveUpdatesContext = useContext(TournamentLiveChangesContext);
   const onSubmit = async (values) => {
     const payload = sanitizeFormValuesRecursive(values);
     setSubmitData({
@@ -45,6 +50,7 @@ const RulesForm = ({ rules, onSubmitSuccess = null }) => {
       });
       dispatch(rulesUpdated(response));
       onSubmitSuccess && onSubmitSuccess();
+      liveUpdatesContext.trigger(Events.rules.updated, response);
     }
   };
 

@@ -7,6 +7,9 @@ export const Events = {
     createdOrUpdated: "client-match/matchCreatedOrUpdated",
     deleted: "client-match/deleted",
   },
+  rules: {
+    updated: "client-rules/updated",
+  },
   tournamentInfo: {
     updated: "client-tournament/infoUpdated",
   },
@@ -17,5 +20,9 @@ export const Events = {
   },
   pools: {
     deleted: "client-pools/deleted",
+    added: "client-pools/added",
+  },
+  phases: {
+    added: "client-phases/added",
   },
 };
