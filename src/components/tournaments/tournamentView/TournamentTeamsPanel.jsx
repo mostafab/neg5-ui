@@ -8,6 +8,7 @@ import { teamCreatedOrUpdated } from "@features/tournamentView/teamsSlice";
 import { Events } from "@libs/liveEvents";
 
 import { Add } from "@components/common/icon";
+import toast from "@components/common/toast";
 import Card from "@components/common/cards";
 import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 import TeamsModal from "@components/tournaments/tournamentView/teams/TeamsModal";
@@ -22,6 +23,7 @@ const TournamentTeamsPanel = ({ teams, matches, editable }) => {
   useEffect(() => {
     liveUpdatesContext.subscribe(Events.teams.createdOrUpdated, (data) => {
       dispatch(teamCreatedOrUpdated(data));
+      toast("Team updated", `${data.name} was just updated.`);
     });
     return () => {
       liveUpdatesContext.unsubscribe(Events.teams.createdOrUpdated);

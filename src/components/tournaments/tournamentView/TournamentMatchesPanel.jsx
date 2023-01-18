@@ -47,13 +47,9 @@ const TournamentMatchesPanel = ({
 
       const { cycles, addedBy } = data;
       if (cycles?.length === 1) {
-        const title = (
-          <>
-            <div className="small">{addedBy} started a new match</div>
-            <div className="small">{scoresheetTitle(teams, data)}</div>
-          </>
-        );
-        toast(title, { type: "info" });
+        toast(`${addedBy} started a new match.`, scoresheetTitle(teams, data), {
+          type: "info",
+        });
       }
     });
     liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
@@ -61,17 +57,13 @@ const TournamentMatchesPanel = ({
       dispatch(matchCreatedOrUpdated({ match, oldId }));
       if (!oldId) {
         const teamsById = keyBy(teams, "id");
-        const title = (
-          <>
-            <div className="small">A match was just submitted</div>
-            <div className="small">
-              {getMatchTeamsDisplayString(match, teamsById, {
-                includeRound: true,
-              })}
-            </div>
-          </>
+        toast(
+          "A match was just submitted",
+          getMatchTeamsDisplayString(match, teamsById, {
+            includeRound: true,
+          }),
+          { type: "success" }
         );
-        toast(title, { type: "success" });
       }
     });
 
