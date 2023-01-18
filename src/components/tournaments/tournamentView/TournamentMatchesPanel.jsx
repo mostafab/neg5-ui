@@ -9,6 +9,7 @@ import { useAppDispatch } from "@store";
 import {
   scoresheetCreatedOrUpdated,
   matchCreatedOrUpdated,
+  matchDeleted,
 } from "@features/tournamentView/matchesSlice";
 
 import Card from "@components/common/cards";
@@ -66,10 +67,14 @@ const TournamentMatchesPanel = ({
         );
       }
     });
+    liveChangesContext.subscribe(Events.match.deleted, ({ matchId }) => {
+      dispatch(matchDeleted({ matchId }));
+    });
 
     return () => {
       liveChangesContext.unsubscribe(Events.scoresheet.createdOrUpdated);
       liveChangesContext.unsubscribe(Events.match.createdOrUpdated);
+      liveChangesContext.unsubscribe(Events.match.deleted);
     };
   }, [liveChangesContext, teams]);
   const enoughTeamsToAddMatch = teams.length >= 2;

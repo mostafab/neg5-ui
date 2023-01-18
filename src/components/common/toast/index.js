@@ -11,7 +11,7 @@ export const ToastContainer = () => (
 const toast = (title, message, opts = { type: "info" }) => {
   const content = (
     <>
-      <div className="small">{title}</div>
+      <div>{title}</div>
       <div className="small">{message}</div>
     </>
   );

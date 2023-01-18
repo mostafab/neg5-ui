@@ -4,11 +4,13 @@ import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
 
 import { useAppDispatch } from "@store";
-import { teamCreatedOrUpdated } from "@features/tournamentView/teamsSlice";
+import {
+  teamCreatedOrUpdated,
+  teamDeleted,
+} from "@features/tournamentView/teamsSlice";
 import { Events } from "@libs/liveEvents";
 
 import { Add } from "@components/common/icon";
-import toast from "@components/common/toast";
 import Card from "@components/common/cards";
 import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 import TeamsModal from "@components/tournaments/tournamentView/teams/TeamsModal";
@@ -23,10 +25,13 @@ const TournamentTeamsPanel = ({ teams, matches, editable }) => {
   useEffect(() => {
     liveUpdatesContext.subscribe(Events.teams.createdOrUpdated, (data) => {
       dispatch(teamCreatedOrUpdated(data));
-      toast("Team updated", `${data.name} was just updated.`);
+    });
+    liveUpdatesContext.subscribe(Events.teams.deleted, ({ teamId }) => {
+      dispatch(teamDeleted({ teamId }));
     });
     return () => {
       liveUpdatesContext.unsubscribe(Events.teams.createdOrUpdated);
+      liveUpdatesContext.unsubscribe(Events.teams.deleted);
     };
   }, [liveUpdatesContext]);
   const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
