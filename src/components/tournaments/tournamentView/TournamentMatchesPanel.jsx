@@ -1,6 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
+
+import { Events } from "@libs/liveEvents";
+import { useAppDispatch } from "@store";
+import {
+  scoresheetCreatedOrUpdated,
+  matchCreatedOrUpdated,
+} from "@features/tournamentView/matchesSlice";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
@@ -10,6 +17,7 @@ import SchedulingModal from "@components/scheduling/SchedulingModal";
 import MatchesAccordian from "@components/tournaments/tournamentView/matches/MatchesAccordian";
 import MatchesModal from "@components/tournaments/tournamentView/matches/MatchesModal";
 import InProgressMatchesPanel from "@components/tournaments/tournamentView/matches/InProgressMatchesPanel";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 
 const TournamentMatchesPanel = ({
   matches,
@@ -27,6 +35,22 @@ const TournamentMatchesPanel = ({
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showScoresheet, setShowScoresheet] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    liveChangesContext.subscribe(Events.scoresheet.createdOrUpdated, (data) => {
+      dispatch(scoresheetCreatedOrUpdated(data));
+    });
+    liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
+      const { oldId, match } = data;
+      dispatch(matchCreatedOrUpdated({ match, oldId }));
+    });
+
+    return () => {
+      liveChangesContext.unsubscribe(Events.scoresheet.createdOrUpdated);
+      liveChangesContext.unsubscribe(Events.match.createdOrUpdated);
+    };
+  }, [liveChangesContext]);
   const enoughTeamsToAddMatch = teams.length >= 2;
   const actions =
     enoughTeamsToAddMatch && (matches.length > 0 || draftScoresheets.length > 0)

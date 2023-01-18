@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import keyBy from "lodash/keyBy";
 import pick from "lodash/pick";
 
@@ -7,11 +7,13 @@ import { matchCreatedOrUpdated } from "@features/tournamentView/matchesSlice";
 import { doValidatedApiRequest } from "@api/common";
 import { convertScoresheet, submitScoresheet } from "@api/scoresheet";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
+import { Events } from "@libs/liveEvents";
 
 import Card from "@components/common/cards";
 import { Info } from "@components/common/alerts";
 import { X, Spinner } from "@components/common/icon";
 import MatchForm from "@components/tournaments/tournamentView/matches/MatchForm";
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 
 import ScoresheetSubmittedCard from "./ScoresheetSubmittedCard";
 
@@ -42,6 +44,7 @@ const ScoresheetSubmissionPanel = ({
     loading: false,
   });
   const [createdData, setCreatedData] = useState(null);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
   useEffect(() => {
     loadConversionData();
   }, []);
@@ -84,6 +87,9 @@ const ScoresheetSubmissionPanel = ({
     if (!response.errors) {
       dispatch(matchCreatedOrUpdated({ match: response }));
       setCreatedData(response);
+      liveChangesContext.trigger(Events.match.createdOrUpdated, {
+        match: response,
+      });
     }
   };
 

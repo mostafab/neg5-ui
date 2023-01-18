@@ -24,12 +24,13 @@ const TournamentRootView = ({ tournamentId }) => {
   const [liveUpdatesChannel, setChannel] = useState({
     subscribe: () => {},
     unsubscribe: () => {},
+    trigger: () => {},
   });
   // Subscribe to Pusher updates
   useEffect(() => {
     const pusher = InitPusher();
     if (pusher) {
-      const channelName = `tournament-view-${tournamentId}`;
+      const channelName = `presence-tournament-view-${tournamentId}`;
       const channel = pusher.subscribe(channelName);
       setChannel({
         subscribe: (event, callback) => {
@@ -37,6 +38,9 @@ const TournamentRootView = ({ tournamentId }) => {
         },
         unsubscribe: (event) => {
           channel.unbind(event);
+        },
+        trigger: (event, data) => {
+          channel.trigger(event, data);
         },
       });
       return () => {

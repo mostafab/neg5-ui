@@ -10,7 +10,11 @@ import { scoresheetCreatedOrUpdated } from "@features/tournamentView/matchesSlic
 import { doValidatedApiRequest } from "@api/common";
 import { createOrUpdateDraft } from "@api/scoresheet";
 import { CycleStage, AnswerType, Direction } from "@libs/enums";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import { Events } from "@libs/liveEvents";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 
 import CurrentCyclePanel from "./CurrentCyclePanel";
 import ScoresheetTable from "./ScoresheetTable";
@@ -67,6 +71,7 @@ const ScoresheetContainer = ({
   onViewCreatedMatch,
 }) => {
   const tournamentId = useContext(TournamentIdContext);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
   const scoresheetTeams = [
     scoresheetStartValues.team1Id,
     scoresheetStartValues.team2Id,
@@ -108,6 +113,7 @@ const ScoresheetContainer = ({
         lastUpdatedAt: response.lastUpdatedAt,
       });
       dispatch(scoresheetCreatedOrUpdated(response));
+      liveChangesContext.trigger(Events.scoresheet.createdOrUpdated, response);
     }
   };
 

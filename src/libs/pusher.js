@@ -11,6 +11,9 @@ const MemoizedPusher = () => {
       if (appKey && cluster) {
         pusher = new Pusher(appKey, {
           cluster,
+          channelAuthorization: {
+            endpoint: "/neg5-api/pusher/auth",
+          },
         });
       } else {
         console.warn(
