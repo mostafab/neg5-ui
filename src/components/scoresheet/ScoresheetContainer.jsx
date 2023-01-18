@@ -113,7 +113,14 @@ const ScoresheetContainer = ({
         lastUpdatedAt: response.lastUpdatedAt,
       });
       dispatch(scoresheetCreatedOrUpdated(response));
-      liveChangesContext.trigger(Events.scoresheet.createdOrUpdated, response);
+      liveChangesContext.trigger(Events.scoresheet.createdOrUpdated, {
+        id: response.id,
+        isNew: response.cycles.length === 1,
+        addedBy: response.addedBy,
+        team1Id: response.team1Id,
+        team2Id: response.team2Id,
+        round: response.round,
+      });
     }
   };
 

@@ -7,7 +7,7 @@ import { Events } from "@libs/liveEvents";
 import { getMatchTeamsDisplayString } from "@libs/matches";
 import { useAppDispatch } from "@store";
 import {
-  scoresheetCreatedOrUpdated,
+  loadScoresheetsAsync,
   matchCreatedOrUpdated,
   matchDeleted,
   loadSchedulesAsync,
@@ -49,13 +49,16 @@ const TournamentMatchesPanel = ({
   const dispatch = useAppDispatch();
   useEffect(() => {
     liveChangesContext.subscribe(Events.scoresheet.createdOrUpdated, (data) => {
-      dispatch(scoresheetCreatedOrUpdated(data));
-
-      const { cycles, addedBy } = data;
-      if (cycles?.length === 1) {
-        toast(`${addedBy} started a new match.`, scoresheetTitle(teams, data), {
-          type: "info",
-        });
+      const { isNew, ...rest } = data;
+      dispatch(loadScoresheetsAsync(tournamentId));
+      if (isNew) {
+        toast(
+          `${rest.addedBy} started a new match.`,
+          scoresheetTitle(teams, rest),
+          {
+            type: "info",
+          }
+        );
       }
     });
     liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
