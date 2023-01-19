@@ -174,6 +174,7 @@ const ScoresheetModal = ({
               currentUser={currentUser}
               onSelect={onSelectScoresheet}
               onDelete={onDelete}
+              selectable={(s) => s.addedBy === currentUser.username}
             />
           </>
         );
@@ -208,24 +209,6 @@ const ScoresheetModal = ({
           </>
         );
     }
-    return (
-      <>
-        <Button
-          type="secondary"
-          onClick={() => setPrestartStage(PreStartStage.Form)}
-          className="w-100 mt-lg-5 mt-md-5 mb-3"
-        >
-          Start a new scoresheet
-        </Button>
-        <ScoresheetsList
-          scoresheets={scoresheets}
-          teams={teams}
-          currentUser={currentUser}
-          onSelect={onSelectScoresheet}
-          onDelete={onDelete}
-        />
-      </>
-    );
   };
   return (
     <Modal fullscreen title={getTitle()} onHide={onHide}>
