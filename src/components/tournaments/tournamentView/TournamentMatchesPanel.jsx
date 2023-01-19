@@ -9,6 +9,7 @@ import { useAppDispatch } from "@store";
 import { getScoresheet } from "@api/scoresheet";
 import {
   scoresheetCreatedOrUpdated,
+  scoresheetDeleted,
   matchCreatedOrUpdated,
   matchDeleted,
   loadSchedulesAsync,
@@ -64,6 +65,9 @@ const TournamentMatchesPanel = ({
         }
       }
     );
+    liveChangesContext.subscribe(Events.scoresheet.deleted, ({ id }) => {
+      dispatch(scoresheetDeleted({ id }));
+    });
     liveChangesContext.subscribe(Events.match.createdOrUpdated, (data) => {
       const { oldId, match } = data;
       dispatch(matchCreatedOrUpdated({ match, oldId }));
