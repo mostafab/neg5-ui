@@ -4,12 +4,14 @@ import ListGroup from "react-bootstrap/ListGroup";
 import DropdownActions from "@components/common/DropdownActions";
 import Card from "@components/common/cards";
 
-const TeamRow = ({ team, poolId, pools, onAssign }) => {
+const TeamRow = ({ team, poolId, pools, onAssign, readOnly }) => {
   const targetPools = pools.filter((p) => p.id !== poolId);
-  const actions = targetPools.map((p) => ({
-    label: p.id ? `Move to ${p.name}` : "Unassign",
-    onClick: () => onAssign(team, poolId, p.id || null),
-  }));
+  const actions = readOnly
+    ? []
+    : targetPools.map((p) => ({
+        label: p.id ? `Move to ${p.name}` : "Unassign",
+        onClick: () => onAssign(team, poolId, p.id || null),
+      }));
   return (
     <div>
       <ListGroup.Item className="d-flex justify-content-between">
@@ -20,7 +22,14 @@ const TeamRow = ({ team, poolId, pools, onAssign }) => {
   );
 };
 
-const PoolCard = ({ pool, teams, onAssignTeam, pools, actions = null }) => {
+const PoolCard = ({
+  pool,
+  teams,
+  onAssignTeam,
+  pools,
+  actions = null,
+  readOnly,
+}) => {
   return (
     <div>
       <Card
@@ -44,6 +53,7 @@ const PoolCard = ({ pool, teams, onAssignTeam, pools, actions = null }) => {
               poolId={pool.id || null}
               pools={pools}
               onAssign={onAssignTeam}
+              readOnly={readOnly}
             />
           ))}
         </ListGroup>

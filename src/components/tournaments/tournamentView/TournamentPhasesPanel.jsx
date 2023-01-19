@@ -9,7 +9,7 @@ import {
 import { Events } from "@libs/liveEvents";
 
 import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
-import { Edit } from "@components/common/icon";
+import { Expand } from "@components/common/icon";
 import Card from "@components/common/cards";
 import toast from "@components/common/toast";
 import PoolsModal from "@components/tournaments/tournamentView/pools/PoolsModal";
@@ -48,15 +48,11 @@ const TournamentPhasesPanel = ({
         className="TournamentPhasesPanel"
         shadow
         title="Team Pools"
-        actions={
-          editable
-            ? [
-                {
-                  component: <Edit onClick={() => setShowModal(true)} />,
-                },
-              ]
-            : []
-        }
+        actions={[
+          {
+            component: <Expand onClick={() => setShowModal(true)} />,
+          },
+        ]}
       />
       {showModal && (
         <PoolsModal
@@ -65,6 +61,7 @@ const TournamentPhasesPanel = ({
           poolTeams={poolTeams}
           teamsNotAssignedPools={teamsNotAssignedPools}
           onHide={() => setShowModal(false)}
+          editable={editable}
         />
       )}
     </>

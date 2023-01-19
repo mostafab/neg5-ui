@@ -12,27 +12,37 @@ const renderPhaseTabContent = (
   phaseId,
   pools,
   teamsNotAssignedPools,
-  poolTeams
+  poolTeams,
+  editable
 ) => {
   const matching = pools.filter((p) => p.phaseId === phaseId);
   return (
     <>
-      <Row>
-        <Col lg={4} md={6} sm={12}>
-          <PoolForm className="mt-4" phaseId={phaseId} pool={null} />
-        </Col>
-      </Row>
+      {editable && (
+        <Row>
+          <Col lg={4} md={6} sm={12}>
+            <PoolForm className="mt-4" phaseId={phaseId} pool={null} />
+          </Col>
+        </Row>
+      )}
       <TeamPoolsEditor
         teamsNotAssignedPools={teamsNotAssignedPools[phaseId]}
         phaseId={phaseId}
         pools={matching}
         poolTeams={poolTeams}
+        readOnly={!editable}
       />
     </>
   );
 };
 
-const PhaseTabs = ({ phases, pools, teamsNotAssignedPools, poolTeams }) => {
+const PhaseTabs = ({
+  phases,
+  pools,
+  teamsNotAssignedPools,
+  poolTeams,
+  editable,
+}) => {
   const [selectedTab, setSelectedTab] = useState(
     phases.length === 0 ? "new" : phases[0].id
   );
@@ -58,7 +68,13 @@ const PhaseTabs = ({ phases, pools, teamsNotAssignedPools, poolTeams }) => {
             </>
           }
         >
-          {renderPhaseTabContent(p.id, pools, teamsNotAssignedPools, poolTeams)}
+          {renderPhaseTabContent(
+            p.id,
+            pools,
+            teamsNotAssignedPools,
+            poolTeams,
+            editable
+          )}
         </Tab>
       ))}
     </Tabs>

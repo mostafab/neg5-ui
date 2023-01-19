@@ -58,6 +58,7 @@ const TeamPoolsEditor = ({
   pools,
   poolTeams,
   teamsNotAssignedPools = [],
+  readOnly = false,
 }) => {
   const [poolAssignments, setPoolAssignments] = useState(() => {
     return buildInitialState(pools, poolTeams, teamsNotAssignedPools);
@@ -207,6 +208,7 @@ const TeamPoolsEditor = ({
           teams={poolAssignments.teamsNotAssignedPools}
           onAssignTeam={onAssignTeam}
           pools={allPools}
+          readOnly={readOnly}
         />
       </Col>
       <Col lg={8} md={7} sm={12}>
@@ -220,11 +222,16 @@ const TeamPoolsEditor = ({
                   teams={poolAssignments.poolTeams[p.id] || []}
                   onAssignTeam={onAssignTeam}
                   pools={allPools}
-                  actions={[
-                    {
-                      component: <X onClick={() => onRemovePool(p.id)} />,
-                    },
-                  ]}
+                  readOnly={readOnly}
+                  actions={
+                    readOnly
+                      ? []
+                      : [
+                          {
+                            component: <X onClick={() => onRemovePool(p.id)} />,
+                          },
+                        ]
+                  }
                 />
               </Col>
             ))}
