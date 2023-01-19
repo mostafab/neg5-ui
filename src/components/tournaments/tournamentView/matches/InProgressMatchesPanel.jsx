@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import orderBy from "lodash/orderBy";
 
 import Card from "@components/common/cards";
@@ -17,6 +17,15 @@ const InProgressMatchesPanel = ({
   rules,
 }) => {
   const [selected, setSelected] = useState(null);
+  useEffect(() => {
+    if (!selected) {
+      return;
+    }
+    const match = draftScoresheets.find((d) => d.id === selected.id);
+    if (match && match.lastUpdatedAt !== selected.lastUpdatedAt) {
+      setSelected(match);
+    }
+  }, [draftScoresheets]);
   const scoresheetTeams = selected
     ? orderBy(
         teams.filter(
