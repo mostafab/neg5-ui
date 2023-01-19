@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 
 import { useAppDispatch } from "@store";
@@ -10,9 +10,11 @@ import Modal from "@components/common/modal";
 import Card from "@components/common/cards";
 import Button from "@components/common/button";
 
+import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
 import ScheduledMatches from "@components/scheduling/ScheduledMatches";
 
 import { ScoresheetState } from "@libs/enums";
+import { Events } from "@libs/liveEvents";
 
 import ScoresheetStartForm from "./ScoresheetStartForm";
 import ScoresheetContainer from "./ScoresheetContainer";
@@ -53,6 +55,7 @@ const ScoresheetModal = ({
   useEffect(() => {
     setStartFormSeedValues(null);
   }, [prestartStage]);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
   const getTitle = () => {
     if (!scoresheetStartValues) {
       return "Scoresheet";
@@ -95,6 +98,9 @@ const ScoresheetModal = ({
     );
     if (!response.errors) {
       dispatch(scoresheetDeleted({ id: scoresheet.id }));
+      liveChangesContext.trigger(Events.scoresheet.deleted, {
+        id: scoresheet.id,
+      });
     }
   };
 
