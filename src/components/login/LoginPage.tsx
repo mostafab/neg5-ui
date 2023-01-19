@@ -46,6 +46,8 @@ const LoginPage = ({
       {googleClientId && (
         <div className="mt-3">
           <GoogleLogin
+            theme="outline"
+            shape="rectangular"
             onSuccess={(response) => {
               console.log(response);
             }}
