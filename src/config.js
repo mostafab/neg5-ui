@@ -11,4 +11,5 @@ export default {
     logOutput: process.env.NODE_ENV !== "production",
   },
   statsBaseUrl: process.env.NEG5_STATS_BASE_URL,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
 };

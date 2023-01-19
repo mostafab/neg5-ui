@@ -1,9 +1,9 @@
 const ContentSecurityPolicy = `
   default-src 'self' wss://ws-mt1.pusher.com https://sockjs-mt1.pusher.com;
   img-src 'self' data:;
-  script-src 'self' 'unsafe-eval';
-  child-src 'self';
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com;
+  child-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com;
   font-src 'self' https://fonts.gstatic.com;  
 `;
 
@@ -29,5 +29,6 @@ module.exports = {
     PUSHER_APP_CLUSTER: process.env.PUSHER_APP_CLUSTER,
     PUSHER_ENABLED: process.env.PUSHER_ENABLED,
     NEG5_STATS_BASE_URL: process.env.NEG5_STATS_BASE_URL,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
 };
