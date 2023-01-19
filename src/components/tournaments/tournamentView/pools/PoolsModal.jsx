@@ -12,6 +12,7 @@ const PoolsModal = ({
   poolTeams,
   teamsNotAssignedPools,
   onHide,
+  editable,
 }) => {
   return (
     <Modal
@@ -21,17 +22,20 @@ const PoolsModal = ({
       fullscreen
     >
       <Card className="TournamentPhasesPanel mt-3" shadow>
-        <Info>
-          Pools are split by the different phases of your tournament (Pool Play,
-          Playoffs, etc.). You can assign teams to pools in each respective
-          phase below, and then generate a schedule for each pool in the Matches
-          panel.
-        </Info>
+        {editable && (
+          <Info>
+            Pools are split by the different phases of your tournament (Pool
+            Play, Playoffs, etc.). You can assign teams to pools in each
+            respective phase below, and then generate a schedule for each pool
+            in the Matches panel.
+          </Info>
+        )}
         <PhaseTabs
           phases={phases}
           teamsNotAssignedPools={teamsNotAssignedPools}
           pools={pools}
           poolTeams={poolTeams}
+          editable={editable}
         />
       </Card>
     </Modal>

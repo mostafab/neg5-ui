@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
+import { Row, Col, Tab, Tabs } from "react-bootstrap";
 
 import pickBy from "lodash/pickBy";
-
+import { Add } from "@components/common/icon";
 import Modal from "@components/common/modal";
 import Card from "@components/common/cards";
+import PhaseForm from "@components/tournaments/tournamentView/pools/PhaseForm";
 
 import { groupTeamsWithoutAssignedPool, groupTeamsByPools } from "@libs/teams";
 
@@ -50,6 +50,20 @@ const SchedulingModal = ({
               </Tab>
             );
           })}
+          {editable && (
+            <Tab eventKey="new" key="new" title={<Add className="mb-1" />}>
+              <Row className="mt-3 p-3">
+                <Col lg={4} md={2} sm={12} />
+                <Col lg={4} md={8} sm={12}>
+                  <PhaseForm
+                    phase={null}
+                    onSubmitSuccess={(phase) => setActiveTab(phase.id)}
+                  />
+                </Col>
+                <Col lg={4} md={2} sm={12} />
+              </Row>
+            </Tab>
+          )}
         </Tabs>
       </Card>
     </Modal>

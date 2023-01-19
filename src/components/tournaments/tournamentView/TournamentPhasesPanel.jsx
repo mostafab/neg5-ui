@@ -5,12 +5,11 @@ import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
 import {
   poolsDeleted,
   poolCreated,
-  phaseCreated,
 } from "@features/tournamentView/phasesSlice";
 import { Events } from "@libs/liveEvents";
 
 import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
-import { Edit } from "@components/common/icon";
+import { Expand } from "@components/common/icon";
 import Card from "@components/common/cards";
 import toast from "@components/common/toast";
 import PoolsModal from "@components/tournaments/tournamentView/pools/PoolsModal";
@@ -37,15 +36,10 @@ const TournamentPhasesPanel = ({
     liveUpdatesContext.subscribe(Events.pools.added, (data) => {
       dispatch(poolCreated(data));
     });
-    liveUpdatesContext.subscribe(Events.phases.added, (data) => {
-      dispatch(phaseCreated(data));
-    });
-
     return () => {
       liveUpdatesContext.unsubscribe(Events.teams.poolsUpdated);
       liveUpdatesContext.unsubscribe(Events.pools.deleted);
       liveUpdatesContext.unsubscribe(Events.pools.added);
-      liveUpdatesContext.unsubscribe(Events.phases.added);
     };
   }, [liveUpdatesContext]);
   return (
@@ -54,15 +48,11 @@ const TournamentPhasesPanel = ({
         className="TournamentPhasesPanel"
         shadow
         title="Team Pools"
-        actions={
-          editable
-            ? [
-                {
-                  component: <Edit onClick={() => setShowModal(true)} />,
-                },
-              ]
-            : []
-        }
+        actions={[
+          {
+            component: <Expand onClick={() => setShowModal(true)} />,
+          },
+        ]}
       />
       {showModal && (
         <PoolsModal
@@ -71,6 +61,7 @@ const TournamentPhasesPanel = ({
           poolTeams={poolTeams}
           teamsNotAssignedPools={teamsNotAssignedPools}
           onHide={() => setShowModal(false)}
+          editable={editable}
         />
       )}
     </>

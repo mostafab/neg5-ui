@@ -26,6 +26,7 @@ const ScoresheetsList = ({
   teams,
   onDelete,
   filter = true,
+  selectable = () => true,
 }) => {
   const [limitList, setLimit] = useState(filter);
   return (
@@ -48,7 +49,7 @@ const ScoresheetsList = ({
               shadow={false}
               title={
                 <h6>
-                  {onSelect ? (
+                  {onSelect && selectable(scoresheet) ? (
                     <a
                       role="button"
                       onClick={(e) => {
@@ -66,7 +67,7 @@ const ScoresheetsList = ({
               }
               className="mb-3"
               actions={
-                onDelete
+                onDelete && selectable(scoresheet)
                   ? [
                       {
                         component: (
