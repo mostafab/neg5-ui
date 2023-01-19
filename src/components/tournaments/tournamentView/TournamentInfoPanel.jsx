@@ -67,9 +67,6 @@ const TournamentInfoPanel = ({ tournamentInfo, editable }) => {
             QBJ
           </a>
         </div>
-        <div className="mb-2">
-          
-        </div>
         {tournamentInfo.hidden && (
           <Pill className="mb-2" type="secondary">
             Hidden
