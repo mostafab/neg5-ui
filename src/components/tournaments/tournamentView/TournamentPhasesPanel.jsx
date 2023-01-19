@@ -5,7 +5,6 @@ import { teamsPoolsUpdated } from "@features/tournamentView/teamsSlice";
 import {
   poolsDeleted,
   poolCreated,
-  phaseCreated,
 } from "@features/tournamentView/phasesSlice";
 import { Events } from "@libs/liveEvents";
 
@@ -37,15 +36,10 @@ const TournamentPhasesPanel = ({
     liveUpdatesContext.subscribe(Events.pools.added, (data) => {
       dispatch(poolCreated(data));
     });
-    liveUpdatesContext.subscribe(Events.phases.added, (data) => {
-      dispatch(phaseCreated(data));
-    });
-
     return () => {
       liveUpdatesContext.unsubscribe(Events.teams.poolsUpdated);
       liveUpdatesContext.unsubscribe(Events.pools.deleted);
       liveUpdatesContext.unsubscribe(Events.pools.added);
-      liveUpdatesContext.unsubscribe(Events.phases.added);
     };
   }, [liveUpdatesContext]);
   return (

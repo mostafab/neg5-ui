@@ -13,6 +13,7 @@ import {
   matchDeleted,
   loadSchedulesAsync,
 } from "@features/tournamentView/matchesSlice";
+import { phaseCreated } from "@features/tournamentView/phasesSlice";
 
 import Card from "@components/common/cards";
 import Icon, { Add } from "@components/common/icon";
@@ -88,12 +89,16 @@ const TournamentMatchesPanel = ({
         toast(`Schedule updated`, `${phaseName} schedule was just updated.`);
       }
     );
+    liveChangesContext.subscribe(Events.phases.added, (data) => {
+      dispatch(phaseCreated(data));
+    });
 
     return () => {
       liveChangesContext.unsubscribe(Events.scoresheet.createdOrUpdated);
       liveChangesContext.unsubscribe(Events.match.createdOrUpdated);
       liveChangesContext.unsubscribe(Events.match.deleted);
       liveChangesContext.unsubscribe(Events.schedule.createdOrUpdated);
+      liveChangesContext.unsubscribe(Events.phases.added);
     };
   }, [liveChangesContext, teams, tournamentId, phases]);
   const enoughTeamsToAddMatch = teams.length >= 2;

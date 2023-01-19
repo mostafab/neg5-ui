@@ -3,10 +3,9 @@ import { Row, Col } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
-import { Warning, Add } from "@components/common/icon";
+import { Warning } from "@components/common/icon";
 
 import PoolForm from "./PoolForm";
-import PhaseForm from "./PhaseForm";
 import TeamPoolsEditor from "./TeamPoolsEditor";
 
 const renderPhaseTabContent = (
@@ -62,18 +61,6 @@ const PhaseTabs = ({ phases, pools, teamsNotAssignedPools, poolTeams }) => {
           {renderPhaseTabContent(p.id, pools, teamsNotAssignedPools, poolTeams)}
         </Tab>
       ))}
-      <Tab eventKey="new" key="new" title={<Add className="mb-1" />}>
-        <Row className="mt-3 p-3">
-          <Col lg={4} md={2} sm={12} />
-          <Col lg={4} md={8} sm={12}>
-            <PhaseForm
-              phase={null}
-              onSubmitSuccess={(phase) => setSelectedTab(phase.id)}
-            />
-          </Col>
-          <Col lg={4} md={2} sm={12} />
-        </Row>
-      </Tab>
     </Tabs>
   );
 };
