@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import dayjs from "dayjs";
 
+import config from "config";
+
 import { useAppDispatch } from "@store";
 import { informationUpdated } from "@features/tournamentView/tournamentInfoSlice";
 import { Events } from "@libs/liveEvents";
@@ -48,6 +50,26 @@ const TournamentInfoPanel = ({ tournamentInfo, editable }) => {
             : []
         }
       >
+        <div className="mb-2">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="me-2"
+            href={`${config.statsBaseUrl}/t/${tournamentInfo.id}`}
+          >
+            Stats
+          </a>
+          <a
+            href={`/neg5-api/tournaments/${tournamentInfo.id}/qbj`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            QBJ
+          </a>
+        </div>
+        <div className="mb-2">
+          
+        </div>
         {tournamentInfo.hidden && (
           <Pill className="mb-2" type="secondary">
             Hidden

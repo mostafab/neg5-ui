@@ -10,4 +10,5 @@ export default {
     cluster: process.env.PUSHER_APP_CLUSTER,
     logOutput: process.env.NODE_ENV !== "production",
   },
+  statsBaseUrl: process.env.NEG5_STATS_BASE_URL,
 };
