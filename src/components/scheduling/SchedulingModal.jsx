@@ -50,18 +50,20 @@ const SchedulingModal = ({
               </Tab>
             );
           })}
-          <Tab eventKey="new" key="new" title={<Add className="mb-1" />}>
-            <Row className="mt-3 p-3">
-              <Col lg={4} md={2} sm={12} />
-              <Col lg={4} md={8} sm={12}>
-                <PhaseForm
-                  phase={null}
-                  onSubmitSuccess={(phase) => setActiveTab(phase.id)}
-                />
-              </Col>
-              <Col lg={4} md={2} sm={12} />
-            </Row>
-          </Tab>
+          {editable && (
+            <Tab eventKey="new" key="new" title={<Add className="mb-1" />}>
+              <Row className="mt-3 p-3">
+                <Col lg={4} md={2} sm={12} />
+                <Col lg={4} md={8} sm={12}>
+                  <PhaseForm
+                    phase={null}
+                    onSubmitSuccess={(phase) => setActiveTab(phase.id)}
+                  />
+                </Col>
+                <Col lg={4} md={2} sm={12} />
+              </Row>
+            </Tab>
+          )}
         </Tabs>
       </Card>
     </Modal>
