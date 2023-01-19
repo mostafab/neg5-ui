@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
-import InitPusher from "@libs/pusher";
+import Pusher from "@libs/pusher";
 import { useAppDispatch } from "@store";
 import { loadTournamentDataAsync } from "@features/tournamentView/tournamentInfoSlice";
 
@@ -30,7 +30,7 @@ const TournamentRootView = ({ tournamentId }) => {
   });
   // Subscribe to Pusher updates
   useEffect(() => {
-    const pusher = InitPusher();
+    const pusher = Pusher();
     if (pusher) {
       const channelName = `presence-tournament-view-${tournamentId}`;
       const channel = pusher.subscribe(channelName);
