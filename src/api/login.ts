@@ -12,3 +12,10 @@ export const attemptRegister = async (body) => {
     data: response.data,
   };
 };
+
+export const attemptGoogleLogin = async (oauthResponse) => {
+  const response = await client.post("/neg5-api/login/google", oauthResponse);
+  return {
+    token: response.headers["neg5_token"],
+  };
+};

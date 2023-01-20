@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Col, Row, Container } from "react-bootstrap";
 import { useRouter } from "next/router";
 
 import Card from "@components/common/cards";
 import { Error } from "@components/common/alerts";
+import GoogleLogin from "@components/login/GoogleLogin";
 
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
@@ -45,16 +46,7 @@ const LoginPage = ({
       />
       {googleClientId && (
         <div className="mt-3">
-          <GoogleLogin
-            theme="outline"
-            shape="rectangular"
-            onSuccess={(response) => {
-              console.log(response);
-            }}
-            onError={() => {
-              console.log("Uh oh.");
-            }}
-          />
+          <GoogleLogin onLoginSuccess={() => router.push("/tournaments")} />
         </div>
       )}
       <div className="mt-3">
