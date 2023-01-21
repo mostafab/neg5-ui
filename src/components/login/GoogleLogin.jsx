@@ -10,10 +10,15 @@ const GoogleLogin = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
   const onSuccess = async (response) => {
     setLoading(true);
-    const token = (await attemptGoogleLogin(response)).token;
-    setLoginCookie(token);
-    setLoading(false);
-    onLoginSuccess();
+    try {
+      const token = (await attemptGoogleLogin(response)).token;
+      setLoginCookie(token);
+      setLoading(false);
+      onLoginSuccess();
+    } catch (e) {
+      console.error(e);
+      setLoading(false);
+    }
   };
   return (
     <div>
