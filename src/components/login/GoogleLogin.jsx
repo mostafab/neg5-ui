@@ -28,7 +28,7 @@ const GoogleLogin = ({ onLoginSuccess }) => {
           shape="rectangular"
           onSuccess={onSuccess}
           onError={() => {
-            console.log("Uh oh.");
+            console.error("Encountered error attempting to do Google login.");
           }}
         />
       )}
