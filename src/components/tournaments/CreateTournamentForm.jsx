@@ -45,7 +45,12 @@ const validation = Yup.object({
   ...rulesValidation(),
 });
 
-const CreateTournamentForm = ({ submitting, error = null }) => {
+const CreateTournamentForm = ({
+  submitting,
+  error = null,
+  onSuccess,
+  readOnly = false,
+}) => {
   const dispatch = useAppDispatch();
   const [showRules, setShowRules] = useState(false);
 
@@ -91,9 +96,10 @@ const CreateTournamentForm = ({ submitting, error = null }) => {
       validation={validation}
       submitButtonText="Create Tournament"
       onSubmit={(values) => {
-        dispatch(createTournamentAsync({ values }));
+        dispatch(createTournamentAsync({ values, onSuccess }));
       }}
       submitting={submitting}
+      readOnly={readOnly}
     >
       {renderFields()}
     </Form>

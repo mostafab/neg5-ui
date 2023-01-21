@@ -30,8 +30,9 @@ const myTournamentsSlice = createSlice({
         state.submittingTournament = true;
         state.submittingTournamentError = null;
       })
-      .addCase(createTournamentAsync.fulfilled, (state) => {
+      .addCase(createTournamentAsync.fulfilled, (state, action) => {
         state.submittingTournament = false;
+        state.tournaments.push(action.payload);
       })
       .addCase(createTournamentAsync.rejected, (state, action) => {
         state.submittingTournament = false;
@@ -62,7 +63,7 @@ export const createTournamentAsync = createAsyncThunk(
       throw e;
     }
     if (onSuccess) {
-      onSuccess();
+      onSuccess(result);
     }
     return result;
   }
