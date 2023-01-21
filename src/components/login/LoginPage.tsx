@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Col, Row, Container } from "react-bootstrap";
 import { useRouter } from "next/router";
 
 import Card from "@components/common/cards";
 import { Error } from "@components/common/alerts";
+import GoogleLogin from "@components/login/GoogleLogin";
 
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
@@ -13,6 +15,7 @@ const LoginPage = ({
   requestingAccount,
   registerError,
   loginError,
+  googleClientId = null,
 }) => {
   const [registering, setRegistering] = useState(false);
   const router = useRouter();
@@ -41,8 +44,13 @@ const LoginPage = ({
         submitting={loggingIn}
         onLoginSuccess={() => router.push("/tournaments")}
       />
+      {googleClientId && (
+        <div className="mt-3">
+          <GoogleLogin onLoginSuccess={() => router.push("/tournaments")} />
+        </div>
+      )}
       <div className="mt-3">
-        <p className="mb-0 text-center">
+        <p className="mb-3 text-center">
           {"Don't have an account? "}
           <a
             role="button"
@@ -57,17 +65,19 @@ const LoginPage = ({
     </>
   );
   return (
-    <Container className="LoginPage">
-      <Row className="vh-100 d-flex justify-content-center align-items-center">
-        <Col md={8} lg={6} xs={12}>
-          <Card>
-            <div className="mb-3 mt-md-4">
-              <div className="mb-3">{formComponent}</div>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <Container className="LoginPage">
+        <Row className="vh-100 d-flex justify-content-center align-items-center">
+          <Col md={8} lg={6} xs={12}>
+            <Card>
+              <div className="mb-3 mt-md-4">
+                <div className="mb-3">{formComponent}</div>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </GoogleOAuthProvider>
   );
 };
 

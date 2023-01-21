@@ -34,9 +34,9 @@ const RegistrationForm = ({ submitting = false, onRegisterSuccess = null }) => {
       validation={validation}
       submitting={submitting}
     >
+      <Text name="username" label="Username" />
       <Text name="email" label="Email address" />
       <Text name="name" label="Name" />
-      <Text name="username" label="Username" />
       <Password name="password" label="Password" />
       <Password name="confirmPassword" label="Enter your password again" />
     </Form>

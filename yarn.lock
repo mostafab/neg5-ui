@@ -908,6 +908,11 @@
   dependencies:
     "@babel/runtime" "^7.6.2"
 
+"@react-oauth/google@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.6.0.tgz#f0af1e82034420af31be78cbc50d9b095923ed3d"
+  integrity sha512-F+VtUk40C5zjL/E3VW5/nsIfm7gmad4HgpGjW3shHqsL6hopOEIncWIGlEzKs2H/hlZw5mHkyq2ONmw5TI2j/g==
+
 "@reduxjs/toolkit@1.9.1":
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.9.1.tgz#4c34dc4ddcec161535288c60da5c19c3ef15180e"

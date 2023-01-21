@@ -17,7 +17,13 @@ app
     const port = process.env.PORT || 3100;
     const server = express();
 
-    server.use(helmet());
+    server.use(
+      helmet({
+        crossOriginOpenerPolicy: {
+          policy: "same-origin-allow-popups",
+        },
+      })
+    );
     server.use(compression());
     server.use(cookieParser());
     if (process.env.NODE_ENV !== "production") {
