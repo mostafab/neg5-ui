@@ -1,1 +1,9 @@
 @use "./toasts.scss";
+
+#googleBtnContainer div[role="button"] {
+  border-radius: 0;
+
+  & span {
+    font-family: "Lato";
+  }
+}

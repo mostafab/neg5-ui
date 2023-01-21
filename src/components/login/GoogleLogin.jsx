@@ -21,7 +21,7 @@ const GoogleLogin = ({ onLoginSuccess }) => {
     }
   };
   return (
-    <div>
+    <div id="googleBtnContainer">
       {loading && (
         <div className="text-center">
           <Spinner />
