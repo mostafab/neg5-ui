@@ -29,6 +29,7 @@ const GoogleLogin = ({ onLoginSuccess }) => {
       )}
       {!loading && (
         <ExtGoogleLogin
+          logo_alignment="center"
           theme="outline"
           shape="rectangular"
           onSuccess={onSuccess}
