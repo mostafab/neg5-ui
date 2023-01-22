@@ -7,7 +7,7 @@ import mapValues from "lodash/mapValues";
 import { answerTypeToPillType } from "@libs/tournamentForms";
 import { orderPlayers } from "@libs/scoresheet";
 
-import { Info } from "@components/common/alerts";
+import { Info, Warning } from "@components/common/alerts";
 import Card from "@components/common/cards";
 import { Edit } from "@components/common/icon";
 
@@ -126,12 +126,15 @@ const ScoresheetTable = ({
   };
   return (
     <Wrapper>
-      {currentCycle?.number > 1 && (
+      {currentCycle?.number > 1 && !activeEditCycleNumber && (
         <Info>
           You can edit a previous tossup/bonus cycle by clicking the{" "}
           <Edit className="me-1" />
           icon in the appropriate row.
         </Info>
+      )}
+      {activeEditCycleNumber && (
+        <Warning>Editing tossup/bonus cycle {activeEditCycleNumber}.</Warning>
       )}
       <Table
         bordered
