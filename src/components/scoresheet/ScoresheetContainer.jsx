@@ -91,7 +91,7 @@ const ScoresheetContainer = ({
     if (scoresheetState.cycles.length > 0) {
       createOrUpdateDraftScoresheet();
     }
-  }, [scoresheetState.cycles.length]);
+  }, [scoresheetState.cycles]);
 
   const onEndMatch = () => {
     setEndingMatch(true);
@@ -355,7 +355,7 @@ const ScoresheetContainer = ({
           </Col>
           <Col lg={12} md={12} sm={12}>
             <ScoresheetSummary
-              cycles={scoresheetState.cycles}
+              cycles={tableCycles}
               teams={scoresheetTeams}
               currentCycle={scoresheetState.currentCycle}
               rules={rules}
@@ -376,7 +376,13 @@ const ScoresheetContainer = ({
             teams={scoresheetTeams}
             rules={rules}
             onClickAnswer={onClickAnswer}
-            onBack={onBack}
+            onBack={
+              scoresheetState.currentCycle.number > 1 ||
+              (scoresheetState.currentCycle.number === 1 &&
+                scoresheetState.currentCycle.stage === CycleStage.Bonus)
+                ? onBack
+                : null
+            }
             onBonus={onBonus}
             onNextTossup={onNextTossup}
             onNoAnswer={onNoAnswer}

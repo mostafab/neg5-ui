@@ -90,7 +90,11 @@ const ScoresheetTable = ({
     return (
       <tr className={isCurrentCycle ? "table-active" : ""} key={cycle.number}>
         {!readOnly && (
-          <td>
+          <td
+            className={
+              cycle.number === activeEditCycleNumber ? "text-bg-warning" : ""
+            }
+          >
             {!isCurrentCycle && (
               <Edit onClick={onEditCycle ? () => onEditCycle(cycle) : null} />
             )}
@@ -103,7 +107,7 @@ const ScoresheetTable = ({
         <td className={isCurrentCycle ? "text-bg-primary" : ""}>
           {getTeamScoreUpToCycle(cycle, firstTeam)}
         </td>
-        <td className={cycle.number === activeEditCycleNumber ? "text-bg-warning" : ""}>{cycle.number}</td>
+        <td>{cycle.number}</td>
         <td className={isCurrentCycle ? "text-bg-primary" : ""}>
           {getTeamScoreUpToCycle(cycle, secondTeam)}
         </td>
