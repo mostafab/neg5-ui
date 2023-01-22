@@ -326,6 +326,11 @@ const ScoresheetContainer = ({
     freshCycle.activePlayers = cycle.activePlayers || [];
     setActivePastCycle(freshCycle);
   };
+
+  const onCancelEdit = () => {
+    setActivePastCycle(null);
+  };
+
   const tableCycles = scoresheetState.cycles.map((c) => {
     if (activePastCycle?.number === c.number) {
       return activePastCycle;
@@ -351,6 +356,7 @@ const ScoresheetContainer = ({
               className="sticky-top"
               onEditCycle={onEditPastCycle}
               activeEditCycleNumber={activePastCycle?.number}
+              onCancelEdit={onCancelEdit}
             />
           </Col>
           <Col lg={12} md={12} sm={12}>
@@ -376,13 +382,7 @@ const ScoresheetContainer = ({
             teams={scoresheetTeams}
             rules={rules}
             onClickAnswer={onClickAnswer}
-            onBack={
-              scoresheetState.currentCycle.number > 1 ||
-              (scoresheetState.currentCycle.number === 1 &&
-                scoresheetState.currentCycle.stage === CycleStage.Bonus)
-                ? onBack
-                : null
-            }
+            onBack={scoresheetState.currentCycle.number > 1 ? onBack : null}
             onBonus={onBonus}
             onNextTossup={onNextTossup}
             onNoAnswer={onNoAnswer}
@@ -401,7 +401,7 @@ const ScoresheetContainer = ({
             teams={scoresheetTeams}
             rules={rules}
             onClickAnswer={onClickAnswer}
-            onBack={onBack}
+            onBack={activePastCycle.stage === CycleStage.Bonus ? onBack : null}
             onBonus={onBonus}
             onNextTossup={onNextTossup}
             onNoAnswer={onNoAnswer}

@@ -8,6 +8,7 @@ import { answerTypeToPillType } from "@libs/tournamentForms";
 import { orderPlayers } from "@libs/scoresheet";
 
 import { Info, Warning } from "@components/common/alerts";
+import Button from "@components/common/button";
 import Card from "@components/common/cards";
 import { Edit } from "@components/common/icon";
 
@@ -22,6 +23,7 @@ const ScoresheetTable = ({
   inCard = true,
   onEditCycle,
   activeEditCycleNumber = null,
+  onCancelEdit = null,
 }) => {
   const [firstTeam, secondTeam] = teams;
   const firstTeamOrdering = playerOrderings[firstTeam.id] || [];
@@ -134,7 +136,12 @@ const ScoresheetTable = ({
         </Info>
       )}
       {activeEditCycleNumber && (
-        <Warning>Editing tossup/bonus cycle {activeEditCycleNumber}.</Warning>
+        <Warning>
+          Editing tossup/bonus cycle {activeEditCycleNumber}.
+          <Button className="ms-3" type="secondary" onClick={onCancelEdit}>
+            Cancel
+          </Button>
+        </Warning>
       )}
       <Table
         bordered
