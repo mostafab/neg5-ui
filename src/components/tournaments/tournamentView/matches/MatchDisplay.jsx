@@ -161,7 +161,7 @@ const MatchDisplay = ({
           }}
         />
       )}
-      {viewScoresheet && scoresheetData && (
+      {match.id && viewScoresheet && scoresheetData && (
         <>
           <Button
             className="mb-3"
