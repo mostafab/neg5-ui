@@ -27,8 +27,15 @@ const ScoresheetsList = ({
   onDelete,
   filter = true,
   selectable = () => true,
+  maxHeight,
 }) => {
   const [limitList, setLimit] = useState(filter);
+  const styles = maxHeight
+    ? {
+        maxHeight,
+        overflow: "scroll",
+      }
+    : {};
   return (
     <>
       {filter && (
@@ -40,7 +47,7 @@ const ScoresheetsList = ({
           <Checkbox name="limit" label="Only Mine" onChange={setLimit} />
         </Form>
       )}
-      <div>
+      <div style={styles}>
         {orderBy(scoresheets, "lastUpdatedAt", "desc")
           .filter((s) => !limitList || s.addedBy === currentUser.username)
           .map((scoresheet) => (

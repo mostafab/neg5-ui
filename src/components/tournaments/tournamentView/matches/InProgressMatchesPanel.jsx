@@ -55,15 +55,14 @@ const InProgressMatchesPanel = ({
           {draftScoresheets.length}{" "}
           {draftScoresheets.length === 1 ? "match" : "matches"} in progress
         </Pill>
-        <div style={{ maxHeight: "75vh", overflow: "scroll" }}>
-          <ScoresheetsList
-            scoresheets={draftScoresheets}
-            teams={teams}
-            currentUser={currentUser}
-            filter={false}
-            onSelect={(s) => setSelected(s)}
-          />
-        </div>
+        <ScoresheetsList
+          scoresheets={draftScoresheets}
+          teams={teams}
+          currentUser={currentUser}
+          filter={false}
+          onSelect={(s) => setSelected(s)}
+          maxHeight="75vh"
+        />
       </Card>
     </>
   );

@@ -181,6 +181,7 @@ const ScoresheetModal = ({
               onSelect={onSelectScoresheet}
               onDelete={onDelete}
               selectable={(s) => s.addedBy === currentUser.username}
+              maxHeight="75vh"
             />
           </>
         );
