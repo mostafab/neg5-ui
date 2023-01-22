@@ -23,13 +23,14 @@ const CurrentCyclePanel = ({
   onToggleActive,
   onEndMatch,
   lastUpdatedAt,
+  isPastCycle = false,
 }) => {
-  const stageTitle = `${
+  const stageTitle = `${isPastCycle ? "Editing " : ""}${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
   } ${currentCycle.number}`;
   const title = (
     <div className="d-flex justify-content-between">
-      {stageTitle}
+      <div className={isPastCycle ? "text-warning" : ""}>{stageTitle}</div>
       {lastUpdatedAt && (
         <span className="small text-dark ms-2">
           Last saved at {dayjs(lastUpdatedAt).format("hh:mm:ss A")}

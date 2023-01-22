@@ -84,13 +84,14 @@ const ScoresheetContainer = ({
       scoresheetStartValues
     )
   );
+  const [activePastCycle, setActivePastCycle] = useState(null);
   const [endingMatch, setEndingMatch] = useState(false);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (scoresheetState.cycles.length > 0) {
       createOrUpdateDraftScoresheet();
     }
-  }, [scoresheetState.cycles.length]);
+  }, [scoresheetState.cycles]);
 
   const onEndMatch = () => {
     setEndingMatch(true);
@@ -120,53 +121,91 @@ const ScoresheetContainer = ({
   };
 
   const onBack = () => {
-    const nextState = produce(scoresheetState, (draft) => {
-      const { stage } = draft.currentCycle;
-      // If user clicks "Back" on a bonus, remove the most recent answer and reset to tossup stage
-      if (stage === CycleStage.Bonus) {
-        draft.currentCycle.stage = CycleStage.Tossup;
-        draft.currentCycle.answers.pop();
-        draft.currentCycle.bonuses = initialBonuses(rules);
+    if (activePastCycle) {
+      const { stage } = activePastCycle;
+      if (stage === CycleStage.Tossup) {
+        setActivePastCycle(null);
       } else {
-        draft.currentCycle = draft.cycles.pop();
-        draft.currentCycle.activePlayers = [];
+        const nextState = produce(activePastCycle, (draft) => {
+          draft.stage = CycleStage.Tossup;
+          draft.answers.pop();
+          draft.bonuses = initialBonuses(rules);
+        });
+        setActivePastCycle(nextState);
       }
-    });
-    setScoresheetState(nextState);
+    } else {
+      const nextState = produce(scoresheetState, (draft) => {
+        const { stage } = draft.currentCycle;
+        // If user clicks "Back" on a bonus, remove the most recent answer and reset to tossup stage
+        if (stage === CycleStage.Bonus) {
+          draft.currentCycle.stage = CycleStage.Tossup;
+          draft.currentCycle.answers.pop();
+          draft.currentCycle.bonuses = initialBonuses(rules);
+        } else {
+          draft.currentCycle = draft.cycles.pop();
+          draft.currentCycle.activePlayers = [];
+        }
+      });
+      setScoresheetState(nextState);
+    }
   };
 
   const onClickAnswer = ({ playerId, value }) => {
     const isNeg =
       rules.tossupValues.find((tv) => tv.value === value).answerType ===
       AnswerType.Neg;
-    const answerNumber = scoresheetState.currentCycle.answers.length + 1;
+    const answerNumber =
+      (activePastCycle || scoresheetState.currentCycle).answers.length + 1;
     const currentCycleNextState = {
-      ...scoresheetState.currentCycle,
+      ...(activePastCycle || scoresheetState.currentCycle),
       answers: [
-        ...scoresheetState.currentCycle.answers,
+        ...(activePastCycle || scoresheetState.currentCycle).answers,
         { playerId, value, number: answerNumber },
       ],
       stage: isNeg ? CycleStage.Tossup : CycleStage.Bonus,
     };
-    setScoresheetState({
-      ...scoresheetState,
-      currentCycle: currentCycleNextState,
-    });
+    if (activePastCycle) {
+      setActivePastCycle(currentCycleNextState);
+    } else {
+      setScoresheetState({
+        ...scoresheetState,
+        currentCycle: currentCycleNextState,
+      });
+    }
   };
 
   const onNoAnswer = () => {
-    const nextState = produce(scoresheetState, (draft) => {
-      // Clear out bonuses since this tossup wasn't answered successfully.
-      draft.currentCycle.bonuses = initialBonuses(rules);
-      draft.currentCycle.activePlayers = Object.values(
-        draft.activePlayers
-      ).flatMap((p) => p);
-      draft.cycles.push(draft.currentCycle);
-      const nextCycle = initialCurrentCycle(rules);
-      nextCycle.number = draft.currentCycle.number + 1;
-      draft.currentCycle = nextCycle;
-    });
-    setScoresheetState(nextState);
+    if (activePastCycle) {
+      const newCycleValue = produce(activePastCycle, (draft) => {
+        draft.bonuses = initialBonuses(rules);
+        draft.activePlayers = Object.values(draft.activePlayers).flatMap(
+          (p) => p
+        );
+      });
+      const nextScoresheetState = produce(scoresheetState, (draft) => {
+        draft.cycles = draft.cycles.map((c) => {
+          if (c.number === newCycleValue.number) {
+            return newCycleValue;
+          }
+          return c;
+        });
+      });
+      setScoresheetState(nextScoresheetState);
+      setActivePastCycle(null);
+    } else {
+      const nextState = produce(scoresheetState, (draft) => {
+        // Clear out bonuses since this tossup wasn't answered successfully.
+        draft.currentCycle.bonuses = initialBonuses(rules);
+        draft.currentCycle.activePlayers = Object.values(
+          draft.activePlayers
+        ).flatMap((p) => p);
+        draft.cycles.push(draft.currentCycle);
+        const nextCycle = initialCurrentCycle(rules);
+        nextCycle.number = draft.currentCycle.number + 1;
+        draft.currentCycle = nextCycle;
+      });
+      setScoresheetState(nextState);
+    }
   };
 
   const onUndoNeg = (teamId) => {
@@ -181,32 +220,65 @@ const ScoresheetContainer = ({
         .filter((p) => p.teamId === teamId)
         .map((p) => p.id)
     );
-    const nextState = produce(scoresheetState, (draft) => {
-      // Remove the neg by this team
-      draft.currentCycle.answers = draft.currentCycle.answers.filter(
-        (a) => !(negValues.has(a.value) && playerIds.has(a.playerId))
-      );
-    });
-    setScoresheetState(nextState);
+    if (activePastCycle) {
+      const nextState = produce(activePastCycle, (draft) => {
+        draft.answers = draft.answers.filter(
+          (a) => !(negValues.has(a.value) && playerIds.has(a.playerId))
+        );
+      });
+      setActivePastCycle(nextState);
+    } else {
+      const nextState = produce(scoresheetState, (draft) => {
+        // Remove the neg by this team
+        draft.currentCycle.answers = draft.currentCycle.answers.filter(
+          (a) => !(negValues.has(a.value) && playerIds.has(a.playerId))
+        );
+      });
+      setScoresheetState(nextState);
+    }
   };
 
   const onBonus = (teamId, number) => {
-    const nextState = produce(scoresheetState, (draft) => {
-      const match = draft.currentCycle.bonuses.find((b) => b.number === number);
-      match.answeringTeamId = teamId === match.answeringTeamId ? null : teamId;
-    });
-    setScoresheetState(nextState);
+    if (activePastCycle) {
+      const nextPastCycle = produce(activePastCycle, (draft) => {
+        const match = draft.bonuses.find((b) => b.number === number);
+        match.answeringTeamId =
+          teamId === match.answeringTeamId ? null : teamId;
+      });
+      setActivePastCycle(nextPastCycle);
+    } else {
+      const nextState = produce(scoresheetState, (draft) => {
+        const match = draft.currentCycle.bonuses.find(
+          (b) => b.number === number
+        );
+        match.answeringTeamId =
+          teamId === match.answeringTeamId ? null : teamId;
+      });
+      setScoresheetState(nextState);
+    }
   };
 
   const onNextTossup = () => {
     const nextState = produce(scoresheetState, (draft) => {
-      draft.currentCycle.activePlayers = draft.activePlayers;
-      draft.cycles.push(draft.currentCycle);
-      const nextCycle = initialCurrentCycle(rules);
-      nextCycle.number = draft.currentCycle.number + 1;
-      draft.currentCycle = nextCycle;
+      if (activePastCycle) {
+        draft.cycles = draft.cycles.map((c) => {
+          if (c.number === activePastCycle.number) {
+            return activePastCycle;
+          }
+          return c;
+        });
+      } else {
+        draft.currentCycle.activePlayers = draft.activePlayers;
+        draft.cycles.push(draft.currentCycle);
+        const nextCycle = initialCurrentCycle(rules);
+        nextCycle.number = draft.currentCycle.number + 1;
+        draft.currentCycle = nextCycle;
+      }
     });
     setScoresheetState(nextState);
+    if (activePastCycle) {
+      setActivePastCycle(null);
+    }
   };
 
   const onMovePlayer = ({ teamId, index, direction }) => {
@@ -248,6 +320,23 @@ const ScoresheetContainer = ({
     setScoresheetState(nextState);
   };
 
+  const onEditPastCycle = (cycle) => {
+    const freshCycle = initialCurrentCycle(rules);
+    freshCycle.number = cycle.number;
+    freshCycle.activePlayers = cycle.activePlayers || [];
+    setActivePastCycle(freshCycle);
+  };
+
+  const onCancelEdit = () => {
+    setActivePastCycle(null);
+  };
+
+  const tableCycles = scoresheetState.cycles.map((c) => {
+    if (activePastCycle?.number === c.number) {
+      return activePastCycle;
+    }
+    return c;
+  });
   return (
     <Row>
       <Col
@@ -260,16 +349,19 @@ const ScoresheetContainer = ({
           <Col lg={12} md={12} sm={12} className="mb-3">
             <ScoresheetTable
               currentCycle={scoresheetState.currentCycle}
-              cycles={scoresheetState.cycles}
+              cycles={tableCycles}
               teams={scoresheetTeams}
               rules={rules}
               playerOrderings={scoresheetState.playerOrderings}
               className="sticky-top"
+              onEditCycle={onEditPastCycle}
+              activeEditCycleNumber={activePastCycle?.number}
+              onCancelEdit={onCancelEdit}
             />
           </Col>
           <Col lg={12} md={12} sm={12}>
             <ScoresheetSummary
-              cycles={scoresheetState.cycles}
+              cycles={tableCycles}
               teams={scoresheetTeams}
               currentCycle={scoresheetState.currentCycle}
               rules={rules}
@@ -284,13 +376,13 @@ const ScoresheetContainer = ({
         sm={12}
         className="order-0 order-lg-1 order-md-1 order-xl-1 mb-3"
       >
-        {!endingMatch && (
+        {!endingMatch && !activePastCycle && (
           <CurrentCyclePanel
             currentCycle={scoresheetState.currentCycle}
             teams={scoresheetTeams}
             rules={rules}
             onClickAnswer={onClickAnswer}
-            onBack={onBack}
+            onBack={scoresheetState.currentCycle.number > 1 ? onBack : null}
             onBonus={onBonus}
             onNextTossup={onNextTossup}
             onNoAnswer={onNoAnswer}
@@ -301,6 +393,25 @@ const ScoresheetContainer = ({
             onToggleActive={onToggleActivePlayer}
             onEndMatch={onEndMatch}
             lastUpdatedAt={scoresheetState.lastUpdatedAt}
+          />
+        )}
+        {activePastCycle && (
+          <CurrentCyclePanel
+            currentCycle={activePastCycle}
+            teams={scoresheetTeams}
+            rules={rules}
+            onClickAnswer={onClickAnswer}
+            onBack={activePastCycle.stage === CycleStage.Bonus ? onBack : null}
+            onBonus={onBonus}
+            onNextTossup={onNextTossup}
+            onNoAnswer={onNoAnswer}
+            onUndoNeg={onUndoNeg}
+            playerOrderings={scoresheetState.playerOrderings}
+            onMovePlayer={onMovePlayer}
+            activePlayers={activePastCycle.activePlayers}
+            onToggleActive={onToggleActivePlayer}
+            onEndMatch={null}
+            isPastCycle
           />
         )}
         {endingMatch && (

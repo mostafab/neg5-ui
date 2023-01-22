@@ -7,8 +7,10 @@ import mapValues from "lodash/mapValues";
 import { answerTypeToPillType } from "@libs/tournamentForms";
 import { orderPlayers } from "@libs/scoresheet";
 
-import { Info } from "@components/common/alerts";
+import { Info, Warning } from "@components/common/alerts";
+import Button from "@components/common/button";
 import Card from "@components/common/cards";
+import { Edit } from "@components/common/icon";
 
 const ScoresheetTable = ({
   cycles,
@@ -19,6 +21,9 @@ const ScoresheetTable = ({
   className = "",
   readOnly = false,
   inCard = true,
+  onEditCycle,
+  activeEditCycleNumber = null,
+  onCancelEdit = null,
 }) => {
   const [firstTeam, secondTeam] = teams;
   const firstTeamOrdering = playerOrderings[firstTeam.id] || [];
@@ -73,24 +78,34 @@ const ScoresheetTable = ({
     return tossupSums + bonusSums;
   };
 
-  const renderPlayerAnswerCell = (player, cycle, role) => {
+  const renderPlayerAnswerCell = (player, cycle) => {
     const answer = getPlayerAnswerValueInCycle(cycle, player.id);
     return (
-      <td role={role} key={player.id} className={answer?.className || ""}>
+      <td key={player.id} className={answer?.className || ""}>
         {answer?.value || null}
       </td>
     );
   };
 
   const renderScoresheetCycleRow = (cycle) => {
-    const role = currentCycle === cycle || readOnly ? null : "button";
     const isCurrentCycle = cycle === currentCycle;
     return (
       <tr className={isCurrentCycle ? "table-active" : ""} key={cycle.number}>
-        {orderPlayers(firstTeam.players, firstTeamOrdering).map((player) =>
-          renderPlayerAnswerCell(player, cycle, role)
+        {!readOnly && (
+          <td
+            className={
+              cycle.number === activeEditCycleNumber ? "text-bg-warning" : ""
+            }
+          >
+            {!isCurrentCycle && (
+              <Edit onClick={onEditCycle ? () => onEditCycle(cycle) : null} />
+            )}
+          </td>
         )}
-        <td role={role}>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
+        {orderPlayers(firstTeam.players, firstTeamOrdering).map((player) =>
+          renderPlayerAnswerCell(player, cycle)
+        )}
+        <td>{getTeamBonusesInCycle(cycle, firstTeam.id)}</td>
         <td className={isCurrentCycle ? "text-bg-primary" : ""}>
           {getTeamScoreUpToCycle(cycle, firstTeam)}
         </td>
@@ -98,9 +113,9 @@ const ScoresheetTable = ({
         <td className={isCurrentCycle ? "text-bg-primary" : ""}>
           {getTeamScoreUpToCycle(cycle, secondTeam)}
         </td>
-        <td role={role}>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
+        <td>{getTeamBonusesInCycle(cycle, secondTeam.id)}</td>
         {orderPlayers(secondTeam.players, secondTeamOrdering).map((player) =>
-          renderPlayerAnswerCell(player, cycle, role)
+          renderPlayerAnswerCell(player, cycle)
         )}
       </tr>
     );
@@ -113,11 +128,20 @@ const ScoresheetTable = ({
   };
   return (
     <Wrapper>
-      {currentCycle?.number > 1 && (
+      {currentCycle?.number > 1 && !activeEditCycleNumber && (
         <Info>
-          You can change a previous tossup/bonus cycle by clicking into a table
-          cell.
+          You can edit a previous tossup/bonus cycle by clicking the{" "}
+          <Edit className="me-1" />
+          icon in the appropriate row.
         </Info>
+      )}
+      {activeEditCycleNumber && (
+        <Warning>
+          Editing tossup/bonus cycle {activeEditCycleNumber}.
+          <Button className="ms-3" type="secondary" onClick={onCancelEdit}>
+            Cancel
+          </Button>
+        </Warning>
       )}
       <Table
         bordered
@@ -128,6 +152,7 @@ const ScoresheetTable = ({
       >
         <thead>
           <tr>
+            {!readOnly && <th></th>}
             <th colSpan={firstTeam.players.length}>{firstTeam.name}</th>
             <th colSpan={5} />
             <th colSpan={secondTeam.players.length}>{secondTeam.name}</th>
@@ -135,6 +160,7 @@ const ScoresheetTable = ({
         </thead>
         <thead>
           <tr>
+            {!readOnly && <th></th>}
             {orderPlayers(firstTeam.players, firstTeamOrdering).map(
               (player) => (
                 <th title={player.name} key={player.id}>
