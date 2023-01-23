@@ -189,7 +189,7 @@ const MatchForm = ({
       onSubmit={internalOnSubmit}
       readOnly={readOnly}
       editableFields={editableFields}
-      onCancel={onCancel}
+      onCancel={match.id ? onCancel : null}
     >
       <ResetListener
         changeKey={match.id}
