@@ -18,9 +18,11 @@ const TeamsModal = ({
   onSelectTeam,
   editable,
 }) => {
-  const [addingGroup, setAddingGroup] = useState(false);
+  const [addingTeam, setAddingTeam] = useState(!Boolean(selectedTeam?.id));
   useEffect(() => {
-    setAddingGroup(false);
+    if (selectedTeam?.id) {
+      setAddingTeam(false);
+    }
   }, [selectedTeam]);
   return (
     <Modal title="Teams" fullscreen onHide={onHide} className="TeamsModal">
@@ -31,42 +33,36 @@ const TeamsModal = ({
               <Button
                 type="outline-primary"
                 className="mb-3"
-                onClick={() => onSelectTeam({})}
+                onClick={() => setAddingTeam(true)}
               >
-                Add A New Team
-              </Button>
-              <Button
-                type="outline-primary"
-                className="mb-3"
-                onClick={() => setAddingGroup(true)}
-              >
-                Add A Group
+                Add A Team
               </Button>
             </div>
           )}
           <TeamsList
-            selectedTeam={addingGroup ? null : selectedTeam}
+            selectedTeam={addingTeam ? null : selectedTeam}
             onSelectTeam={onSelectTeam}
             teams={teams}
             shadow
           />
         </Col>
         <Col lg={9} md={8} sm={12}>
-          {!addingGroup && (
+          {!addingTeam && (
             <TeamDisplay
               team={selectedTeam}
               matches={matches}
               teams={teams}
               onSubmitSuccess={onSelectTeam}
-              onDeleteSuccess={() => onSelectTeam({})}
+              onDeleteSuccess={() => setAddingTeam(true)}
               editable={editable}
             />
           )}
-          {addingGroup && (
-            <Card title="Add a Team Group">
+          {addingTeam && (
+            <Card title="Add a Team">
               <Info>
-                Add a Team Group when you have multiple teams from the same
-                school or organization participating in a tournament.
+                You should add more than one roster if you have multiple teams
+                from the same school or organization participating in a
+                tournament.
               </Info>
               <TeamGroupForm />
             </Card>

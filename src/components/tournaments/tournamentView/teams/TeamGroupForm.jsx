@@ -6,6 +6,7 @@ import { X } from "@components/common/icon";
 import Card from "@components/common/cards";
 import StateSelect from "@components/common/StateSelect";
 import { Form, Text, RepeatField } from "@components/common/forms";
+import TeamFields from "@components/tournaments/common/TeamFields";
 
 const initialValues = () => ({
   name: "",
@@ -37,7 +38,7 @@ const TeamGroupForm = () => {
             render={(_val, { index }, { remove }) => {
               return (
                 <Card
-                  title={`Team ${index + 1}`}
+                  title={`Roster ${index + 1}`}
                   key={index}
                   className="mb-3"
                   shadow={false}
@@ -47,11 +48,7 @@ const TeamGroupForm = () => {
                     },
                   ]}
                 >
-                  <Row>
-                    <Col lg={6}>
-                      <Text name={`teams[${index}].name`} label="Team Name" />
-                    </Col>
-                  </Row>
+                  <TeamFields fieldNamePrefix={`teams[${index}].`} />
                 </Card>
               );
             }}
