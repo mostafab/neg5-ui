@@ -33,7 +33,10 @@ const TeamsModal = ({
               <Button
                 type="outline-primary"
                 className="mb-3"
-                onClick={() => setAddingTeam(true)}
+                onClick={() => {
+                  setAddingTeam(true);
+                  onSelectTeam({});
+                }}
               >
                 Add A Team
               </Button>

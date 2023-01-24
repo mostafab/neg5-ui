@@ -32,7 +32,7 @@ const TeamGroupForm = () => {
           <RepeatField
             name="teams"
             addObjectProps={{
-              buttonText: "Add another Team",
+              buttonText: "Add another Roster",
               newObject: () => ({ name: "", players: [] }),
             }}
             render={(_val, { index }, { remove }) => {
