@@ -21,6 +21,10 @@ const ScheduleFilters = ({ teams, matches, onChange }) => {
     label: room,
     value: room,
   }));
+  const uniqueRounds = uniq(matches.map((m) => m.round)).map((r) => ({
+    value: r,
+    label: r,
+  }));
   const internalOnChange = (name) => (value) => {
     const nextState = {
       ...filtersState,
@@ -39,6 +43,13 @@ const ScheduleFilters = ({ teams, matches, onChange }) => {
         onChange={internalOnChange("teams")}
         searchable
       />
+      <Select
+        name="rounds"
+        multiple
+        options={uniqueRounds}
+        label="Rounds"
+        onChange={internalOnChange("rounds")}
+      />
       {uniqueRooms.length > 0 && (
         <Select
           name="rooms"
@@ -53,7 +64,7 @@ const ScheduleFilters = ({ teams, matches, onChange }) => {
   );
 };
 
-const ScheduledMatches = ({ matches, teams, onSelect }) => {
+const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
   const teamsById = keyBy(teams, "id");
   const [filters, setFilters] = useState(null);
 
@@ -75,6 +86,12 @@ const ScheduledMatches = ({ matches, teams, onSelect }) => {
           ) {
             return false;
           }
+          if (
+            filters.rounds.length > 0 &&
+            filters.rounds.indexOf(m.round) === -1
+          ) {
+            return false;
+          }
           const teamMatches =
             filters.teams.indexOf(m.team1Id) >= 0 ||
             filters.teams.indexOf(m.team2Id) >= 0;
@@ -85,11 +102,13 @@ const ScheduledMatches = ({ matches, teams, onSelect }) => {
         });
   return (
     <>
-      <ScheduleFilters
-        teams={teams}
-        matches={matches}
-        onChange={(values) => setFilters(values)}
-      />
+      {filterable && (
+        <ScheduleFilters
+          teams={teams}
+          matches={matches}
+          onChange={(values) => setFilters(values)}
+        />
+      )}
       <ListGroup className="overflow-scroll" style={{ maxHeight: "75vh" }}>
         {orderBy(filteredMatches, "round").map((m) => (
           <ListGroup.Item action key={m.id} onClick={() => onSelect(m)}>
