@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ListGroup } from "react-bootstrap";
 
 import keyBy from "lodash/keyBy";
@@ -14,9 +14,6 @@ const ScheduleFilters = ({ teams, matches, onChange }) => {
     rooms: [],
     teams: [],
   });
-  useEffect(() => {
-    onChange && onChange(filtersState);
-  }, [filtersState]);
   const teamOptions = getTeamOptions(teams);
   const uniqueRooms = uniq(
     matches.filter((m) => m.room).map((m) => m.room)
@@ -30,6 +27,7 @@ const ScheduleFilters = ({ teams, matches, onChange }) => {
       [name]: value,
     };
     setFiltersState(nextState);
+    onChange(nextState);
   };
   return (
     <Form name="ScheduleFilters" customCtaButtons>
