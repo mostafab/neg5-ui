@@ -205,13 +205,13 @@ const ScoresheetModal = ({
                   Or start a scoresheet from scratch
                 </a>
               </div>
-              <div>
-                <ScheduledMatches
-                  teams={teams}
-                  matches={scheduledMatches}
-                  onSelect={onSelectScheduledMatch}
-                />
-              </div>
+              <ScheduledMatches
+                teams={teams}
+                matches={scheduledMatches}
+                onSelect={onSelectScheduledMatch}
+                // This threshold seems to be when the list leaves the viewport on mobile
+                filterable={scheduledMatches.length >= 6}
+              />
             </Card>
           </>
         );
