@@ -1,8 +1,44 @@
-import React from "react";
-import ListGroup from "react-bootstrap/ListGroup";
+import React, { useState } from "react";
+import { ListGroup, Row, Col } from "react-bootstrap";
 
 import keyBy from "lodash/keyBy";
 import orderBy from "lodash/orderBy";
+import uniq from "lodash/uniq";
+
+import { getTeamOptions } from "@libs/tournamentForms";
+
+import { Select, Form } from "@components/common/forms";
+
+const ScheduleFilters = ({
+  teams,
+  matches,
+  onChange,
+}) => {
+  const filtersState = useState({
+    rooms: [],
+    teams: [],
+  });
+  const teamOptions = getTeamOptions(teams);
+  const uniqueRooms = uniq(matches
+    .filter(m => m.room)
+    .map(m => m.room))
+    .map(room => ({
+      label: room,
+      value: room,
+    }));
+  return (
+    <Form name="ScheduleFilters" customCtaButtons>
+      <Row>
+        <Col lg={6} md={6} sm={12}>
+        <Select name="teams" multiple options={teamOptions} label="Teams" />
+        </Col>
+        <Col lg={6} md={6} sm={12}>
+        <Select name="rooms" multiple options={uniqueRooms} label="Rooms" />
+        </Col>
+      </Row>
+    </Form>
+  )
+}
 
 const ScheduledMatches = ({ matches, teams, onSelect }) => {
   const teamsById = keyBy(teams, "id");
@@ -16,6 +52,8 @@ const ScheduledMatches = ({ matches, teams, onSelect }) => {
     );
   };
   return (
+    <>
+    <ScheduleFilters teams={teams} matches={matches} />
     <ListGroup className="overflow-scroll" style={{ maxHeight: "75vh" }}>
       {orderBy(matches, "round").map((m) => (
         <ListGroup.Item action key={m.id} onClick={() => onSelect(m)}>
@@ -23,6 +61,7 @@ const ScheduledMatches = ({ matches, teams, onSelect }) => {
         </ListGroup.Item>
       ))}
     </ListGroup>
+    </>
   );
 };
 
