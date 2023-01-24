@@ -287,7 +287,9 @@ export const Select = ({
         onChange={internalOnChange}
         value={
           multiple
-            ? normalizedOptions.filter((o) => (field.value || []).indexOf(o.value) >= 0)
+            ? normalizedOptions.filter(
+                (o) => (field.value || []).indexOf(o.value) >= 0
+              )
             : normalizedOptions.find((o) => o.value === field.value) || ""
         }
       />
