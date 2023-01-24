@@ -1,5 +1,5 @@
 import React from "react";
-
+import * as Yup from "yup";
 import { Col, Row } from "react-bootstrap";
 
 import { X } from "@components/common/icon";
@@ -14,9 +14,32 @@ const initialValues = () => ({
   teams: [{ name: "", players: [] }],
 });
 
+const validation = Yup.object({
+  name: Yup.string().required("Add a team name."),
+  state: Yup.string(),
+  teams: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Add a team name."),
+      players: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string().required("Add a player name."),
+        })
+      ),
+    })
+  ),
+});
+
 const TeamGroupForm = () => {
+  const onSubmit = (values) => {
+    console.log(values);
+  };
   return (
-    <Form name="TeamGroupForm" initialValues={initialValues()}>
+    <Form
+      name="TeamGroupForm"
+      initialValues={initialValues()}
+      validation={validation}
+      onSubmit={onSubmit}
+    >
       <Row>
         <Col lg={12} md={12} sm={12}>
           <Row>
