@@ -18,7 +18,7 @@ import TeamsList from "@components/tournaments/tournamentView/teams/TeamsList";
 import NoTeamsAdded from "@components/tournaments/tournamentView/teams/NoTeamsAdded";
 import { useEffect } from "react";
 
-const TournamentTeamsPanel = ({ teams, matches, editable }) => {
+const TournamentTeamsPanel = ({ teams, matches, editable, teamGroups }) => {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const liveUpdatesContext = useContext(TournamentLiveChangesContext);
   const dispatch = useAppDispatch();
@@ -73,6 +73,7 @@ const TournamentTeamsPanel = ({ teams, matches, editable }) => {
       {selectedTeam && (
         <TeamsModal
           teams={teams}
+          teamGroups={teamGroups}
           onHide={() => setSelectedTeam(null)}
           onSelectTeam={setSelectedTeam}
           selectedTeam={selectedTeam}

@@ -8,6 +8,7 @@ const mapStateToProps = ({
   tournamentPermissionsReducer,
 }) => ({
   teams: tournamentTeamsReducer.teams,
+  teamGroups: tournamentTeamsReducer.groups,
   matches: tournamentMatchesReducer.matches,
   editable: tournamentPermissionsReducer.data?.canEditTeams,
 });

@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { loadTeams } from "@api/tournaments";
+import { loadTeams, loadTeamGroups } from "@api/tournaments";
 
 const initialState = {
   teams: [],
+  groups: [],
 };
 
 const tournamentTeamsSlice = createSlice({
@@ -50,7 +51,8 @@ const tournamentTeamsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentTeamsAsync.fulfilled, (state, action) => {
-      state.teams = action.payload;
+      state.teams = action.payload.teams;
+      state.groups = action.payload.groups;
     });
   },
 });
@@ -58,7 +60,14 @@ const tournamentTeamsSlice = createSlice({
 export const loadTournamentTeamsAsync = createAsyncThunk(
   "tournamentTeamsSlice/loadTeams",
   async (tournamentId) => {
-    return await loadTeams(tournamentId);
+    const result = await Promise.all([
+      loadTeams(tournamentId),
+      loadTeamGroups(tournamentId),
+    ]);
+    return {
+      teams: result[0],
+      groups: result[1],
+    };
   }
 );
 

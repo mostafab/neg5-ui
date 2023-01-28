@@ -17,6 +17,7 @@ const TeamsModal = ({
   onHide,
   onSelectTeam,
   editable,
+  teamGroups,
 }) => {
   const [addingTeam, setAddingTeam] = useState(!Boolean(selectedTeam?.id));
   useEffect(() => {
@@ -46,6 +47,8 @@ const TeamsModal = ({
             selectedTeam={addingTeam ? null : selectedTeam}
             onSelectTeam={onSelectTeam}
             teams={teams}
+            grouped
+            teamGroups={teamGroups}
             shadow
           />
         </Col>
@@ -63,9 +66,8 @@ const TeamsModal = ({
           {addingTeam && (
             <Card title="Add a Team">
               <Info>
-                You should add more than one roster if you have multiple teams
-                from the same school or organization participating in a
-                tournament.
+                Add more than one roster if you have multiple teams from the
+                same school or organization participating in a tournament.
               </Info>
               <TeamGroupForm />
             </Card>

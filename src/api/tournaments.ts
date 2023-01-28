@@ -30,6 +30,11 @@ export const loadTeams = async (tournamentId) =>
     await client.get(`/neg5-api/tournaments/${tournamentId}/teams`)
   ).data;
 
+export const loadTeamGroups = async (tournamentId) =>
+  await (
+    await client.get(`/neg5-api/tournaments/${tournamentId}/team-groups`)
+  ).data;
+
 export const loadCollaborators = async (tournamentId) =>
   await (
     await client.get(`/neg5-api/tournaments/${tournamentId}/collaborators`)

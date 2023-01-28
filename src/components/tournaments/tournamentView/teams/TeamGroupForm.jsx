@@ -1,5 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
+import times from "lodash/times";
 import { Col, Row } from "react-bootstrap";
 
 import { X } from "@components/common/icon";
@@ -11,7 +12,7 @@ import TeamFields from "@components/tournaments/common/TeamFields";
 const initialValues = () => ({
   name: "",
   state: "",
-  teams: [{ name: "", players: [] }],
+  teams: [{ name: "", players: times(4, () => ({ name: "", year: "" })) }],
 });
 
 const validation = Yup.object({
@@ -55,7 +56,7 @@ const TeamGroupForm = () => {
           <RepeatField
             name="teams"
             addObjectProps={{
-              buttonText: "Add another Roster",
+              buttonText: "Add a Roster",
               newObject: () => ({ name: "", players: [] }),
             }}
             render={(_val, { index }, { remove }) => {
