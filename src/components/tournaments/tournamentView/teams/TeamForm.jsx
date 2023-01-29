@@ -38,14 +38,18 @@ const initialValues = (team) => ({
   ),
 });
 
-const validation = Yup.object({
-  name: Yup.string().required("Please provide a team name."),
-  players: Yup.array().of(
-    Yup.object().shape({
-      name: Yup.string().required("Please enter a name."),
-    })
-  ),
-});
+const validation = (team) =>
+  Yup.object({
+    name: Yup.string().required("Please provide a team name."),
+    players: Yup.array().of(
+      Yup.object().shape({
+        name: Yup.string().required("Please enter a name."),
+      })
+    ),
+    teamGroupId: team?.id
+      ? Yup.number()
+      : Yup.number().required("Please choose an organization."),
+  });
 
 const TeamForm = ({
   team,
@@ -105,7 +109,7 @@ const TeamForm = ({
       name="TeamForm"
       submitButtonText="Save"
       initialValues={initialValues(team)}
-      validation={validation}
+      validation={validation(team)}
       onSubmit={onSubmit}
       readOnly={readOnly}
       cancelButtonText="Cancel"

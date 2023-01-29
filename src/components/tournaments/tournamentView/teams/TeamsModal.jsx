@@ -61,14 +61,16 @@ const TeamsModal = ({
         </Col>
         <Col lg={9} md={8} sm={12}>
           {!addingTeam && (
-            <TeamDisplay
-              team={selectedTeam}
-              matches={matches}
-              teams={teams}
-              onSubmitSuccess={onSelectTeam}
-              onDeleteSuccess={() => setAddingTeam(true)}
-              editable={editable}
-            />
+            <span className="sticky-top">
+              <TeamDisplay
+                team={selectedTeam}
+                matches={matches}
+                teams={teams}
+                onSubmitSuccess={onSelectTeam}
+                onDeleteSuccess={() => setAddingTeam(true)}
+                editable={editable}
+              />
+            </span>
           )}
           {addingTeam && (
             <Card
@@ -80,17 +82,19 @@ const TeamsModal = ({
             >
               {addMode === ADD_MODES.MULTI && (
                 <>
-                  <div className="mb-3">
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setAddMode(ADD_MODES.SINGLE);
-                      }}
-                    >
-                      Or Add a New Team to an Existing Organization
-                    </a>
-                  </div>
+                  {teamGroups.length > 0 && (
+                    <div className="mb-3">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setAddMode(ADD_MODES.SINGLE);
+                        }}
+                      >
+                        Or Add a New Team to an Existing Organization
+                      </a>
+                    </div>
+                  )}
                   <Info>
                     Add more than one roster if you have multiple teams from the
                     same school or organization participating in a tournament.

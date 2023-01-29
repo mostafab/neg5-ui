@@ -1,6 +1,7 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import groupBy from "lodash/groupBy";
+import orderBy from "lodash/orderBy";
 
 const TeamsList = ({
   teams,
@@ -15,12 +16,12 @@ const TeamsList = ({
     const teamsByGroup = groupBy(teams, (t) => t.teamGroupId || null);
     return (
       <ListGroup className={shadow ? "shadow-sm" : null}>
-        {teamGroups.map((tg) =>
-          (teamsByGroup[tg.id] || []).length > 1 ? (
-            <div key={tg.id}>
-              <div className="border-1 text-bg-light p-2 ps-3">
-                <span>{tg.name}</span>
-              </div>
+        {orderBy(teamGroups, "name").map((tg) => (
+          <div key={tg.id}>
+            <div className="border-1 text-bg-light p-2 ps-3">
+              <span>{tg.name}</span>
+            </div>
+            {teamsByGroup[tg.id]?.length > 0 ? (
               <TeamsList
                 key={tg.id}
                 teams={teamsByGroup[tg.id] || []}
@@ -28,16 +29,13 @@ const TeamsList = ({
                 onSelectTeam={onSelectTeam}
                 rowClasses="ps-4"
               />
-            </div>
-          ) : (
-            <TeamsList
-              key={tg.id}
-              teams={teamsByGroup[tg.id] || []}
-              selectedTeam={selectedTeam}
-              onSelectTeam={onSelectTeam}
-            />
-          )
-        )}
+            ) : (
+              <div className="border-1 bg-white p-2 ps-4">
+                <span>No teams added yet</span>
+              </div>
+            )}
+          </div>
+        ))}
         <TeamsList
           teams={teamsByGroup["null"] || []}
           selectedTeam={selectedTeam}
@@ -48,7 +46,7 @@ const TeamsList = ({
   }
   return (
     <ListGroup className={shadow ? "shadow-sm" : null}>
-      {teams.map((team) => (
+      {orderBy(teams, "name").map((team) => (
         <ListGroup.Item
           key={team.id}
           action={onSelectTeam ? true : false}

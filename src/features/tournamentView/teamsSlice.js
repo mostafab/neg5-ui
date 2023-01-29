@@ -48,6 +48,18 @@ const tournamentTeamsSlice = createSlice({
         }
       });
     },
+    teamGroupCreatedOrUpdated(state, action) {
+      const { rosters, ...group } = action.payload;
+      const matchIndex = state.groups.findIndex((t) => t.id === group.id);
+      if (matchIndex === -1) {
+        state.groups.push(group);
+      } else {
+        state.groups[matchIndex] = group;
+      }
+      if (rosters) {
+        state.teams.push(...rosters);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentTeamsAsync.fulfilled, (state, action) => {
@@ -73,5 +85,9 @@ export const loadTournamentTeamsAsync = createAsyncThunk(
 
 export const tournamentTeamsReducer = tournamentTeamsSlice.reducer;
 
-export const { teamCreatedOrUpdated, teamsPoolsUpdated, teamDeleted } =
-  tournamentTeamsSlice.actions;
+export const {
+  teamCreatedOrUpdated,
+  teamsPoolsUpdated,
+  teamDeleted,
+  teamGroupCreatedOrUpdated,
+} = tournamentTeamsSlice.actions;
