@@ -27,6 +27,7 @@ const initialPlayerValue = () => ({
 
 const initialValues = (team) => ({
   id: team.id || null,
+  teamGroupId: team.teamGroupId || "",
   name: team.name || "",
   players: orderBy(team.players || [initialPlayerValue()], "name").map(
     (player) => ({
@@ -115,12 +116,6 @@ const TeamForm = ({
         initialValues={() => initialValues(team)}
       />
       <TeamFields />
-      {!team.id && (
-        <Info className="mt-3">
-          After creating a team, you can assign it a pool in the Team Pools
-          panel.
-        </Info>
-      )}
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
   );

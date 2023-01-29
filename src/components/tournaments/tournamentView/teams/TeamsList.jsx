@@ -16,7 +16,7 @@ const TeamsList = ({
     return (
       <ListGroup className={shadow ? "shadow-sm" : null}>
         {teamGroups.map((tg) =>
-          (teamsByGroup[tg.id] || []).length > 0 ? (
+          (teamsByGroup[tg.id] || []).length > 1 ? (
             <div key={tg.id}>
               <div className="border-1 text-bg-light p-2 ps-3">
                 <span>{tg.name}</span>

@@ -9,6 +9,12 @@ import Button from "@components/common/button";
 import TeamsList from "./TeamsList";
 import TeamDisplay from "./TeamDisplay";
 import TeamGroupForm from "./TeamGroupForm";
+import TeamForm from "./TeamForm";
+
+const ADD_MODES = {
+  SINGLE: "s",
+  MULTI: "m",
+};
 
 const TeamsModal = ({
   matches,
@@ -20,6 +26,7 @@ const TeamsModal = ({
   teamGroups,
 }) => {
   const [addingTeam, setAddingTeam] = useState(!Boolean(selectedTeam?.id));
+  const [addMode, setAddMode] = useState(ADD_MODES.MULTI);
   useEffect(() => {
     if (selectedTeam?.id) {
       setAddingTeam(false);
@@ -64,12 +71,49 @@ const TeamsModal = ({
             />
           )}
           {addingTeam && (
-            <Card title="Add a Team">
-              <Info>
-                Add more than one roster if you have multiple teams from the
-                same school or organization participating in a tournament.
-              </Info>
-              <TeamGroupForm />
+            <Card
+              title={
+                addMode === ADD_MODES.SINGLE
+                  ? "Add Team"
+                  : "Add an Organization"
+              }
+            >
+              {addMode === ADD_MODES.MULTI && (
+                <>
+                  <div className="mb-3">
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setAddMode(ADD_MODES.SINGLE);
+                      }}
+                    >
+                      Or Add a New Team to an Existing Organization
+                    </a>
+                  </div>
+                  <Info>
+                    Add more than one roster if you have multiple teams from the
+                    same school or organization participating in a tournament.
+                  </Info>
+                  <TeamGroupForm />
+                </>
+              )}
+              {addMode === ADD_MODES.SINGLE && (
+                <>
+                  <div className="mb-3">
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setAddMode(ADD_MODES.MULTI);
+                      }}
+                    >
+                      Or Add an Organization / Multiple Rosters
+                    </a>
+                  </div>
+                  <TeamForm team={{}} teamGroups={teamGroups} />
+                </>
+              )}
             </Card>
           )}
         </Col>

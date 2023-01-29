@@ -57,7 +57,7 @@ const TeamGroupForm = () => {
             name="teams"
             addObjectProps={{
               buttonText: "Add a Roster",
-              newObject: () => ({ name: "", players: [] }),
+              newObject: () => initialValues().teams[0],
             }}
             render={(_val, { index }, { remove }) => {
               return (
