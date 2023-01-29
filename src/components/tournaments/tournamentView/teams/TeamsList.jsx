@@ -9,24 +9,26 @@ const TeamsList = ({
   shadow = false,
   grouped = false,
   teamGroups = null,
-  flush = false,
+  rowClasses = "",
 }) => {
   if (grouped && teamGroups?.length > 0) {
     const teamsByGroup = groupBy(teams, (t) => t.teamGroupId || null);
     return (
       <ListGroup className={shadow ? "shadow-sm" : null}>
         {teamGroups.map((tg) =>
-          (teamsByGroup[tg.id] || []).length > 1 ? (
-            <ListGroup.Item key={tg.id}>
-              <h6>{tg.name}</h6>
+          (teamsByGroup[tg.id] || []).length > 0 ? (
+            <div key={tg.id}>
+              <div className="border-1 text-bg-light p-2 ps-3">
+                <span>{tg.name}</span>
+              </div>
               <TeamsList
                 key={tg.id}
                 teams={teamsByGroup[tg.id] || []}
                 selectedTeam={selectedTeam}
                 onSelectTeam={onSelectTeam}
-                flush
+                rowClasses="ps-4"
               />
-            </ListGroup.Item>
+            </div>
           ) : (
             <TeamsList
               key={tg.id}
@@ -45,17 +47,14 @@ const TeamsList = ({
     );
   }
   return (
-    <ListGroup
-      className={shadow ? "shadow-sm" : null}
-      variant={flush ? "flush" : null}
-    >
+    <ListGroup className={shadow ? "shadow-sm" : null}>
       {teams.map((team) => (
         <ListGroup.Item
           key={team.id}
           action={onSelectTeam ? true : false}
           active={team.id === selectedTeam?.id}
           onClick={onSelectTeam ? () => onSelectTeam(team) : null}
-          className={flush ? "border-0" : ""}
+          className={rowClasses}
         >
           {team.name}
         </ListGroup.Item>
