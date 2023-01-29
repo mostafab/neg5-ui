@@ -20,13 +20,13 @@ import TeamFields from "@components/tournaments/common/TeamFields";
 const initialValues = () => ({
   name: "",
   state: "",
-  teams: [{ name: "", players: times(4, () => ({ name: "", year: "" })) }],
+  rosters: [{ name: "", players: times(4, () => ({ name: "", year: "" })) }],
 });
 
 const validation = Yup.object({
   name: Yup.string().required("Add a team name."),
   state: Yup.string(),
-  teams: Yup.array().of(
+  rosters: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required("Add a team name."),
       players: Yup.array().of(
@@ -90,10 +90,10 @@ const TeamGroupForm = () => {
         </Col>
         <Col lg={12} md={12} sm={12}>
           <RepeatField
-            name="teams"
+            name="rosters"
             addObjectProps={{
               buttonText: "Add a Roster",
-              newObject: () => initialValues().teams[0],
+              newObject: () => initialValues().rosters[0],
             }}
             render={(_val, { index }, { remove }) => {
               return (
@@ -108,7 +108,7 @@ const TeamGroupForm = () => {
                     },
                   ]}
                 >
-                  <TeamFields fieldNamePrefix={`teams[${index}].`} />
+                  <TeamFields fieldNamePrefix={`rosters[${index}].`} />
                 </Card>
               );
             }}
