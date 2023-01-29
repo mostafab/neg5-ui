@@ -52,6 +52,7 @@ const TeamForm = ({
   readOnly = false,
   onCancel = null,
   onSubmitSuccess,
+  teamGroups,
 }) => {
   const [submitData, setSubmitData] = useState({
     submitting: false,
@@ -115,7 +116,7 @@ const TeamForm = ({
         changeKey={team.id}
         initialValues={() => initialValues(team)}
       />
-      <TeamFields />
+      <TeamFields teamGroups={teamGroups} />
       {submitData.error && <CommonErrorBanner errors={submitData.error} />}
     </Form>
   );

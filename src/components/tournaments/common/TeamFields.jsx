@@ -1,8 +1,8 @@
 import React from "react";
+import { InputGroup, Row, Col } from "react-bootstrap";
+import orderBy from "lodash/orderBy";
 
-import { InputGroup } from "react-bootstrap";
-
-import { Text, RepeatField } from "@components/common/forms";
+import { Text, RepeatField, Select } from "@components/common/forms";
 import Button from "@components/common/button";
 import PlayerYearSelect from "@components/tournaments/common/PlayerYearSelect";
 
@@ -12,10 +12,35 @@ const initialPlayerValue = () => ({
   id: "",
 });
 
-const TeamFields = ({ fieldNamePrefix = "" }) => {
+const TeamFields = ({ fieldNamePrefix = "", teamGroups = [] }) => {
+  const groupOptions = orderBy(
+    teamGroups.map((tg) => ({
+      value: tg.id,
+      label: tg.name,
+    })),
+    "label"
+  );
+  const showGroupOptions = teamGroups.length > 0;
   return (
     <>
-      <Text name={`${fieldNamePrefix}name`} label="Team Name" />
+      <Row>
+        <Col
+          lg={showGroupOptions ? 6 : 12}
+          md={showGroupOptions ? 6 : 12}
+          sm={12}
+        >
+          <Text name={`${fieldNamePrefix}name`} label="Team Name" />
+        </Col>
+        {showGroupOptions && (
+          <Col lg={6} md={6} sm={12}>
+            <Select
+              name={`${fieldNamePrefix}teamGroupId`}
+              label="Organization"
+              options={groupOptions}
+            />
+          </Col>
+        )}
+      </Row>
       <p className="d-flex justify-content-center">Players</p>
       <RepeatField
         name={`${fieldNamePrefix}players`}
