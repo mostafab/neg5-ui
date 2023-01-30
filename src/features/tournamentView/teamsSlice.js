@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { loadTeams } from "@api/tournaments";
+import { loadTeams, loadTeamGroups } from "@api/tournaments";
 
 const initialState = {
   teams: [],
+  groups: [],
 };
 
 const tournamentTeamsSlice = createSlice({
@@ -47,10 +48,23 @@ const tournamentTeamsSlice = createSlice({
         }
       });
     },
+    teamGroupCreatedOrUpdated(state, action) {
+      const { rosters, ...group } = action.payload;
+      const matchIndex = state.groups.findIndex((t) => t.id === group.id);
+      if (matchIndex === -1) {
+        state.groups.push(group);
+      } else {
+        state.groups[matchIndex] = group;
+      }
+      if (rosters) {
+        state.teams.push(...rosters);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTournamentTeamsAsync.fulfilled, (state, action) => {
-      state.teams = action.payload;
+      state.teams = action.payload.teams;
+      state.groups = action.payload.groups;
     });
   },
 });
@@ -58,11 +72,22 @@ const tournamentTeamsSlice = createSlice({
 export const loadTournamentTeamsAsync = createAsyncThunk(
   "tournamentTeamsSlice/loadTeams",
   async (tournamentId) => {
-    return await loadTeams(tournamentId);
+    const result = await Promise.all([
+      loadTeams(tournamentId),
+      loadTeamGroups(tournamentId),
+    ]);
+    return {
+      teams: result[0],
+      groups: result[1],
+    };
   }
 );
 
 export const tournamentTeamsReducer = tournamentTeamsSlice.reducer;
 
-export const { teamCreatedOrUpdated, teamsPoolsUpdated, teamDeleted } =
-  tournamentTeamsSlice.actions;
+export const {
+  teamCreatedOrUpdated,
+  teamsPoolsUpdated,
+  teamDeleted,
+  teamGroupCreatedOrUpdated,
+} = tournamentTeamsSlice.actions;

@@ -4,34 +4,39 @@ import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
 
 import { useAppDispatch } from "@store";
-import {
-  teamCreatedOrUpdated,
-  teamDeleted,
-} from "@features/tournamentView/teamsSlice";
+import { loadTournamentTeamsAsync } from "@features/tournamentView/teamsSlice";
 import { Events } from "@libs/liveEvents";
 
 import { Add } from "@components/common/icon";
 import Card from "@components/common/cards";
-import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
+import {
+  TournamentLiveChangesContext,
+  TournamentIdContext,
+} from "@components/tournaments/common/context";
 import TeamsModal from "@components/tournaments/tournamentView/teams/TeamsModal";
 import TeamsList from "@components/tournaments/tournamentView/teams/TeamsList";
 import NoTeamsAdded from "@components/tournaments/tournamentView/teams/NoTeamsAdded";
 import { useEffect } from "react";
 
-const TournamentTeamsPanel = ({ teams, matches, editable }) => {
+const TournamentTeamsPanel = ({ teams, matches, editable, teamGroups }) => {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const liveUpdatesContext = useContext(TournamentLiveChangesContext);
+  const tournamentId = useContext(TournamentIdContext);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    liveUpdatesContext.subscribe(Events.teams.createdOrUpdated, (data) => {
-      dispatch(teamCreatedOrUpdated(data));
+    liveUpdatesContext.subscribe(Events.teams.createdOrUpdated, () => {
+      dispatch(loadTournamentTeamsAsync(tournamentId));
     });
-    liveUpdatesContext.subscribe(Events.teams.deleted, ({ teamId }) => {
-      dispatch(teamDeleted({ teamId }));
+    liveUpdatesContext.subscribe(Events.teams.deleted, () => {
+      dispatch(loadTournamentTeamsAsync(tournamentId));
+    });
+    liveUpdatesContext.subscribe(Events.teams.teamGroupAddedOrUpdated, () => {
+      dispatch(loadTournamentTeamsAsync(tournamentId));
     });
     return () => {
       liveUpdatesContext.unsubscribe(Events.teams.createdOrUpdated);
       liveUpdatesContext.unsubscribe(Events.teams.deleted);
+      liveUpdatesContext.unsubscribe(Events.teams.teamGroupAddedOrUpdated);
     };
   }, [liveUpdatesContext]);
   const orderedAndChunked = chunk(orderBy(teams, "name"), 10);
@@ -73,6 +78,7 @@ const TournamentTeamsPanel = ({ teams, matches, editable }) => {
       {selectedTeam && (
         <TeamsModal
           teams={teams}
+          teamGroups={teamGroups}
           onHide={() => setSelectedTeam(null)}
           onSelectTeam={setSelectedTeam}
           selectedTeam={selectedTeam}
