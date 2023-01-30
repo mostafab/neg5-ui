@@ -17,6 +17,7 @@ export const Events = {
     createdOrUpdated: "client-team/createdOrUpdated",
     deleted: "client-team/deleted",
     poolsUpdated: "client-team/pools-updated",
+    teamGroupAddedOrUpdated: "client-team/groupAddedOrCreated",
   },
   pools: {
     deleted: "client-pools/deleted",

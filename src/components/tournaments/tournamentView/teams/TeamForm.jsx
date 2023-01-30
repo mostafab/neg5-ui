@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import orderBy from "lodash/orderBy";
 
 import { Form, ResetListener } from "@components/common/forms";
-import { Info } from "@components/common/alerts";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import TeamFields from "@components/tournaments/common/TeamFields";
 import {

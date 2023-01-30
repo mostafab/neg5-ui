@@ -7,6 +7,7 @@ import { useAppDispatch } from "@store";
 import {
   teamCreatedOrUpdated,
   teamDeleted,
+  teamGroupCreatedOrUpdated,
 } from "@features/tournamentView/teamsSlice";
 import { Events } from "@libs/liveEvents";
 
@@ -29,9 +30,16 @@ const TournamentTeamsPanel = ({ teams, matches, editable, teamGroups }) => {
     liveUpdatesContext.subscribe(Events.teams.deleted, ({ teamId }) => {
       dispatch(teamDeleted({ teamId }));
     });
+    liveUpdatesContext.subscribe(
+      Events.teams.teamGroupAddedOrUpdated,
+      (data) => {
+        dispatch(teamGroupCreatedOrUpdated(data));
+      }
+    );
     return () => {
       liveUpdatesContext.unsubscribe(Events.teams.createdOrUpdated);
       liveUpdatesContext.unsubscribe(Events.teams.deleted);
+      liveUpdatesContext.unsubscribe(Events.teams.teamGroupAddedOrUpdated);
     };
   }, [liveUpdatesContext]);
   const orderedAndChunked = chunk(orderBy(teams, "name"), 10);

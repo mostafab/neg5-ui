@@ -6,6 +6,7 @@ import { Col, Row } from "react-bootstrap";
 import { doValidatedApiRequest } from "@api/common";
 import { createTeamGroup } from "@api/team";
 import { sanitizeFormValuesRecursive } from "@libs/forms";
+import { Events } from "@libs/liveEvents";
 import { useAppDispatch } from "@store";
 import { teamGroupCreatedOrUpdated } from "@features/tournamentView/teamsSlice";
 
@@ -14,7 +15,10 @@ import Card from "@components/common/cards";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 import StateSelect from "@components/common/StateSelect";
 import { Form, Text, RepeatField } from "@components/common/forms";
-import { TournamentIdContext } from "@components/tournaments/common/context";
+import {
+  TournamentIdContext,
+  TournamentLiveChangesContext,
+} from "@components/tournaments/common/context";
 import TeamFields from "@components/tournaments/common/TeamFields";
 
 const initialValues = () => ({
@@ -45,6 +49,7 @@ const TeamGroupForm = () => {
   });
   const dispatch = useAppDispatch();
   const tournamentId = useContext(TournamentIdContext);
+  const liveChangesContext = useContext(TournamentLiveChangesContext);
   const onSubmit = async (values, { resetForm }) => {
     setSubmitData({
       submitting: true,
@@ -67,6 +72,10 @@ const TeamGroupForm = () => {
       });
       resetForm({ values: initialValues() });
       dispatch(teamGroupCreatedOrUpdated(response));
+      liveChangesContext.trigger(
+        Events.teams.teamGroupAddedOrUpdated,
+        response
+      );
     }
   };
   return (
