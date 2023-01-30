@@ -1,6 +1,7 @@
 import React from "react";
 import dayjs from "dayjs";
 
+import { Spinner } from "@components/common/icon";
 import Card from "@components/common/cards";
 import { CycleStage } from "@libs/enums";
 
@@ -24,6 +25,7 @@ const CurrentCyclePanel = ({
   onEndMatch,
   lastUpdatedAt,
   isPastCycle = false,
+  saving = false,
 }) => {
   const stageTitle = `${isPastCycle ? "Editing " : ""}${
     currentCycle.stage === CycleStage.Tossup ? "Tossup" : "Bonus"
@@ -33,7 +35,10 @@ const CurrentCyclePanel = ({
       <div className={isPastCycle ? "text-warning" : ""}>{stageTitle}</div>
       {lastUpdatedAt && (
         <span className="small text-dark ms-2">
-          Last saved at {dayjs(lastUpdatedAt).format("hh:mm:ss A")}
+          {saving
+            ? "Saving"
+            : `Last saved at ${dayjs(lastUpdatedAt).format("hh:mm:ss A")}`}
+          {saving && <Spinner className="ms-2" />}
         </span>
       )}
     </div>

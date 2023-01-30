@@ -86,6 +86,7 @@ const ScoresheetContainer = ({
   );
   const [activePastCycle, setActivePastCycle] = useState(null);
   const [endingMatch, setEndingMatch] = useState(false);
+  const [saving, setSaving] = useState(false);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (scoresheetState.cycles.length > 0) {
@@ -102,9 +103,11 @@ const ScoresheetContainer = ({
       ...scoresheetStartValues,
       ...scoresheetState,
     };
+    setSaving(true);
     const response = await doValidatedApiRequest(() =>
       createOrUpdateDraft(payload)
     );
+    setSaving(false);
     if (!response.errors) {
       setScoresheetState({
         ...scoresheetState,
@@ -393,6 +396,7 @@ const ScoresheetContainer = ({
             onToggleActive={onToggleActivePlayer}
             onEndMatch={onEndMatch}
             lastUpdatedAt={scoresheetState.lastUpdatedAt}
+            saving={saving}
           />
         )}
         {activePastCycle && (
