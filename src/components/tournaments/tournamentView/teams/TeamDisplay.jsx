@@ -2,7 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 
 import { useAppDispatch } from "@store";
-import { teamDeleted } from "@features/tournamentView/teamsSlice";
+import {
+  teamDeleted,
+  loadTournamentTeamsAsync,
+} from "@features/tournamentView/teamsSlice";
 import { deleteTeam } from "@api/team";
 import { doValidatedApiRequest } from "@api/common";
 import { Events } from "@libs/liveEvents";
@@ -12,7 +15,10 @@ import DropdownActions from "@components/common/DropdownActions";
 import ActionConfirmationAlert from "@components/common/ActionConfirmationAlert";
 import CommonErrorBanner from "@components/common/errors/CommonErrorBanner";
 
-import { TournamentLiveChangesContext } from "@components/tournaments/common/context";
+import {
+  TournamentLiveChangesContext,
+  TournamentIdContext,
+} from "@components/tournaments/common/context";
 
 import TeamForm from "./TeamForm";
 import TeamMatches from "./TeamMatches";
@@ -31,6 +37,7 @@ const TeamDisplay = ({
     submitting: false,
     error: null,
   });
+  const tournamentId = useContext(TournamentIdContext);
   useEffect(() => {
     setIsDeleting(false);
     setSubmitData({
@@ -56,8 +63,9 @@ const TeamDisplay = ({
       setSubmitData({
         submitting: false,
       });
-      dispatch(teamDeleted({ teamId: team.id }));
-      onDeleteSuccess({ id: team.id });
+      await dispatch(teamDeleted({ teamId: team.id }));
+      await dispatch(loadTournamentTeamsAsync(tournamentId));
+      onDeleteSuccess && onDeleteSuccess({ id: team.id });
       liveUpdatesContext.trigger(Events.teams.deleted, { teamId: team.id });
     }
   };
