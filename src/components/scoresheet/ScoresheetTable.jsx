@@ -29,7 +29,7 @@ const ScoresheetTable = ({
   const firstTeamOrdering = playerOrderings[firstTeam.id] || [];
   const secondTeamOrdering = playerOrderings[secondTeam.id] || [];
 
-  const getPlayerDisplay = (player) => player.name.substring(0, 2);
+  const getPlayerDisplay = (player) => player.name.substring(0, 3);
 
   const valueToTypeMap = mapValues(
     keyBy(rules.tossupValues, "value"),

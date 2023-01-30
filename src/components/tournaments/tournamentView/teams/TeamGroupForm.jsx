@@ -24,7 +24,7 @@ import TeamFields from "@components/tournaments/common/TeamFields";
 const initialValues = () => ({
   name: "",
   state: "",
-  rosters: [{ name: "", players: times(4, () => ({ name: "", year: "" })) }],
+  rosters: [{ name: "", players: times(1, () => ({ name: "", year: "" })) }],
 });
 
 const validation = Yup.object({

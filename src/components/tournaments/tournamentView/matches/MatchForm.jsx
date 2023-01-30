@@ -52,7 +52,7 @@ const initialTeamsValue = () => ({
   players: [],
 });
 
-const initialValues = (match, tossupValues) => ({
+const initialValues = (match, tossupValues, phases) => ({
   id: match.id || "",
   round: match.round || "",
   tossupsHeard: match.tossupsHeard || "",
@@ -61,7 +61,12 @@ const initialValues = (match, tossupValues) => ({
   packet: match.packet || "",
   serialId: match.serialId || "",
   notes: match.notes || "",
-  phases: match.phases || [],
+  phases: (() => {
+    if (match.id || match.phases) {
+      return match.phases || [];
+    }
+    return phases?.length === 1 ? [phases[0].id] : [];
+  })(),
   isTiebreaker: match.isTiebreaker || "",
   teams: orderBy(
     match.teams || [initialTeamsValue(), initialTeamsValue()],
@@ -169,7 +174,9 @@ const MatchForm = ({
         matchCreatedOrUpdated({ match: payload, oldId: match.id || null })
       );
       if (!match.id) {
-        actions.resetForm({ values: initialValues(match) });
+        actions.resetForm({
+          values: initialValues(match, tossupValues, phases),
+        });
       }
       onSubmitSuccess && onSubmitSuccess(payload);
       liveUpdatesContext.trigger(Events.match.createdOrUpdated, {
@@ -182,7 +189,7 @@ const MatchForm = ({
   return (
     <Form
       name="MatchForm"
-      initialValues={initialValues(match, tossupValues)}
+      initialValues={initialValues(match, tossupValues, phases)}
       submitting={submitData.submitting}
       submitButtonText="Save"
       validation={validation}
@@ -193,7 +200,7 @@ const MatchForm = ({
     >
       <ResetListener
         changeKey={match.id}
-        initialValues={() => initialValues(match, tossupValues)}
+        initialValues={() => initialValues(match, tossupValues, phases)}
       />
       <Row>
         <Col lg={3} md={6}>
@@ -241,14 +248,14 @@ const MatchForm = ({
                   </InputGroup>
                 </Row>
                 <Row>
-                  <Col lg={6} sm={12} md={12}>
+                  <Col lg={12} sm={12} md={12}>
                     <Number
                       name={`teams[${index}].overtimeTossupsGotten`}
-                      label={`${teamLabelPrefix} TUs w/o bonuses`}
+                      label={`${teamLabelPrefix} TUs without bonuses`}
                     />
                   </Col>
                   {usesBouncebacks && (
-                    <Col lg={6} sm={12} md={12}>
+                    <Col lg={12} sm={12} md={12}>
                       <Number
                         name={`teams[${index}].bouncebackPoints`}
                         label={`${teamLabelPrefix} Bounceback Points`}
