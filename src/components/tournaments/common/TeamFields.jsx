@@ -24,15 +24,11 @@ const TeamFields = ({ fieldNamePrefix = "", teamGroups = [] }) => {
   return (
     <>
       <Row>
-        <Col
-          lg={showGroupOptions ? 6 : 12}
-          md={showGroupOptions ? 6 : 12}
-          sm={12}
-        >
+        <Col lg={12} md={12} sm={12}>
           <Text name={`${fieldNamePrefix}name`} label="Team Name" />
         </Col>
         {showGroupOptions && (
-          <Col lg={6} md={6} sm={12}>
+          <Col lg={12} md={12} sm={12}>
             <Select
               name={`${fieldNamePrefix}teamGroupId`}
               label="Organization"

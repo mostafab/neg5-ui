@@ -69,6 +69,7 @@ const TeamsModal = ({
                 onSubmitSuccess={onSelectTeam}
                 onDeleteSuccess={() => setAddingTeam(true)}
                 editable={editable}
+                teamGroups={teamGroups}
               />
             </span>
           )}

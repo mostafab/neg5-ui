@@ -30,6 +30,7 @@ const TeamDisplay = ({
   onSubmitSuccess,
   onDeleteSuccess,
   editable,
+  teamGroups,
 }) => {
   const [readOnly, setReadOnly] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -120,6 +121,7 @@ const TeamDisplay = ({
             )}
             <TeamForm
               team={team}
+              teamGroups={teamGroups}
               readOnly={(readOnly && team.id) || !editable}
               onCancel={team.id ? () => setReadOnly(true) : null}
               onSubmitSuccess={
