@@ -26,9 +26,7 @@ app
     );
     server.use(compression());
     server.use(cookieParser());
-    if (process.env.NODE_ENV !== "production") {
-      server.use(morgan());
-    }
+    server.use(morgan());
 
     const staticPath = path.join(__dirname, "../static");
     server.use(
