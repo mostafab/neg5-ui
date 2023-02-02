@@ -6,10 +6,10 @@ import Card from "@components/common/cards";
 
 import PoolCard from "@components/tournaments/tournamentView/pools/PoolCard";
 
-const TeamPools = ({ pools, poolTeams, teams }) => {
+const TeamPools = ({ pools, poolTeams }) => {
   if (pools.length === 0) {
     return (
-      <div className="d-flex justify-content-center p-4 border">
+      <div className="d-flex justify-content-center p-4 border bg-white">
         The tournament director hasn't created pools for this phase yet.
       </div>
     );

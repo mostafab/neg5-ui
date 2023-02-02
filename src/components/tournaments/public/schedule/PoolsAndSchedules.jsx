@@ -17,29 +17,27 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
   }, [phases]);
   const poolTeams = groupTeamsByPools(teams);
   return (
-    <Card>
-      <Tabs transition={false} activeKey={tab} onSelect={setTab}>
-        {phases.map((p) => (
-          <Tab key={p.id} eventKey={p.id} title={p.name}>
-            <Row className="mt-3">
-              <Col lg={4} md={6} sm={12} className="mb-3">
-                <MatchesSchedule
-                  teams={teams}
-                  schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
-                />
-              </Col>
-              <Col lg={8} md={6} sm={12}>
-                <TeamPools
-                  pools={pools.filter((pool) => pool.phaseId === p.id)}
-                  teams={teams}
-                  poolTeams={poolTeams}
-                />
-              </Col>
-            </Row>
-          </Tab>
-        ))}
-      </Tabs>
-    </Card>
+    <Tabs transition={false} activeKey={tab} onSelect={setTab}>
+      {phases.map((p) => (
+        <Tab key={p.id} eventKey={p.id} title={p.name}>
+          <Row>
+            <Col lg={4} md={6} sm={12} className="mb-3">
+              <MatchesSchedule
+                teams={teams}
+                schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
+              />
+            </Col>
+            <Col lg={8} md={6} sm={12}>
+              <TeamPools
+                pools={pools.filter((pool) => pool.phaseId === p.id)}
+                teams={teams}
+                poolTeams={poolTeams}
+              />
+            </Col>
+          </Row>
+        </Tab>
+      ))}
+    </Tabs>
   );
 };
 
