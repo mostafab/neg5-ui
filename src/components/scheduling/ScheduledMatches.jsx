@@ -4,27 +4,33 @@ import { ListGroup } from "react-bootstrap";
 import keyBy from "lodash/keyBy";
 import orderBy from "lodash/orderBy";
 
+import Pill from "@components/common/pill";
+
 import ScheduleFilters from "./ScheduleFilters";
 
-const ScheduledMatches = ({
-  matches,
-  teams,
-  onSelect,
-  filterable,
-  externalFilters,
-}) => {
+const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
   const teamsById = keyBy(teams, "id");
   const [filters, setFilters] = useState(null);
 
   const getMatchTitle = ({ team1Id, team2Id, round, room }) => {
+    if (!team1Id || !team2Id) {
+      return (
+        <>
+          Round {round}: {teamsById[team1Id || team2Id]?.name}
+          <Pill type="info" className="ms-2">
+            Bye
+          </Pill>
+        </>
+      );
+    }
     return (
-      <div>
+      <>
         Round {round}: {teamsById[team1Id]?.name} vs {teamsById[team2Id]?.name}
         {room && <div className="small text-dark mt-2">{room}</div>}
-      </div>
+      </>
     );
   };
-  const filtersToUse = externalFilters || filters;
+  const filtersToUse = filters;
   const filteredMatches =
     filtersToUse === null
       ? matches

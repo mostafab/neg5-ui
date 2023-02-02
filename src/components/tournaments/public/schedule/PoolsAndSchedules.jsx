@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
+import { Tab, Tabs, Row, Col } from "react-bootstrap";
 
 import { groupTeamsByPools } from "@libs/teams";
 import Card from "@components/common/cards";
@@ -22,16 +21,21 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
       <Tabs transition={false} activeKey={tab} onSelect={setTab}>
         {phases.map((p) => (
           <Tab key={p.id} eventKey={p.id} title={p.name}>
-            <TeamPools
-              pools={pools.filter((pool) => pool.phaseId === p.id)}
-              teams={teams}
-              poolTeams={poolTeams}
-            />
-            <br />
-            <MatchesSchedule
-              teams={teams}
-              schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
-            />
+            <Row className="mt-3">
+              <Col lg={4} md={6} sm={12}>
+                <MatchesSchedule
+                  teams={teams}
+                  schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
+                />
+              </Col>
+              <Col lg={8} md={6} sm={12}>
+                <TeamPools
+                  pools={pools.filter((pool) => pool.phaseId === p.id)}
+                  teams={teams}
+                  poolTeams={poolTeams}
+                />
+              </Col>
+            </Row>
           </Tab>
         ))}
       </Tabs>
