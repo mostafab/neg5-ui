@@ -5,13 +5,14 @@ import DropdownActions from "@components/common/DropdownActions";
 import Card from "@components/common/cards";
 
 const TeamRow = ({ team, poolId, pools, onAssign, readOnly }) => {
-  const targetPools = pools.filter((p) => p.id !== poolId);
   const actions = readOnly
     ? []
-    : targetPools.map((p) => ({
-        label: p.id ? `Move to ${p.name}` : "Unassign",
-        onClick: () => onAssign(team, poolId, p.id || null),
-      }));
+    : pools
+        .filter((p) => p.id !== poolId)
+        .map((p) => ({
+          label: p.id ? `Move to ${p.name}` : "Unassign",
+          onClick: onAssign ? () => onAssign(team, poolId, p.id || null) : null,
+        }));
   return (
     <div>
       <ListGroup.Item className="d-flex justify-content-between">
@@ -29,6 +30,7 @@ const PoolCard = ({
   pools,
   actions = null,
   readOnly,
+  showCount = true,
 }) => {
   return (
     <div>
@@ -36,7 +38,7 @@ const PoolCard = ({
         title={
           <h6>
             <b>
-              {pool.name} {teams.length > 0 && `(${teams.length})`}
+              {pool.name} {teams.length > 0 && showCount && `(${teams.length})`}
             </b>
           </h6>
         }
