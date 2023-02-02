@@ -37,7 +37,7 @@ const SchedulingModal = ({
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href={`/tournaments/${tournamentId}/schedule`}
+            href={`/tournaments/${tournamentId}/public`}
           >
             Public Link
           </a>

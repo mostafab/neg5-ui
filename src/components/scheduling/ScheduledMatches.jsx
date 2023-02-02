@@ -4,6 +4,8 @@ import { ListGroup } from "react-bootstrap";
 import keyBy from "lodash/keyBy";
 import orderBy from "lodash/orderBy";
 
+import Pill from "@components/common/pill";
+
 import ScheduleFilters from "./ScheduleFilters";
 
 const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
@@ -11,33 +13,44 @@ const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
   const [filters, setFilters] = useState(null);
 
   const getMatchTitle = ({ team1Id, team2Id, round, room }) => {
+    if (!team1Id || !team2Id) {
+      return (
+        <>
+          Round {round}: {teamsById[team1Id || team2Id]?.name}
+          <Pill type="info" className="ms-2">
+            Bye
+          </Pill>
+        </>
+      );
+    }
     return (
-      <div>
+      <>
         Round {round}: {teamsById[team1Id]?.name} vs {teamsById[team2Id]?.name}
         {room && <div className="small text-dark mt-2">{room}</div>}
-      </div>
+      </>
     );
   };
+  const filtersToUse = filters;
   const filteredMatches =
-    filters === null
+    filtersToUse === null
       ? matches
       : matches.filter((m) => {
           if (
-            filters.rooms.length > 0 &&
-            filters.rooms.indexOf(m.room) === -1
+            filtersToUse.rooms.length > 0 &&
+            filtersToUse.rooms.indexOf(m.room) === -1
           ) {
             return false;
           }
           if (
-            filters.rounds.length > 0 &&
-            filters.rounds.indexOf(m.round) === -1
+            filtersToUse.rounds.length > 0 &&
+            filtersToUse.rounds.indexOf(m.round) === -1
           ) {
             return false;
           }
           const teamMatches =
-            filters.teams.indexOf(m.team1Id) >= 0 ||
-            filters.teams.indexOf(m.team2Id) >= 0;
-          if (filters.teams.length > 0 && !teamMatches) {
+            filtersToUse.teams.indexOf(m.team1Id) >= 0 ||
+            filtersToUse.teams.indexOf(m.team2Id) >= 0;
+          if (filtersToUse.teams.length > 0 && !teamMatches) {
             return false;
           }
           return true;
@@ -52,8 +65,12 @@ const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
         />
       )}
       <ListGroup className="overflow-scroll" style={{ maxHeight: "75vh" }}>
-        {orderBy(filteredMatches, "round").map((m) => (
-          <ListGroup.Item action key={m.id} onClick={() => onSelect(m)}>
+        {orderBy(filteredMatches, "round").map((m, idx) => (
+          <ListGroup.Item
+            action={onSelect ? true : false}
+            key={m.id}
+            onClick={onSelect ? () => onSelect(m) : null}
+          >
             {getMatchTitle(m)}
           </ListGroup.Item>
         ))}
