@@ -7,6 +7,7 @@ import { groupTeamsByPools } from "@libs/teams";
 import Card from "@components/common/cards";
 
 import TeamPools from "./TeamPools";
+import MatchesSchedule from "./MatchesSchedule";
 
 const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
   const [tab, setTab] = useState(phases.length === 0 ? null : phases[0].id);
@@ -17,7 +18,7 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
   }, [phases]);
   const poolTeams = groupTeamsByPools(teams);
   return (
-    <Card title="Schedule">
+    <Card>
       <Tabs transition={false} activeKey={tab} onSelect={setTab}>
         {phases.map((p) => (
           <Tab key={p.id} eventKey={p.id} title={p.name}>
@@ -25,6 +26,11 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
               pools={pools.filter((pool) => pool.phaseId === p.id)}
               teams={teams}
               poolTeams={poolTeams}
+            />
+            <br />
+            <MatchesSchedule
+              teams={teams}
+              schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
             />
           </Tab>
         ))}
@@ -36,10 +42,11 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
 const mapStateToProps = ({
   tournamentPhasesReducer,
   tournamentTeamsReducer,
+  tournamentMatchesReducer,
 }) => ({
   pools: tournamentPhasesReducer.pools,
   teams: tournamentTeamsReducer.teams,
-  schedules: tournamentPhasesReducer.schedules,
+  schedules: tournamentMatchesReducer.schedules,
   phases: tournamentPhasesReducer.phases,
 });
 

@@ -6,7 +6,13 @@ import orderBy from "lodash/orderBy";
 
 import ScheduleFilters from "./ScheduleFilters";
 
-const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
+const ScheduledMatches = ({
+  matches,
+  teams,
+  onSelect,
+  filterable,
+  externalFilters,
+}) => {
   const teamsById = keyBy(teams, "id");
   const [filters, setFilters] = useState(null);
 
@@ -18,26 +24,27 @@ const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
       </div>
     );
   };
+  const filtersToUse = externalFilters || filters;
   const filteredMatches =
-    filters === null
+    filtersToUse === null
       ? matches
       : matches.filter((m) => {
           if (
-            filters.rooms.length > 0 &&
-            filters.rooms.indexOf(m.room) === -1
+            filtersToUse.rooms.length > 0 &&
+            filtersToUse.rooms.indexOf(m.room) === -1
           ) {
             return false;
           }
           if (
-            filters.rounds.length > 0 &&
-            filters.rounds.indexOf(m.round) === -1
+            filtersToUse.rounds.length > 0 &&
+            filtersToUse.rounds.indexOf(m.round) === -1
           ) {
             return false;
           }
           const teamMatches =
-            filters.teams.indexOf(m.team1Id) >= 0 ||
-            filters.teams.indexOf(m.team2Id) >= 0;
-          if (filters.teams.length > 0 && !teamMatches) {
+            filtersToUse.teams.indexOf(m.team1Id) >= 0 ||
+            filtersToUse.teams.indexOf(m.team2Id) >= 0;
+          if (filtersToUse.teams.length > 0 && !teamMatches) {
             return false;
           }
           return true;
@@ -52,8 +59,12 @@ const ScheduledMatches = ({ matches, teams, onSelect, filterable }) => {
         />
       )}
       <ListGroup className="overflow-scroll" style={{ maxHeight: "75vh" }}>
-        {orderBy(filteredMatches, "round").map((m) => (
-          <ListGroup.Item action key={m.id} onClick={() => onSelect(m)}>
+        {orderBy(filteredMatches, "round").map((m, idx) => (
+          <ListGroup.Item
+            action={onSelect ? true : false}
+            key={m.id}
+            onClick={onSelect ? () => onSelect(m) : null}
+          >
             {getMatchTitle(m)}
           </ListGroup.Item>
         ))}
