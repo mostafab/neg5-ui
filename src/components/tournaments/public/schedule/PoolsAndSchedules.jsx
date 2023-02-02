@@ -22,7 +22,7 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
         {phases.map((p) => (
           <Tab key={p.id} eventKey={p.id} title={p.name}>
             <Row className="mt-3">
-              <Col lg={4} md={6} sm={12}>
+              <Col lg={4} md={6} sm={12} className="mb-3">
                 <MatchesSchedule
                   teams={teams}
                   schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
