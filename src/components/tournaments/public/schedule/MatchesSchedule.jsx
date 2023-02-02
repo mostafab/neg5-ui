@@ -7,7 +7,7 @@ import ScheduledMatches from "@components/scheduling/ScheduledMatches";
 const MatchesSchedule = ({ schedule, teams }) => {
   if (!schedule) {
     return (
-      <div className="p-4 d-flex justify-content-center">
+      <div className="p-4 d-flex justify-content-center border bg-white">
         No schedule has been created yet.
       </div>
     );
