@@ -51,9 +51,11 @@ const BonusPanel = ({
       </Row>
       <Row>
         <Col lg={12} md={12} sm={12} className="d-flex justify-content-between">
-          <Button type="outline-secondary" onClick={onBack}>
-            Back
-          </Button>
+          {onBack && (
+            <Button type="outline-secondary" onClick={onBack}>
+              Back
+            </Button>
+          )}
           <Button type="outline-primary" onClick={onNextTossup}>
             Next Tossup
           </Button>

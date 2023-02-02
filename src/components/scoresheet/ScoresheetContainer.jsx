@@ -385,7 +385,13 @@ const ScoresheetContainer = ({
             teams={scoresheetTeams}
             rules={rules}
             onClickAnswer={onClickAnswer}
-            onBack={scoresheetState.currentCycle.number > 1 ? onBack : null}
+            onBack={
+              scoresheetState.currentCycle.number > 1 ||
+              (scoresheetState.currentCycle.number == 1 &&
+                scoresheetState.currentCycle.stage == CycleStage.Bonus)
+                ? onBack
+                : null
+            }
             onBonus={onBonus}
             onNextTossup={onNextTossup}
             onNoAnswer={onNoAnswer}
