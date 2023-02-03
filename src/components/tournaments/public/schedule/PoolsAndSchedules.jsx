@@ -20,7 +20,7 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
     <Tabs transition={false} activeKey={tab} onSelect={setTab}>
       {phases.map((p) => (
         <Tab key={p.id} eventKey={p.id} title={p.name}>
-          <Row>
+          <Row className="mt-3">
             <Col lg={4} md={6} sm={12} className="mb-3">
               <MatchesSchedule
                 teams={teams}

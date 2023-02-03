@@ -9,13 +9,13 @@ import PoolCard from "@components/tournaments/tournamentView/pools/PoolCard";
 const TeamPools = ({ pools, poolTeams }) => {
   if (pools.length === 0) {
     return (
-      <div className="d-flex justify-content-center p-4 border bg-white">
+      <div className="d-flex justify-content-center p-4 border bg-white shadow-sm">
         The tournament director hasn't created pools for this phase yet.
       </div>
     );
   }
   return (
-    <Card title="Pools" shadow={false}>
+    <Card title="Pools">
       <Row>
         {pools.map((p) => (
           <Col key={p.id} lg={4} md={6} sm={12}>
