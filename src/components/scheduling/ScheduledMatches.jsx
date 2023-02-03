@@ -26,7 +26,7 @@ const ScheduledMatches = ({
         <>
           {prefix} {teamsById[team1Id || team2Id]?.name}
           <Pill type="info" className="ms-2">
-            Bye
+            BYE
           </Pill>
         </>
       );

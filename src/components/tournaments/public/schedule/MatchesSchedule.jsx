@@ -4,7 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import Card from "@components/common/cards";
 import ScheduledMatches from "@components/scheduling/ScheduledMatches";
 
-const MatchesSchedule = ({ schedule, teams }) => {
+const MatchesSchedule = ({ schedule, teams, phase }) => {
   if (!schedule) {
     return (
       <div className="p-4 d-flex justify-content-center border bg-white">
@@ -13,7 +13,7 @@ const MatchesSchedule = ({ schedule, teams }) => {
     );
   }
   return (
-    <Card title="Schedule" shadow={false}>
+    <Card title={`${phase.name} Schedule`} shadow={false}>
       <Row>
         <Col lg={12} md={12} sm={12}>
           <ScheduledMatches

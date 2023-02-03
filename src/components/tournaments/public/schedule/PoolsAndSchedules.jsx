@@ -25,6 +25,7 @@ const PoolsAndSchedules = ({ pools, teams, schedules, phases }) => {
               <MatchesSchedule
                 teams={teams}
                 schedule={schedules.find((s) => s.tournamentPhaseId === p.id)}
+                phase={p}
               />
             </Col>
             <Col lg={8} md={6} sm={12}>
