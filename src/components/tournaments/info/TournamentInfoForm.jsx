@@ -70,12 +70,12 @@ const TournamentInfoForm = ({ tournamentInfo, onSubmitSuccess = null }) => {
     >
       <Checkbox
         name="hidden"
-        label="Hidden"
+        label="Private"
         onChange={(checked) => setHiddenChcked(checked)}
       />
       {hiddenChecked && (
         <Info>
-          Hidden tournaments won't show up in searches on{" "}
+          Private tournaments won't show up in searches on{" "}
           <a
             target="_blank"
             rel="noopener noreferrer"

@@ -69,7 +69,7 @@ const TournamentInfoPanel = ({ tournamentInfo, editable }) => {
         </div>
         {tournamentInfo.hidden && (
           <Pill className="mb-2" type="secondary">
-            Hidden
+            Private
           </Pill>
         )}
         {labelWithValue("Owner", tournamentInfo.directorId)}
