@@ -20,6 +20,7 @@ const MatchesSchedule = ({ schedule, teams }) => {
             teams={teams}
             matches={schedule.matches}
             filterable
+            splitByRound
           />
         </Col>
       </Row>
