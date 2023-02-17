@@ -424,7 +424,7 @@ const ScoresheetContainer = ({
             isPastCycle
           />
         )}
-        {endingMatch && (
+        {endingMatch && !activePastCycle && (
           <ScoresheetSubmissionPanel
             scoresheetState={scoresheetState}
             startValues={scoresheetStartValues}
