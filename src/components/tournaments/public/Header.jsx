@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
 
@@ -10,6 +10,11 @@ const STATS_BASE_URL = config.statsBaseUrl;
 
 const Header = ({ tournamentName, date, teams }) => {
   const tournamentId = useContext(TournamentIdContext);
+  useEffect(() => {
+    if (tournamentName) {
+      document.title = `${tournamentName} Schedule | Neg 5`;
+    }
+  }, [tournamentName]);
   return (
     <>
       <h3>{tournamentName}</h3>
